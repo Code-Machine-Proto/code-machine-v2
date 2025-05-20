@@ -1,0 +1,18 @@
+.text
+
+ldi         r1,    3
+ldi   r2,  7
+
+
+
+l1:
+
+add r5 ,  r1,     r2
+
+st  r7 , r 5
+ld r 9,  r   7
+br l1
+
+stop
+.data   
+f1:5,  3,   7

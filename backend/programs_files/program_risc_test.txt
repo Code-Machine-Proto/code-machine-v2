@@ -1,0 +1,28 @@
+.text
+ldi r5, 5
+sub r5,r4,r3
+add r15,r0,r18
+and    r  3 , r29  , r  6 
+or  r1, r3  ,     r5
+ldi r13, 45
+shr   r  17  ,  r  20
+ld r4 , r5
+st r12, r0
+cpy r3,r4
+not r6,r9
+shl r0,r11
+stop
+l1:
+brgez l1
+stop 
+stop
+stop
+l2:
+brz l1
+stop
+brnz l2
+
+  stop
+
+.data   
+f1:5,  3,   7

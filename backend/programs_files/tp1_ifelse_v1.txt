@@ -1,0 +1,22 @@
+.text
+main:
+	ld valeur
+	sub seuil
+	brz brancheA
+	br brancheB
+brancheA:
+	ld valeur
+	mul constante
+	st resultat
+	br fin
+brancheB:
+	ld valeur
+	sub constante
+	st resultat
+fin:
+	stop
+.data
+valeur: 100
+seuil: 50
+constante: 4
+resultat: 0

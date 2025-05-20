@@ -1,0 +1,6 @@
+.text
+ld a
+stop
+.data
+a: -1
+b: -2

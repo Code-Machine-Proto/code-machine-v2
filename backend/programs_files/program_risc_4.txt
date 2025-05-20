@@ -1,0 +1,17 @@
+.text
+ldi r1,5
+ldi r0,1
+bcl:
+sub r1,r1,r0
+brgz bcl
+ldi r1,1
+ld r4,f1
+l2:
+add r4,r4,r10
+brlz l2
+br l3
+st r3,r0
+l3:
+stop
+.data
+f1: -4

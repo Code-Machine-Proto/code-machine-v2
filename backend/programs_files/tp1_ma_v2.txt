@@ -1,0 +1,22 @@
+.text
+main:
+	lda adr_tableau // MA <= Mem[adr_tableau]
+	ldi 
+	add constante
+	sti
+l1:
+	ldi // ACC <= Mem[MA]
+	adda constante // MA <= MA + constante
+	add constante // ACC <= ACC + constante
+	sti // Mem[MA] <= ACC
+	ld iteration
+	sub constante
+	st iteration
+	brnz l1
+fin:
+	stop
+.data
+constante: 1
+iteration: 6
+adr_tableau: tableau + 0
+tableau: 0

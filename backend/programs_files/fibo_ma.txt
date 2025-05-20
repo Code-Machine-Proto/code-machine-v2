@@ -1,0 +1,19 @@
+.text
+lda fibo_adr
+l1:
+    ldi // ACC <= Mem[MA]
+    adda const // MA <= MA + const
+    addx // ACC <= ACC + Mem[MA]
+    adda const // MA <= MA + const
+    sti // Mem[MA] <= ACC
+    suba const // MA <= MA - const
+    ld iterations
+    sub const
+    st iterations
+    brnz l1
+stop
+.data
+const: 1
+iterations: 7
+fibo_adr: fibo + 0
+fibo: 0, 1

@@ -1,0 +1,20 @@
+.text
+ldi         r1,    f2
+ld r2,r1
+ldi   r2,  7
+ldi   r2,  8
+
+
+l1:
+
+add r5 ,  r1,     r2
+
+st  r7 , r 5
+ld r 9,  r   7
+br l1
+
+stop
+.data   
+f1:-3,  -2,   7,5
+f2: 8, 3
+f3 : 2 ,1

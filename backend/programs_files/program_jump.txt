@@ -1,0 +1,16 @@
+br main
+boucle:
+    sub constant
+    brnz boucle
+    br fin
+main:
+    ld a
+    add b
+    br boucle
+fin:
+    add truc
+    stop
+a: 5, 2
+b: 2, 4, 6
+constant: 1
+truc: 2, -1

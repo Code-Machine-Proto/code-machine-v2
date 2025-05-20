@@ -1,0 +1,22 @@
+.text
+main:
+	ld date
+	add tableau+2 // on ajoute la valeur à (tableau + 2) donc 8
+boucle:
+    sub tableau
+    brnz boucle
+    st annee
+    stop
+test:
+    add tableau
+    sub tableau
+
+.data
+tableau: 1, 4, 8
+valeur_b: tableau + 1 // valeur_b pointe vers (tableau + 1) donc 4
+date: 18
+7
+annee: 99
+21
+variable: 1, 2, 3
+variable_b: -8

@@ -1,0 +1,7 @@
+.bsp/
+.idea/
+target/
+test_run_dir/
+verilog/
+null/
+scala-2.13.0.deb

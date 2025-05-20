@@ -1,0 +1,22 @@
+.text
+main:
+ld  valeur
+sub seuil
+brz brancheA
+br  brancheB
+brancheA:
+ld  valeur
+mul constante
+st  resultat
+br  fin
+brancheB:
+ld  valeur
+sub constante
+st  resultat
+fin:
+stop
+.data
+valeur: 12  // Remplacez 0 par la valeur de (MATR ETU 1 + MATR ETU 2) % 2021
+seuil: 5  // Remplacez 0 par la valeur de (MATR ETU 1 + MATR ETU 2) % 2022
+constante: 2  // Remplacez 0 par la valeur de MAX(MATR ETU 1, MATR ETU 2) % 10
+resultat: 0

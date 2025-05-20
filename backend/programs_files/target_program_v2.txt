@@ -1,0 +1,9 @@
+.text
+lda fiboaddr
+ldi
+stop
+.data
+n: 7
+fibo: 18, 1
+fiboaddr: fibo + 0
+const : 1

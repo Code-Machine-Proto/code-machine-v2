@@ -1,0 +1,13 @@
+.data
+valeur_1:
+    .int 18, 7, 1999
+    .int 56
+	.byte 123
+valeur_2:
+	.int 2, 3, 4
+.text
+label_text_1:
+	lui x20, valeur_1
+	lw x21, (x20)
+	lw x22, 4(x20)
+	add x23, x21, x22
