@@ -7,6 +7,7 @@ import {
 } from "react-router";
 
 import "./app.css";
+import Header from "@src/components/Header";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,8 +18,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="h-dvh">
+        <Header />
+        { children }
         <ScrollRestoration />
         <Scripts />
       </body>
