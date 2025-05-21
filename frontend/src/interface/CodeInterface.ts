@@ -1,4 +1,4 @@
 export default interface CodeInterface {
-   code: string,
-   lineTotal: number, 
+    code: string,
+    lineTotal: number, 
 };

@@ -7,7 +7,12 @@ export default function CodeEditor() {
     const dispatch = useContext(DispatchCodeContext);
     return(
         <div className="flex p-5">
-            <textarea className="text-white" value={codeContext?.code} onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} wrap="off"/>
+            <textarea 
+                className="text-white" 
+                value={codeContext?.code} 
+                onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} 
+                wrap="off"
+            />
                 <p>{ codeContext?.lineTotal }</p>
         </div>
     );
