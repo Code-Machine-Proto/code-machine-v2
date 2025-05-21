@@ -4,11 +4,9 @@ import { CodeProvider } from "@src/components/CodeProvider";
 export default function Processor() {
     return (
         <CodeProvider >
-            <div className="flex flex-col grow bg-back">
-                <div className="flex">
+                <div className="flex grow p-5 bg-back">
                     <CodeEditor />
                 </div>
-            </div>
         </CodeProvider>
     );
 }

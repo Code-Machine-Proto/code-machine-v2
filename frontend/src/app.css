@@ -14,3 +14,13 @@
     --color-main-900: #1b3a5f;
     --color-main-950: #0e1d31;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

@@ -6,7 +6,7 @@ export const CodeContext = createContext<CodeInterface | null>(null);
 export const DispatchCodeContext = createContext<DispatchCode>(()=>{});
 
 export function CodeProvider({ children }: { children: ReactNode}) {
-    const [ codeState, dispatch ] = useReducer(codeReducer, { code: "", lineTotal: 1 });
+    const [ codeState, dispatch ] = useReducer(codeReducer, { code: "", lines: [""] });
     return(
         <CodeContext.Provider value={ codeState } >
             <DispatchCodeContext.Provider value={ dispatch }>
@@ -28,9 +28,9 @@ function codeReducer(state: CodeInterface, action: CodePayload): CodeInterface {
 }
 
 function changeCode(state: CodeInterface, code: string): CodeInterface {
-        return { ...state, code: code, lineTotal: changeLineTotal(code) };
+        return { ...state, code: code, lines: changeLineTotal(code) };
 }
 
-function changeLineTotal(code: string): number {
-    return code.split("\n").length;
+function changeLineTotal(code: string): Array<string> {
+    return code.split("\n");
 }

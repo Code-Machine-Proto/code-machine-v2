@@ -1,0 +1,1 @@
+export type ScrollElement = React.RefObject<HTMLDivElement | HTMLTextAreaElement | null>;
