@@ -28,7 +28,7 @@ function codeReducer(state: CodeInterface, action: CodePayload): CodeInterface {
 }
 
 function changeCode(state: CodeInterface, code: string): CodeInterface {
-        return { ...state, code: code, lines: changeLineTotal(code) };
+    return { ...state, code: code, lines: changeLineTotal(code) };
 }
 
 function changeLineTotal(code: string): Array<string> {
