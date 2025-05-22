@@ -121,13 +121,15 @@ object accumulator_execs {
 }
 
 class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
-  val output_internal_memory = new FileWriter("./output_files/internal_memory_status_" + id + ".txt", false);
-  val output_pc = new FileWriter("./output_files/pc_status" + id + ".txt", false);
-  val output_acc = new FileWriter("./output_files/acc_status" + id + ".txt", false);
-  val output_ir = new FileWriter("./output_files/ir_status" + id + ".txt", false);
-  val output_state = new FileWriter("./output_files/state_status" + id + ".txt", false);
-  val output_stimulated_memory = new FileWriter("./output_files/stimulated_memory_status" + id + ".txt", false);
-  val output_stimulated_lines = new FileWriter("./output_files/stimulated_lines_status" + id + ".txt", false);
+  // val output_internal_memory = new FileWriter("./output_files/internal_memory_status_" + id + ".txt", false);
+  // val output_pc = new FileWriter("./output_files/pc_status" + id + ".txt", false);
+  // val output_acc = new FileWriter("./output_files/acc_status" + id + ".txt", false);
+  // val output_ir = new FileWriter("./output_files/ir_status" + id + ".txt", false);
+  // val output_state = new FileWriter("./output_files/state_status" + id + ".txt", false);
+  // val output_stimulated_memory = new FileWriter("./output_files/stimulated_memory_status" + id + ".txt", false);
+  // val output_stimulated_lines = new FileWriter("./output_files/stimulated_lines_status" + id + ".txt", false);
+  val outputStep = new FileWriter("./output_files/simulated" + id + ".txt", false);
+
 
   //  var instructionsArray = accumulator_v1_compiler.compileFromArray(program)
   var instructionsArray = program
