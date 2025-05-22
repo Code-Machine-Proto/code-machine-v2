@@ -26,7 +26,7 @@ export default function CodeEditor() {
                     ref={numberContainer}
                     onScroll={() => handleScroll(numberContainer, textArea)}
                 >
-                    { codeContext?.lines.map((_, i) => ( <p>{i + 1}</p>))}
+                    { codeContext?.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
                 <textarea 
                     className="text-white resize-none border-none outline-none w-4/5" 
