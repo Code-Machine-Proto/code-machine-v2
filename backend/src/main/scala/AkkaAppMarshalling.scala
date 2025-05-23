@@ -37,7 +37,7 @@ object SprayJsonExample {
   implicit val ProgramMarshaller: spray.json.RootJsonFormat[Program] = jsonFormat1(Program.apply);
   implicit val compileAndRunRequestMarshaller: spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat3(CompileAndRunRequest.apply)
   implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] = jsonFormat2(testClass.apply);
-  implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] = jsonFormat8(RunResultsV1.apply);
+  implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] = jsonFormat2(RunResultsV1.apply);
   implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] = jsonFormat9(RunResultsV2.apply);
   implicit val RunResultsRiscSimpleMarshaller: spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat8(RunResultsRiscSimple.apply)
 
