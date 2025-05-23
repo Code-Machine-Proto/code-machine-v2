@@ -45,7 +45,7 @@ object accumulator_execs {
     var content = ""
     for(line <- Source.fromFile(filename).getLines){
       content = content + line
-      }
+    }
     result = content
 
     // result(n) follows filenames val order
@@ -146,19 +146,19 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("instructionState : {" + peek(DUT.io.StimulatedMemoryCell).toString + "}")
+    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "}")
     output.flush()
 
     //Writing stimulated lines
     //TODO
-    output.write("},")
-    output.flush()
 
     step(1)
 
     simulation_cycle = simulation_cycle + 1
     simulation_ended = (peek(DUT.io.Instruction).toInt == 5) || (simulation_cycle == 512)    
   }
+  output.write("]")
+  output.flush()
 }
 
 class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
