@@ -10,7 +10,7 @@ import { Link } from "react-router";
 export default function Header() {
     return (
     <div className="flex h-[5rem] bg-main-950 justify-center items-center">
-        <Link to="/" className=" flex bg-main-950 justify-center items-center gap-5" >
+        <Link to="/" className="flex bg-main-950 justify-center items-center gap-5" >
             <img src={ logo } alt="Logo" className="h-[3rem]" />
             <p className="text-white text-xl">Code Machine</p>
         </Link>
