@@ -54,7 +54,7 @@ object accumulator_execs {
   }
 
   def compileAndRunV2(program: Array[String], id: Int): RunResultsV2 = {
-    var result = Array[Array[String]]()
+    var result = ""
 
     val filename = AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V2
 
@@ -65,25 +65,16 @@ object accumulator_execs {
       DUT => new accumulator_v2_simulation(DUT, UIntProgram, id)
     }
 
-    for(sourcefile <- filenames){
-      var content = Array[String]()
-      for(line <- Source.fromFile(sourcefile).getLines){
-        content = content :+ line
-      }
-      result = result :+ content
+    var content = ""
+    for(line <- Source.fromFile(filename).getLines){
+      content = content + line
     }
+    result = content
 
     // result(n) follows filenames val order
     RunResultsV2(
       HexProgram,
-      result(0),
-      result(1),
-      result(2),
-      result(3),
-      result(4),
-      result(5),
-      result(6),
-      result(7)
+      result,
     )
   }
 }
@@ -166,7 +157,7 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
 
   var simulation_ended = false
   var simulation_cycle = 0
-
+  
   output.write("[")
   output.flush()
   while(!simulation_ended){

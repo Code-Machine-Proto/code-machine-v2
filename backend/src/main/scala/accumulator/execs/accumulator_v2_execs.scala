@@ -1,7 +1,7 @@
 package accumulator.execs
 
 import java.io.FileWriter
-
+import accumulator.execs.AccumulatorFilePathes
 import accumulator.accumulator_v2.{accumulator_v2, accumulator_v2_compiler}
 import chisel3.iotesters.PeekPokeTester
 
@@ -26,42 +26,24 @@ object accumulator_v2_execs {
   }
 
   def compileAndRun(program: Array[String], id: Int): RunResultsV2 = {
-    var result = Array[Array[String]]()
+    var result = ""
 
-    val filenames = Array[String](
-      "./output_files/acc_v2_internal_memory_status_" + id + ".txt",
-      "./output_files/acc_v2_pc_status" + id + ".txt",
-      "./output_files/acc_v2_acc_status" + id + ".txt",
-      "./output_files/acc_v2_ir_status" + id + ".txt",
-      "./output_files/acc_v2_ma_status" + id + ".txt",
-      "./output_files/acc_v2_state_status" + id + ".txt",
-      "./output_files/acc_v2_stimulated_memory_status" + id + ".txt",
-      "./output_files/acc_v2_stimulated_lines_status" + id + ".txt"
-    )
+    val filename = AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V2
 
     chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new accumulator_v2()) {
       DUT => new accumulator_v2_tester_with_array(DUT, program, id)
     }
 
-    for(sourcefile <- filenames){
-      var content = Array[String]()
-      for(line <- Source.fromFile(sourcefile).getLines){
-        content = content :+ line
-      }
-      result = result :+ content
+    var content = ""
+    for(line <- Source.fromFile(filename).getLines){
+      content = content + line
     }
+    result = content
 
     // result(n) follows filenames val order
     RunResultsV2(
       accumulator_v2_compiler.getHexCodeFromArray(program),
-      result(0),
-      result(1),
-      result(2),
-      result(3),
-      result(4),
-      result(5),
-      result(6),
-      result(7)
+      result,
     )
   }
 }

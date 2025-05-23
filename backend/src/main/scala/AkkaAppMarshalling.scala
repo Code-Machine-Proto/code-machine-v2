@@ -38,8 +38,8 @@ object SprayJsonExample {
   implicit val compileAndRunRequestMarshaller: spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat3(CompileAndRunRequest.apply)
   implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] = jsonFormat2(testClass.apply);
   implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] = jsonFormat2(RunResultsV1.apply);
-  implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] = jsonFormat9(RunResultsV2.apply);
-  implicit val RunResultsRiscSimpleMarshaller: spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat8(RunResultsRiscSimple.apply)
+  implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] = jsonFormat2(RunResultsV2.apply);
+  implicit val RunResultsRiscSimpleMarshaller: spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat3(RunResultsRiscSimple.apply)
 
   def main(args: Array[String]): Unit = {
 
