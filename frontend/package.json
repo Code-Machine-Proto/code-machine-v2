@@ -5,7 +5,7 @@
   "scripts": {
     "build": "react-router build --mode website",
     "dev": "react-router dev --mode website",
-    "preview": "vite preview",
+    "start": "vite preview",
     "lint": "eslint ."
   },
   "dependencies": {
