@@ -167,57 +167,56 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
   var simulation_ended = false
   var simulation_cycle = 0
 
+  output.write("[")
+  output.flush()
   while(!simulation_ended){
+    output.write("{")
+    output.flush()
 
+    // Writing memory state 
+    output.write("memoryState : [")
     for(memIdx <- 0 until DUT.io.InternalMemory.length){
       if(memIdx < DUT.io.InternalMemory.length - 1){
-        output_internal_memory.write(peek(DUT.io.InternalMemory(memIdx)).toString + ",")
+        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + ",")
       }else{
-        output_internal_memory.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
+        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
       }
-      output_internal_memory.flush()
     }
-    output_internal_memory.write("\n")
-    output_internal_memory.flush()
+    output.write("]},")
+    output.flush()
+    // Writing PC state 
+    output.write("pcState : {" + peek(DUT.io.PC).toString + "},")
+    output.flush()
 
-    output_pc.write(peek(DUT.io.PC).toString + "\n")
-    output_pc.flush()
+    // Writing ACC state
+    output.write("accState : {" + peek(DUT.io.ACC.asSInt()).toString + "},")
+    output.flush()
 
-    output_acc.write(peek(DUT.io.ACC.asSInt()).toString + "\n")
-    output_acc.flush()
+    // Writing IR state
+    output.write("irState : {" + peek(DUT.io.IR).toString + "},")
+    output.flush()
 
-    output_ir.write(peek(DUT.io.IR).toString + "\n")
-    output_ir.flush()
+    //Writing ma
+    output.write("ma : {" + peek(DUT.io.MA).toString + "}")
+    output.flush()
 
-    output_ma.write(peek(DUT.io.MA).toString + "\n")
-    output_ma.flush()
+    //Writing instruction state
+    output.write("instructionState : {" + peek(DUT.io.State).toString + "},")
+    output.flush()
 
-    output_state.write(peek(DUT.io.State).toString + "\n")
-    output_state.flush()
+    //Writing stimulated memory
+    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "}")
+    output.flush()
 
-    output_stimulated_memory.write(peek(DUT.io.StimulatedMemoryCell).toString + "\n")
-    output_stimulated_memory.flush()
-
-    stimulatedLines = accumulator_v2_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt)
-
-    var lineIdx = 0
-    for(line <- stimulatedLines){
-      if(lineIdx == stimulatedLines.size - 1) {
-        output_stimulated_lines.write(line + "\r")
-      }else{
-        output_stimulated_lines.write(line + ",")
-      }
-      lineIdx = lineIdx + 1
-      output_stimulated_lines.flush()
-    }
-    output_stimulated_lines.write("\n")
-    output_stimulated_lines.flush()
-
+    //Writing stimulated lines
+    //TODO
     step(1)
 
     simulation_cycle = simulation_cycle + 1
     simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || (simulation_cycle == 512)
   }
+  output.write("]")
+  output.flush()
 }
 
 object exec extends App {
