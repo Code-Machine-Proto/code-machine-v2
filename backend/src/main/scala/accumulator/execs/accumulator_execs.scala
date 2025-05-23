@@ -10,13 +10,7 @@ import scala.io.Source
 
 final case class RunResultsV1(
                              hex: Array[String],
-                             internal_memory_status: Array[String],
-                             pc_status: Array[String],
-                             acc_status: Array[String],
-                             ir_status: Array[String],
-                             state_status: Array[String],
-                             stimulated_memory_address: Array[String],
-                             lines_status: Array[String],
+                             output: String,
                            )
 
 final case class RunResultsV2(
@@ -37,17 +31,9 @@ object accumulator_execs {
   }
 
   def compileAndRunV1(program: Array[String], id: Int): RunResultsV1 = {
-    var result = Array[Array[String]]()
+    var result = ""
 
-    val filenames = Array[String](
-      "./output_files/internal_memory_status_" + id + ".txt",
-      "./output_files/pc_status" + id + ".txt",
-      "./output_files/acc_status" + id + ".txt",
-      "./output_files/ir_status" + id + ".txt",
-      "./output_files/state_status" + id + ".txt",
-      "./output_files/stimulated_memory_status" + id + ".txt",
-      "./output_files/stimulated_lines_status" + id + ".txt"
-    )
+    val filename = "./output_files/output.txt"
 
     val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 1)
     val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
@@ -56,24 +42,17 @@ object accumulator_execs {
       DUT => new accumulator_v1_simulation(DUT, UIntProgram, id)
     }
 
-    for(sourcefile <- filenames){
-      var content = Array[String]()
-      for(line <- Source.fromFile(sourcefile).getLines){
-        content = content :+ line
+    var content = ""
+    for(line <- Source.fromFile(filename).getLines){
+      content = content + line
       }
-      result = result :+ content
-    }
+    result = content
 
     // result(n) follows filenames val order
     RunResultsV1(
       HexProgram,
-      result(0),
-      result(1),
-      result(2),
-      result(3),
-      result(4),
-      result(5),
-      result(6))
+      result,
+      )
   }
 
   def compileAndRunV2(program: Array[String], id: Int): RunResultsV2 = {
