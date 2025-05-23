@@ -44,7 +44,7 @@ export default function ExecutionControl() {
             </div>
             <div className="flex items-center gap-2">
                 <label className="switch">
-                    <input type="checkbox" readOnly={true} checked={checkbox} onClick={() => setCheckBox(!checkbox)}/>
+                    <input type="checkbox" readOnly={true} checked={checkbox} onClick={() => setCheckBox(!checkbox)} />
                     <span className="slider rounded-full before:rounded-full" />
                 </label>
                 <p className="text-white">
