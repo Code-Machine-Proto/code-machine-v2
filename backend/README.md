@@ -23,3 +23,6 @@ Il faut pouvoir lancer les fichiers sbt dans le backend.
 - Etre dans le terminal sbt
 - Pour lancer le serveur: ```~run```
 - Une fois le serveur lance, peut acceder a l'aide avec ```?```
+
+#### Compiler en un .JAR stand-alone:
+- Se trouver dans la racine du backend et faire la commande: ```sbt assembly``` *Attention: le fichier n'a pas directement les droits d'execution donc possiblement lui ajouter avec chmod*
