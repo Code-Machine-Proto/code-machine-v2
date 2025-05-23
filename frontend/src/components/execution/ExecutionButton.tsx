@@ -12,6 +12,6 @@ export default function ExecutionButton({ children }: { children: ReactNode }) {
             <svg fill="currentColor" focusable="false" aria-hidden="true" viewBox="0 0 24 24" className="size-[2rem]">
                 { children }
             </svg>
-            </button>
+        </button>
     )
 }

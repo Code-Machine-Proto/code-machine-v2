@@ -1,6 +1,6 @@
-import CodeEditor from "@src/components/CodeEditor";
-import { CodeProvider } from "@src/components/CodeProvider";
-import ExecutionControl from "@src/components/ExecutionControl";
+import CodeEditor from "@src/components/code/CodeEditor";
+import { CodeProvider } from "@src/components/code/CodeProvider";
+import ExecutionControl from "@src/components/execution/ExecutionControl";
 
 /**
  * Layout de la page processeurs pour accueillir une simulation d'un processeur 
