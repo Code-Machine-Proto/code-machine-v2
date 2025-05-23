@@ -15,14 +15,7 @@ final case class RunResultsV1(
 
 final case class RunResultsV2(
                                hex: Array[String],
-                               internal_memory_status: Array[String],
-                               pc_status: Array[String],
-                               acc_status: Array[String],
-                               ir_status: Array[String],
-                               ma_status: Array[String],
-                               state_status: Array[String],
-                               stimulated_memory_address: Array[String],
-                               lines_status: Array[String],
+                               output: String,
                              )
 
 object accumulator_execs {
@@ -33,7 +26,7 @@ object accumulator_execs {
   def compileAndRunV1(program: Array[String], id: Int): RunResultsV1 = {
     var result = ""
 
-    val filename = "./output_files/output.txt"
+    val filename = "./output_files/output_v1.txt"
 
     val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 1)
     val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
