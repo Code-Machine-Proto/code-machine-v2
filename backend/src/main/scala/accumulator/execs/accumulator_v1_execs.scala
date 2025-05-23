@@ -27,7 +27,7 @@ object accumulator_v1_execs {
 
   def compileAndRun(program: Array[String], id: Int): RunResultsV1 = {
 
-    var result = Array[Array[String]]()
+    var result = ""
 
     val filenames = Array[String](
       "./output_files/internal_memory_status_" + id + ".txt",
@@ -46,23 +46,17 @@ object accumulator_v1_execs {
     }
 
     for(sourcefile <- filenames){
-      var content = Array[String]()
+      var content = ""
       for(line <- Source.fromFile(sourcefile).getLines){
-        content = content :+ line
+        content = content + line
       }
-      result = result :+ content
+      result = result + content
     }
 
     // result(n) follows filenames val order
     RunResultsV1(
       accumulator_v1_compiler.getHexCodeFromArray(program),
-      result(0),
-      result(1),
-      result(2),
-      result(3),
-      result(4),
-      result(5),
-      result(6))
+      result)
   }
 }
 
