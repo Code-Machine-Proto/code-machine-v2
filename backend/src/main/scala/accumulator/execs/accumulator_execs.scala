@@ -100,31 +100,16 @@ object accumulator_execs {
 }
 
 class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
-  // val output_internal_memory = new FileWriter("./output_files/internal_memory_status_" + id + ".txt", false);
-  // val output_pc = new FileWriter("./output_files/pc_status" + id + ".txt", false);
-  // val output_acc = new FileWriter("./output_files/acc_status" + id + ".txt", false);
-  // val output_ir = new FileWriter("./output_files/ir_status" + id + ".txt", false);
-  // val output_state = new FileWriter("./output_files/state_status" + id + ".txt", false);
-  // val output_stimulated_memory = new FileWriter("./output_files/stimulated_memory_status" + id + ".txt", false);
-  // val output_stimulated_lines = new FileWriter("./output_files/stimulated_lines_status" + id + ".txt", false);
-  val output = new FileWriter("./output_files/simulated" + id + ".txt", false);
-
-
-  //  var instructionsArray = accumulator_v1_compiler.compileFromArray(program)
+  val output = new FileWriter("./output_files/output.txt", false);
   var instructionsArray = program
   var stimulatedLines = Array[String]()
-
-//  for(idx <- 0 until instructionsArray.length) {
-//    poke(DUT.io.InputMemory(idx), instructionsArray(idx))
-//  }
-//  step(256)
 
   step(1)
 
   var simulation_ended = false
   var simulation_cycle = 0
 
-  output.write("{ sim: [")
+  output.write("[")
   output.flush()
   while(!simulation_ended){
     output.write("{")
@@ -132,15 +117,16 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
 
 
     // Writing memory state 
-    output.write("memoryState : {")
+    output.write("memoryState : [")
     for(memIdx <- 0 until DUT.io.InternalMemory.length){
       if(memIdx < DUT.io.InternalMemory.length - 1){
         output.write(peek(DUT.io.InternalMemory(memIdx)).toString + ",")
       }else{
         output.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
       }
-      output.flush()
     }
+    output.write("]},")
+    output.flush()
 
 
     // Writing PC state 
