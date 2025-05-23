@@ -87,7 +87,28 @@ eslint est une vérification de syntaxe pour améliorer la qualité du code. En 
 
 ### [assets](src/assets)
 
-Utilisé pour stocké les photos, etc. Si plusieurs fichiers semble pouvoir être rassembler
-### routes
-### interface
-### components
+Utilisé pour stocké les photos, etc. Si plusieurs fichiers semble pouvoir être rassembler en un dossier on le priorise pour garder la lisibilité.
+
+### [routes](src/routes)
+
+Utilisé pour stocké les composantes react et leur test il faut garder le chemin pour faire un url. Par exemple, la page des processeurs doient être stockés dans src/routes/processor, car son url est /processor. Bref, on veut que le dossier du composant soit le même chemin que son url.
+
+### [interface](src/interface)
+
+Utilisé pour stocké les types et interfaces de typescript. Si besoin, créer des sous-dossier pour regrouper les fichiers cohérents.
+
+### [components](src/components)
+
+Utilisé pour les composants réutilisables ou ponctuelles. Veuillez regrouper les composantes qui sont cohérentes entre eux. 
+
+## Mode d'exécution
+
+L'application s'exécute avec deux différents modes d'exécution en ajoutant --mode \<mode> à react-router dev ou build.
+
+### Mode website
+
+Le mode website est utilisé pour représenter l'exécution dans un browser régulier. Il permets au site d'utilisé http pour comuniquer avec le serveur et d'utiliser localStorage pour sauvegarder certaines données de navigation.
+
+### Mode electron
+
+Comme son nom l'indique, le mode d'exécution electron sert à compiler l'application dans le contexte d'une application electron. Il permets au client d'utiliser la communication IPC pour contacter le serveur et d'utiliser une librairie comme electron-store ou electron-setting pour sauvegarder certaines données de navigation
