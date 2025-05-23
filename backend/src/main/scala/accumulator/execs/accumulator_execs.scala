@@ -8,6 +8,11 @@ import chisel3.iotesters._
 import java.io.FileWriter
 import scala.io.Source
 
+object AccumulatorFilePathes {
+  val FILE_PATH_ACCUMULATOR_V1 = "./output_files/output_v1.txt"
+  val FILE_PATH_ACCUMULATOR_V2 = "./output_files/output_v2.txt"
+}
+
 final case class RunResultsV1(
                              hex: Array[String],
                              output: String,
@@ -26,7 +31,7 @@ object accumulator_execs {
   def compileAndRunV1(program: Array[String], id: Int): RunResultsV1 = {
     var result = ""
 
-    val filename = "./output_files/output_v1.txt"
+    val filename = AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V1
 
     val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 1)
     val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
@@ -51,16 +56,7 @@ object accumulator_execs {
   def compileAndRunV2(program: Array[String], id: Int): RunResultsV2 = {
     var result = Array[Array[String]]()
 
-    val filenames = Array[String](
-      "./output_files/acc_v2_internal_memory_status_" + id + ".txt",
-      "./output_files/acc_v2_pc_status" + id + ".txt",
-      "./output_files/acc_v2_acc_status" + id + ".txt",
-      "./output_files/acc_v2_ir_status" + id + ".txt",
-      "./output_files/acc_v2_ma_status" + id + ".txt",
-      "./output_files/acc_v2_state_status" + id + ".txt",
-      "./output_files/acc_v2_stimulated_memory_status" + id + ".txt",
-      "./output_files/acc_v2_stimulated_lines_status" + id + ".txt"
-    )
+    val filename = AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V2
 
     val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 2)
     val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
@@ -93,7 +89,7 @@ object accumulator_execs {
 }
 
 class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
-  val output = new FileWriter("./output_files/output.txt", false);
+  val output = new FileWriter(AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V1, false);
   var instructionsArray = program
   var stimulatedLines = Array[String]()
 
@@ -155,14 +151,7 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
 }
 
 class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
-  val output_internal_memory = new FileWriter("./output_files/acc_v2_internal_memory_status_" + id + ".txt", false);
-  val output_pc = new FileWriter("./output_files/acc_v2_pc_status" + id + ".txt", false);
-  val output_acc = new FileWriter("./output_files/acc_v2_acc_status" + id + ".txt", false);
-  val output_ir = new FileWriter("./output_files/acc_v2_ir_status" + id + ".txt", false);
-  val output_ma = new FileWriter("./output_files/acc_v2_ma_status" + id + ".txt", false);
-  val output_state = new FileWriter("./output_files/acc_v2_state_status" + id + ".txt", false);
-  val output_stimulated_memory = new FileWriter("./output_files/acc_v2_stimulated_memory_status" + id + ".txt", false);
-  val output_stimulated_lines = new FileWriter("./output_files/acc_v2_stimulated_lines_status" + id + ".txt", false);
+  val output = new FileWriter(AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V2, false);
 
   //  var instructionsArray = accumulator_v2_compiler.compileFromArray(program)
   var instructionsArray = program
