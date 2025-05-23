@@ -6,6 +6,6 @@ import type { Config } from "@react-router/dev/config";
  * un frontend 100% côté client.
  */
 export default {
-  appDirectory: "src",
-  ssr: false,
+    appDirectory: "src",
+    ssr: false,
 } satisfies Config;

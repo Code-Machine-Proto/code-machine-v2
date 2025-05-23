@@ -5,12 +5,12 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
-  envDir: "./environment",
-  appType: "spa",
-  resolve: {
-    alias: {
-      "@src": path.resolve(__dirname, "src"),
+    plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+    envDir: "./environment",
+    appType: "spa",
+    resolve: {
+        alias: {
+            "@src": path.resolve(__dirname, "src"),
+        }
     },
-  },
 });
