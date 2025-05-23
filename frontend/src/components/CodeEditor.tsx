@@ -3,6 +3,11 @@ import { CodeContext, DispatchCodeContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollElement } from "@src/interface/ScrollInterfaces";
 
+/**
+ * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
+ * S'affiche automatiquement avec le numéro de ligne juste à côté
+ * @returns L'éditeur de code pour écrire de l'assembleur
+ */
 export default function CodeEditor() {
     const codeContext = useContext(CodeContext);
     const dispatch = useContext(DispatchCodeContext);
@@ -46,6 +51,12 @@ export default function CodeEditor() {
     );
 }
 
+/**
+ * Associe deux ScrollElement pour synchronisé le leur. Lien d'une seule direction.
+ * Il faut l'utiliser sur les deux onScroll pour bien synchronisé les deux éléments.
+ * @param scroller - l'élément qu'on défile
+ * @param scrolled - l'élément qu'on veut synchronisé
+ */
 function handleScroll(scroller: ScrollElement ,scrolled: ScrollElement): void {
     if( scroller.current && scrolled.current ) {
         scrolled.current.scrollTop = scroller.current.scrollTop;

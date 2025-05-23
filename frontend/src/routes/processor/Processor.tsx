@@ -2,6 +2,10 @@ import CodeEditor from "@src/components/CodeEditor";
 import { CodeProvider } from "@src/components/CodeProvider";
 import ExecutionControl from "@src/components/ExecutionControl";
 
+/**
+ * Layout de la page processeurs pour accueillir une simulation d'un processeur 
+ * @returns Le composant de la page des processeur
+ */
 export default function Processor() {
     return (
         <CodeProvider >

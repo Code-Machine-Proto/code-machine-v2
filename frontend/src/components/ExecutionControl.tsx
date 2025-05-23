@@ -1,6 +1,10 @@
 import { useState } from "react";
 import ExecutionButton from "./ExecutionButton";
 
+/**
+ * Sert à contrôler l'exécution de la simulation côté frontend une fois utilisé
+ * @returns le composant React qui affiche la barre de contrôle 
+ */
 export default function ExecutionControl() {
     const [checkbox, setCheckBox] = useState<boolean>(false);
     return (
