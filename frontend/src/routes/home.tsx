@@ -1,5 +1,10 @@
 import BoxLink from "@src/components/BoxLink";
 
+/**
+ * Composant de la page principale et permets la navigation entre les différents processeurs
+ * 
+ * @returns le composant React a affiché
+ */
 export default function Home() {
     return (
     <div className="bg-back flex grow flex-col gap-5 p-5" >
