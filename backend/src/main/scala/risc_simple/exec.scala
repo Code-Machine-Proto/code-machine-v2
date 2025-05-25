@@ -7,32 +7,23 @@ import scala.io.Source
 
 // need further dev : stimulated lines
 
+object RiscSimpleFilePath {
+  val path = "./output_files/output_risc_simple.txt"
+}
+
+
 final case class RunResultsRiscSimple  (
                                hex_text: Array[String],
                                hex_data: Array[String],
-                               dm_status: Array[String],
-                               reg_status: Array[String],
-                               pc_status: Array[String],
-                               ir_status: Array[String],
-                               state_status: Array[String],
-                               lines_status: Array[String],
-                               //im_status: Array[String],
+                               output: String,
                              )
 
 object risc_simple_execs {
 
   def compileAndRun(program: Array[String], id: Int): RunResultsRiscSimple = {
   
-    var result = Array[Array[String]]()
-    val filenames = Array[String](
-      "./output_files/risc_simple_dm_status_" + id + ".txt",
-      "./output_files/risc_simple_reg_status" + id + ".txt",
-      "./output_files/risc_simple_pc_status" + id + ".txt",
-      "./output_files/risc_simple_ir_status" + id + ".txt",
-      "./output_files/risc_simple_state_status" + id + ".txt",
-      "./output_files/risc_simple_stimulated_lines_status" + id + ".txt"
-      //"./output_files/risc_simple_im_status" + id + ".txt"
-    )
+    var result = ""
+    val filename = RiscSimpleFilePath.path
     
 
     val UIntText = risc_simple.compiler.asm_compiler.compileFromArray_text(program) //UInt text
@@ -49,107 +40,78 @@ object risc_simple_execs {
       DUT => new risc_simple_simulation(DUT, id)
     }
 
-    for(sourcefile <- filenames){
-      var content = Array[String]()
-      for(line <- Source.fromFile(sourcefile).getLines){
-        content = content :+ line
-      }
-      result = result :+ content
+    var content = ""
+    for(line <- Source.fromFile(filename).getLines){
+      content = content + line
     }
+    result = content
+
 
     // result(n) follows filenames val order
     RunResultsRiscSimple(
       Hextext,
       Hexdata,
-      result(0),
-      result(1),
-      result(2),
-      result(3),
-      result(4),
-      result(5)
-      //result(6)
+      result,
     )
   }
 }
 
 class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekPokeTester(DUT) {
 
-  val output_dm = new FileWriter("./output_files/risc_simple_dm_status_" + id + ".txt", false);
-  val output_reg = new FileWriter("./output_files/risc_simple_reg_status" + id + ".txt", false);
-  val output_pc = new FileWriter("./output_files/risc_simple_pc_status" + id + ".txt", false);
-  val output_ir = new FileWriter("./output_files/risc_simple_ir_status" + id + ".txt", false);
-  val output_state = new FileWriter("./output_files/risc_simple_state_status" + id + ".txt", false);
-  val output_stimulated_lines = new FileWriter("./output_files/risc_simple_stimulated_lines_status" + id + ".txt", false);
-  //val output_im = new FileWriter("./output_files/risc_simple_im_status_" + id + ".txt", false);
 
+  val output = new FileWriter(RiscSimpleFilePath.path, false);
   var simulation_ended = false
   var simulation_cycle = 0
 
+  output.write("[")
+  output.flush()
   while(!simulation_ended){
-  
+    output.write("{")
+    output.flush()
+
+
 // --------- DM
-  
+    output.write("memoryState : [")
     for(memIdx <- 0 until DUT.io.debug.Data_mem.length){
     
       if(memIdx < DUT.io.debug.Data_mem.length - 1){
-        output_dm.write(peek(DUT.io.debug.Data_mem(memIdx)).toString + ",")
+        output.write(peek(DUT.io.debug.Data_mem(memIdx)).toString + ",")
       }
       else{
-        output_dm.write(peek(DUT.io.debug.Data_mem(memIdx)).toString + "\r")
+        output.write(peek(DUT.io.debug.Data_mem(memIdx)).toString + "\r")
       }
-      output_dm.flush()
     }
-    
-    output_dm.write("\n")
-    output_dm.flush()
+    output.write("]},")
+    output.flush()
     
 // ---------  Reg
- 
+    output.write("regState : [")
     for(memIdx <- 0 until DUT.io.debug.Registers.length){
     
       if(memIdx < DUT.io.debug.Registers.length - 1){
-        output_reg.write(peek(DUT.io.debug.Registers(memIdx)).toString + ",")
+        output.write(peek(DUT.io.debug.Registers(memIdx)).toString + ",")
       }
       else{
-        output_reg.write(peek(DUT.io.debug.Registers(memIdx)).toString + "\r")
+        output.write(peek(DUT.io.debug.Registers(memIdx)).toString + "\r")
       }
-      output_reg.flush()
     }
-    
-    output_reg.write("\n")
-    output_reg.flush()
+    output.write("]},")
+    output.flush()
         
 // ---------- PC
- 
-    output_pc.write(peek(DUT.io.debug.PC).toString + "\n")
-    output_pc.flush()
+    output.write("irState : {" + peek(DUT.io.debug.PC).toString + "},")
+    output.flush()
 
 // ----------- IR
-
-    output_ir.write(peek(DUT.io.debug.IR).toString + "\n")
-    output_ir.flush()
+    output.write("irState : {" + peek(DUT.io.debug.IR).toString + "},")
+    output.flush()
     
 // ----------- State
-
-    output_state.write(peek(DUT.io.debug.State).toString + "\n")
-    output_state.flush()
+    output.write("instructionState : {" + peek(DUT.io.debug.State).toString + "},")
+    output.flush()
     
 // ----------- Stimulated lines
-
-    val stimulatedLines = risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.Instruction).toInt, peek(DUT.io.debug.State).toInt)
-
-    var lineIdx = 0
-    for(line <- stimulatedLines){
-      if(lineIdx == stimulatedLines.size - 1) {
-        output_stimulated_lines.write(line + "\r")
-      }else{
-        output_stimulated_lines.write(line + ",")
-      }
-      lineIdx = lineIdx + 1
-      output_stimulated_lines.flush()
-    }
-    output_stimulated_lines.write("\n")
-    output_stimulated_lines.flush()
+  //TODO: complete
 
 //------- IM (If needed )
    /*
@@ -173,6 +135,8 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
     simulation_cycle = simulation_cycle + 1    //Debug. purposes
     simulation_ended = (peek(DUT.io.debug.State).toInt == 4) || (simulation_cycle == 512)
   }
+  output.write("]")
+  output.flush()
 }
 
 object exec extends App {
