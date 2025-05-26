@@ -4,14 +4,14 @@
 
 ## Technologie utilisé
 
-- node/npm
-- React
-- React-Router
-- TypeScript
-- TailwindCSS
-- Vite
-- eslint
-- Librairie de test à venir
+- [node/npm](#nodenpm)
+- [React](#react)
+- [React-Router](#react-router)
+- [TypeScript](#typescript)
+- [TailwindCSS](#tailwindcss)
+- [Vite](#vite)
+- [eslint](#eslint)
+- [Vitest](#vitest)
 
 ## node/npm
 
@@ -33,13 +33,21 @@ react-router dev --mode website
 
 Commande pour partir le frontend en mode dévelopement. Le mode indique qu'il sera ouvert avec les modules propres à la version pour un fureteur régulier.
 
-#### npm run build
+#### npm run build:website
 
 ```
 react-router build --mode website
 ```
 
 Commande pour construire la plateforme en incluant les modules pour le site web pour un fureteur régulier. À exécuter avant la commande npm start.
+
+#### npm run build:electron
+
+```
+react-router build --mode electron
+```
+
+Commande pour construire la plateforme en incluant les modules pour la plateforme electron. À exécuter avant de partir l'application electron.
 
 #### npm start
 
@@ -52,10 +60,44 @@ Commande pour partir le serveur statique avec les fichiers construit dans l'éta
 #### npm run lint
 
 ```
-eslint .
+eslint
 ```
 
 Commande pour vérifier tous les fichiers avec eslint dans le projet frontend
+
+#### npm run lint:fix
+
+```
+eslint --fix
+```
+
+Commande pour vérifier tous les fichiers avec eslint dans le projet frontend et corriger les erreurs simples.
+
+#### npm test
+
+```
+vitest watch
+```
+
+Commande pour lancer les tests et garder une instance de test à chaque changement. Parfait durant le développement.
+
+#### npm run test:headless
+
+```
+vitest watch
+```
+
+vitest --browser.headless
+
+Commande pour lancer les tests une seule fois sans l'ouverture d'un navigateur web. Parfait pour les tests d'un pipeline.
+
+#### npm run coverage
+
+```
+npm run test:headless -- --coverage --coverage.provider v8 -r src
+```
+
+Commande pour lancer le code coverage en mode headless avec l'engin de coverage v8 en ne prenant en compte que les fichiers sources.
 
 ## React
 
@@ -82,6 +124,10 @@ Vite est la plateforme par défaut de react-router, il s'occupe de servir, minif
 ## eslint
 
 eslint est une vérification de syntaxe pour améliorer la qualité du code. En ce moment, il manque les règles à ajouter dans le [fichier de configuration](eslint.config.js). Documentation de [eslint](https://eslint.org/docs/latest/)
+
+## Vitest
+
+Vitest est un cadriciel de test adapté pour Vite et fonctionnant avec React. Nous l'avons choisi pour sa compatibilité avec Vite et React. Documentation de [Vitest](https://vitest.dev/)
 
 ## Format des fichiers
 

@@ -8,9 +8,10 @@
     "dev": "react-router dev --mode website",
     "start": "vite preview",
     "lint": "eslint",
-    "test": "vitest watch --browser=chromium",
+    "lint:fix": "eslint --fix",
+    "test": "vitest watch",
     "test:headless": "vitest --browser.headless",
-    "test:coverage": "npm run test:headless -- --coverage --coverage.provider v8 -r src"
+    "coverage": "npm run test:headless -- --coverage --coverage.provider v8 -r src"
   },
   "dependencies": {
     "@react-router/node": "^7.5.3",
