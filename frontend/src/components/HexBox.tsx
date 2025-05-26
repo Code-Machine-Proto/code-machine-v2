@@ -1,7 +1,7 @@
 import type { HexBoxProps } from "@src/interface/HexBoxProps";
 import { useState } from "react";
 
-export default function HexBox({ name, number, defaultBase10 }: HexBoxProps) {
+export default function HexBox({ name, number, defaultBase10 = false }: HexBoxProps) {
     const [ base10, setBase10 ] = useState<boolean>(defaultBase10);
     return (
         <div className="flex flex-col size-[9rem] gap-2 bg-inherit p-2 rounded-md">
