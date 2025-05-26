@@ -6,7 +6,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 
 
 export default defineConfig([ 
-    globalIgnores(["build/*", "node_modules/*", ".react-router/*"]),
+    globalIgnores(["build/*", "node_modules/*", ".react-router/*", "src/coverage/*"]),
     { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
     { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: {...globals.browser, ...globals.node} } },
     tseslint.configs.recommended,
@@ -20,6 +20,19 @@ export default defineConfig([
             "react/react-in-jsx-scope": "off",
             // Idem
             "react/jsx-uses-react": "off",
+            "array-callback-return": ["error", { allowImplicit: true, checkForEach: true, allowVoid: true }],
+            "no-duplicate-imports": "error",
+            "camelcase": ["error", { ignoreGlobals: true, }],
+            "class-methods-use-this": "warn",
+            "curly": "error",
+            "dot-notation": "error",
+            "max-classes-per-file": "error",
+            "new-cap": "error",
+            "no-bitwise": "error",
+            "no-console": "error",
+            "no-magic-numbers": "error",
+            "no-var": "error",
+            "prefer-const": "error",
         },
         settings:{
             "react": {
