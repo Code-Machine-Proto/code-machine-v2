@@ -1,5 +1,9 @@
 import HexBox from "@src/components/HexBox";
 
+/**
+ * L'affichage du processeur à accumulateur avec registre MA
+ * @returns Le composant React a affiché
+ */
 export default function MaProcessor() {
     return (
         <div className="flex gap-3">

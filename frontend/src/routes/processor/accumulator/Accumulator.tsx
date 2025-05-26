@@ -1,5 +1,9 @@
 import HexBox from "@src/components/HexBox";
 
+/**
+ * L'affichage du processeur à accumulateur
+ * @returns Le composant React du processeur à accumulateur
+ */
 export default function AccumulatorProcessor() {
     return (
         <div className="flex gap-3">
