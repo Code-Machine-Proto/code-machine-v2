@@ -95,19 +95,19 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
         output.write(peek(DUT.io.debug.Registers(memIdx)).toString + "\r")
       }
     }
-    output.write("]},")
+    output.write("],")
     output.flush()
         
 // ---------- PC
-    output.write("\"irState\" : {" + peek(DUT.io.debug.PC).toString + "},")
+    output.write("\"pcState\" : " + peek(DUT.io.debug.PC).toString + ",")
     output.flush()
 
 // ----------- IR
-    output.write("\"irState\" : {" + peek(DUT.io.debug.IR).toString + "},")
+    output.write("\"irState\" : " + peek(DUT.io.debug.IR).toString + ",")
     output.flush()
     
 // ----------- State
-    output.write("\"instructionState\" : {" + peek(DUT.io.debug.State).toString + "}},")
+    output.write("\"instructionState\" : " + peek(DUT.io.debug.State).toString + "},")
     output.flush()
     
 // ----------- Stimulated lines
