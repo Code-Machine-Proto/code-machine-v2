@@ -44,6 +44,7 @@ actionMap.set(CodeAction.FORWARD, forward);
 actionMap.set(CodeAction.BACKWARD, backward);
 actionMap.set(CodeAction.TO_START, toStart);
 actionMap.set(CodeAction.TO_END, toEnd);
+actionMap.set(CodeAction.CHANGE_EXECUTED_CODE, changeExecutedCode);
 
 /**
  * Associe le type d'action avec la bonne fonction pour mettre à jour l'état
@@ -79,15 +80,15 @@ function changeProcessor(state: SimulationState, action: CodePayload): Simulatio
 }
 
 function forward(state: SimulationState, _: CodePayload): SimulationState {
-    if ( state.currentStep + 1 >= state.executionState.length ) {
+    if ( state.currentStep + 1 < state.executionState.length ) {
         return { ...state, currentStep: state.currentStep + 1 };
     }
     return { ... state };
 }
 
 function backward(state: SimulationState, _: CodePayload): SimulationState {
-    if ( state.currentStep - 1 < 0 ) {
-        return { ...state, currentStep: state.currentStep - 1 };
+    if ( state.currentStep - 1 >= 0 ) {
+        return { ...state, ...state.executionState, currentStep: state.currentStep - 1 };
     }
     return { ...state };
 }
@@ -98,4 +99,11 @@ function toStart(state: SimulationState, _: CodePayload): SimulationState {
 
 function toEnd(state: SimulationState, _: CodePayload): SimulationState {
     return { ...state, currentStep: state.executionState.length - 1 };
+}
+
+function changeExecutedCode(state: SimulationState, action: CodePayload): SimulationState {
+    if ( action.executedCode ) {
+        return { ...state, executionState: action.executedCode };
+    }
+    return { ...state };
 }

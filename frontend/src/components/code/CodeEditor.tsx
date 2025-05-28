@@ -17,6 +17,12 @@ export default function CodeEditor() {
     const textArea = useRef<HTMLTextAreaElement>(null);
 
     const fetcher = useFetcher();
+
+    useEffect(() => {
+        if( fetcher.data ) {
+            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data })
+        }
+    }, [fetcher.data]);
     
     useEffect(() => {
         if (numberContainer.current) {

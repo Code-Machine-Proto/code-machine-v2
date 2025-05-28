@@ -1,5 +1,6 @@
 import type { ActionDispatch } from "react";
 import type { ProcessorId, SimulationState } from "./CodeInterface";
+import type { ProcessorStep } from "./ProcessorStep";
 
 /**
  * Type du dispatch du reducer
@@ -16,6 +17,7 @@ export enum CodeAction {
     TO_END,
     FORWARD,
     BACKWARD,
+    CHANGE_EXECUTED_CODE,
 };
 
 /**
@@ -23,6 +25,7 @@ export enum CodeAction {
  */
 export interface CodePayload {
     code?: string,
+    executedCode?: Array<ProcessorStep>,
     processorId?: ProcessorId,
     type: CodeAction,
 };
