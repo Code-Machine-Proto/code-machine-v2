@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { CodeContext, DispatchCodeContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollElement } from "@src/interface/ScrollInterfaces";
+import { useFetcher } from "react-router";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -9,10 +10,13 @@ import type { ScrollElement } from "@src/interface/ScrollInterfaces";
  * @returns L'éditeur de code pour écrire de l'assembleur
  */
 export default function CodeEditor() {
-    const codeContext = useContext(CodeContext);
+    const { code, lines, processorId } = useContext(CodeContext);
     const dispatch = useContext(DispatchCodeContext);
+
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
+
+    const fetcher = useFetcher();
     
     useEffect(() => {
         if (numberContainer.current) {
@@ -31,11 +35,11 @@ export default function CodeEditor() {
                     ref={numberContainer}
                     onScroll={() => handleScroll(numberContainer, textArea)}
                 >
-                    { codeContext?.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
+                    { lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
                 <textarea 
                     className="text-white resize-none border-none outline-none w-4/5" 
-                    value={codeContext?.code} 
+                    value={ code } 
                     onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} 
                     wrap="off"
                     ref={textArea}
@@ -44,6 +48,7 @@ export default function CodeEditor() {
             </div>
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
+                onClick={() => fetcher.submit({ lines: lines, processorId: processorId }, { method: "POST", action: "/processor"})}
             >
                 Compiler
             </button>

@@ -9,6 +9,7 @@ export default [
     index("./routes/home.tsx"),
     ...prefix("processor", [
         layout("./routes/processor/Processor.tsx", [
+            index("./routes/processor/CompileAction.tsx"),
             route("accumulator", "./routes/processor/accumulator/Accumulator.tsx"),
             route("with-ma", "./routes/processor/with-ma/MaProcessor.tsx"),
             route("polyrisc", "./routes/processor/polyrisc/PolyRisc.tsx"),

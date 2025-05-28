@@ -14,7 +14,7 @@ export default function HexBox({ name, number, defaultBase10 = false }: HexBoxPr
     return (
         <div className="flex flex-col size-[9rem] gap-2 bg-inherit p-2 rounded-md">
             <p className="text-4xl">{ name }</p>
-            <p className="text-2xl">
+            <p className="text-2xl text-right">
                 {base10 ? "" : "0x"}
                 { number.toString(base10 ? 10 : 16) }
             </p>
