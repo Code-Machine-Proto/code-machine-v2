@@ -26,7 +26,10 @@ export default function Processor() {
                         </p>
                         <div className=" flex grow gap-5">
                             <Outlet />
-                            { enableMemory && <Memory className="bg-green-500" memoryContent={execution[currentStep].memoryState}/> }
+                            {
+                            enableMemory &&
+                            <Memory className="bg-green-500" memoryContent={execution[currentStep].memoryState} stimulatedCell={execution[currentStep].stimulatedMemory} />
+                            }
                         </div>
                     </div>
                 </div>

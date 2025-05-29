@@ -4,7 +4,7 @@ import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
 
-export default function Memory({ memoryContent, className }: { memoryContent: Array<number>, className: string }) {
+export default function Memory({ memoryContent, className, stimulatedCell }: { memoryContent: Array<number>, className: string, stimulatedCell?: number }) {
     const [columnCount, setColumnCount] = useState<number>(4);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);
     const [memoryCellFormat, setMemoryCellFormat] = useState<boolean>(true);
@@ -47,8 +47,16 @@ export default function Memory({ memoryContent, className }: { memoryContent: Ar
                 { 
                     memoryContent.map((value, index) => {
                         return (
-                        <div key={index} className="flex flex-col size-[4rem] bg-slate-700 justify-center p-2 rounded-sm">
-                            <HexNumber keygen={index} className="text-white" number={value} base10={memoryCellFormat} />
+                        <div 
+                            key={index}
+                            className={`flex flex-col size-[4rem] justify-center p-2 rounded-sm ${stimulatedCell === index ? "bg-green-700" : "bg-slate-700"}`}
+                        >
+                            <HexNumber 
+                                keygen={index} 
+                                className={"text-white"}
+                                number={value}
+                                base10={memoryCellFormat}
+                            />
                         </div>
                         );
                     })
