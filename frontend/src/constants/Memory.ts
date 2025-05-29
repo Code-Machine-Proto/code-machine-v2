@@ -4,3 +4,5 @@ export const COLUMN_CHOICE = [
     { count: 4, cssclass: "grid-cols-4" },
     { count: 8, cssclass: "grid-cols-8" },
 ];
+
+export const PROCESSOR_ACTIONS = ["Fetch", "Decode", "Execute"];

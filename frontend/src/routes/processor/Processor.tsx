@@ -2,6 +2,7 @@ import CodeEditor from "@src/components/code/CodeEditor";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import ExecutionControl from "@src/components/execution/ExecutionControl";
 import Memory from "@src/components/Memory";
+import { PROCESSOR_ACTIONS } from "@src/constants/Memory";
 import { useContext, useState } from "react";
 import { Outlet } from "react-router";
 
@@ -20,9 +21,12 @@ export default function Processor() {
                     <CodeEditor />
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
                         <ExecutionControl enableMemory={enableMemory} setEnableMemory={setEnableMemory} />
+                        <p className="bg-white w-fit p-3 rounded-md">
+                                { PROCESSOR_ACTIONS[execution[currentStep].instructionState] }
+                        </p>
                         <div className=" flex grow gap-5">
                             <Outlet />
-                            {enableMemory && <Memory memoryContent={execution[currentStep].memoryState}/>}
+                            { enableMemory && <Memory className="bg-green-500" memoryContent={execution[currentStep].memoryState}/> }
                         </div>
                     </div>
                 </div>

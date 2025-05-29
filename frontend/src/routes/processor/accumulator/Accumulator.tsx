@@ -1,5 +1,5 @@
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
-import HexBox from "@src/components/HexBox";
+import HexBox from "@src/components/utils-hex/HexBox";
 import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect } from "react";

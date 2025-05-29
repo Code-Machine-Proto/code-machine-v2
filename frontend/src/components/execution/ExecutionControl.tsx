@@ -1,6 +1,6 @@
 import { useContext, useState, type Dispatch, type SetStateAction } from "react";
 import ExecutionButton from "./ExecutionButton";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "../code/CodeProvider";
+import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 
 /**
