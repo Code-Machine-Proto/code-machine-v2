@@ -1,7 +1,8 @@
 import CodeEditor from "@src/components/code/CodeEditor";
-import { CodeProvider } from "@src/components/code/CodeProvider";
+import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import ExecutionControl from "@src/components/execution/ExecutionControl";
 import Memory from "@src/components/Memory";
+import { useContext, useState } from "react";
 import { Outlet } from "react-router";
 
 /**
@@ -9,18 +10,21 @@ import { Outlet } from "react-router";
  * @returns Le composant de la page des processeur
  */
 export default function Processor() {
+    const execution = useContext(ExecutionContext);
+    const currentStep = useContext(StepContext);
+
+    const [enableMemory, setEnableMemory] = useState<boolean>(false);
+
     return (
-        <CodeProvider >
                 <div className="flex grow p-5 bg-back gap-5">
                     <CodeEditor />
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
-                        <ExecutionControl />
+                        <ExecutionControl enableMemory={enableMemory} setEnableMemory={setEnableMemory} />
                         <div className=" flex grow gap-5">
                             <Outlet />
-                            <Memory memoryContent={[0,1,2,3,4,5,6,7,8,9,10,11,12,13]}/>
+                            {enableMemory && <Memory memoryContent={execution[currentStep].memoryState}/>}
                         </div>
                     </div>
                 </div>
-        </CodeProvider>
     );
 }

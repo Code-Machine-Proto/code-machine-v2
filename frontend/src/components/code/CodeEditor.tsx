@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { CodeContext, DispatchCodeContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
-import type { ScrollElement } from "@src/interface/ScrollInterfaces";
+import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 
 /**
@@ -68,7 +68,7 @@ export default function CodeEditor() {
  * @param scroller - l'élément qu'on défile
  * @param scrolled - l'élément qu'on veut synchronisé
  */
-function handleScroll(scroller: ScrollElement ,scrolled: ScrollElement): void {
+function handleScroll(scroller: ScrollRef ,scrolled: ScrollRef): void {
     if( scroller.current && scrolled.current ) {
         scrolled.current.scrollTop = scroller.current.scrollTop;
     }

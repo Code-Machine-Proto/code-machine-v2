@@ -8,6 +8,7 @@ import {
 
 import "./app.css";
 import Header from "@src/components/Header";
+import { CodeProvider } from "./components/code/CodeProvider";
 
 /**
  * Disposition de base de l'application est affiché sur toutes les pages.
@@ -41,5 +42,5 @@ export function Layout({ children }: { children: React.ReactNode }) {
  * @returns Une outlet qui affiche le reste de l'application
  */
 export default function App() {
-    return <Outlet />;
+    return <CodeProvider> <Outlet /> </CodeProvider>;
 }

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, type Dispatch, type SetStateAction } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "../code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -7,7 +7,7 @@ import { CodeAction } from "@src/interface/DispatchCode";
  * Sert à contrôler l'exécution de la simulation côté frontend une fois utilisé
  * @returns le composant React qui affiche la barre de contrôle 
  */
-export default function ExecutionControl() {
+export default function ExecutionControl({ enableMemory, setEnableMemory }: { enableMemory: boolean, setEnableMemory: Dispatch<SetStateAction<boolean>> }) {
     const [checkbox, setCheckBox] = useState<boolean>(true);
     const dispatch = useContext(DispatchCodeContext);
     const currentStep = useContext(StepContext);
@@ -45,12 +45,12 @@ export default function ExecutionControl() {
                 <p>/{ maxStep }</p>
             </div>
             <div className="flex items-center gap-1">
-                <input type="checkbox" disabled />
+                <input type="checkbox"  checked={enableMemory} onChange={() => setEnableMemory(!enableMemory)}/>
                 <p className="text-white">Afficher la mémoire</p>
             </div>
             <div className="flex items-center gap-2">
                 <label className="switch">
-                    <input type="checkbox" disabled readOnly={true} checked={checkbox} onClick={() => setCheckBox(!checkbox)} />
+                    <input type="checkbox" disabled checked={checkbox} onChange={() => setCheckBox(!checkbox)} />
                     <span className="slider rounded-full before:rounded-full" />
                 </label>
                 <p className="text-white">
