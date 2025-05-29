@@ -4,14 +4,14 @@ import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
 
-export default function Memory({ memoryContent, className, stimulatedCell }: { memoryContent: Array<number>, className: string, stimulatedCell?: number }) {
+export default function Memory({ memoryContent, className, stimulatedCell, nom }: { memoryContent: Array<number>, className: string, stimulatedCell?: number, nom: string }) {
     const [columnCount, setColumnCount] = useState<number>(4);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);
     const [memoryCellFormat, setMemoryCellFormat] = useState<boolean>(true);
 
     return (
         <div className="flex flex-col gap-1">
-            
+            <p className="text-white text-2xl">{ nom }</p> 
             <div className="flex gap-2">
                 <div className="flex flex-col text-white bg-slate-800 p-3 rounded-md">
                     <p className="text-xs text-main-400">Mode</p>

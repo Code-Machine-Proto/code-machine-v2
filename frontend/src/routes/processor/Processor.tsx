@@ -28,7 +28,12 @@ export default function Processor() {
                             <Outlet />
                             {
                             enableMemory &&
-                            <Memory className="bg-green-500" memoryContent={execution[currentStep].memoryState} stimulatedCell={execution[currentStep].stimulatedMemory} />
+                            <Memory 
+                                className="bg-green-500"
+                                memoryContent={execution[currentStep].memoryState}
+                                stimulatedCell={execution[currentStep].stimulatedMemory}
+                                nom="Mémoire principale"
+                            />
                             }
                         </div>
                     </div>
