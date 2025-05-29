@@ -1,5 +1,6 @@
 import type { HexBoxProps } from "@src/interface/HexBoxProps";
 import { useState } from "react";
+import HexNumber from "./HexNumber";
 
 /**
  * Permets de créer une boîte qui affichera un nombre et pourra le transformer en hexadécimal au besoin
@@ -14,10 +15,7 @@ export default function HexBox({ name, number, defaultBase10 = false }: HexBoxPr
     return (
         <div className="flex flex-col size-[9rem] gap-2 bg-inherit p-2 rounded-md">
             <p className="text-4xl">{ name }</p>
-            <p className="text-2xl text-right">
-                {base10 ? "" : "0x"}
-                { number.toString(base10 ? 10 : 16) }
-            </p>
+            <HexNumber className="text-2xl" base10={base10} number={number} />
             <button 
             className={
                 "p-1 rounded-md cursor-pointer " 
