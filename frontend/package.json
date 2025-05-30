@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "react-router build --mode website",
+    "build:electron": "react-router build --mode electron && mv build/client ../electron-interface/static-website",
     "dev": "react-router dev --mode website",
     "preview": "vite preview",
     "lint": "eslint ."
