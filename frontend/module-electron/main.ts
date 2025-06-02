@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+import { ChildProcess, spawn } from "node:child_process";
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -9,4 +10,17 @@ function createWindow() {
     mainWindow.loadFile("./build/client/index.html");
 }
 
-app.whenReady().then(createWindow);
+let scalaServer : ChildProcess;
+
+app.whenReady().then(() => {
+    const execPath = "./module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar";
+    scalaServer = spawn("java", ["-jar", execPath], {stdio: "inherit"});
+
+    createWindow();
+});
+
+app.on('before-quit',() => {
+    if(scalaServer) {
+        scalaServer.kill();
+    }
+});
