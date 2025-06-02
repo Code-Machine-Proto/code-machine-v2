@@ -2,10 +2,27 @@
   "name": "frontend",
   "private": true,
   "type": "module",
+  "main": "build/main.js",
+  "description": "",
+  "author": "",
+  "version": "0.0.1",
+  "build": {
+    "productName": "CodeMachine",
+    "win": {
+      "target": "msi",
+      "signAndEditExecutable": false,
+      "icon": "public/code-machine-logo.ico"
+    },
+    "files": [
+      "./build/**/*"
+    ]
+  },
   "scripts": {
     "build": "react-router build --mode website",
-    "build:electron": "react-router build --mode electron && mv build/client ../electron-interface/static-website",
+    "build:electron": "react-router build --mode electron && vite build -c vite.config.electron.ts",
     "dev": "react-router dev --mode website",
+    "dev:electron": "electron .",
+    "package": "electron-builder",
     "preview": "vite preview",
     "lint": "eslint ."
   },
@@ -24,6 +41,8 @@
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "electron": "^36.3.2",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.26.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.1.0",
