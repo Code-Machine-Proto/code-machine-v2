@@ -488,7 +488,6 @@ object accumulator_v1_compiler {
       
       else {lineState = lineStates.pc_ex}
     }
-    System.out.println("instruction:" + instruction.toString() + " state: "+state.toString()+" accValue"+ accValue.toString() + " lineState:" + lineState.toString() )
     lineState
   }
 
