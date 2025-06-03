@@ -6,6 +6,38 @@ import chisel3.util.Enum
 import scala.io.Source
 import scala.reflect.ClassTag
 
+object opcode {
+  val add = 0
+  val stop= 1
+  val mul = 2
+  val st  = 3
+  val ld  = 4
+  val nop = 5
+  val startup = 6
+  val br  = 7
+  val brz = 8
+  val brnz= 9
+}
+
+object lineStates {
+  val lineError       = -1
+  val fetchLines      = 0
+  val ld_dec          = 1
+  val st_dec          = 2
+  val cntrl_dec       = 3
+  val add_mul_dec     = 4
+  val nop_dec         = 5
+  val branching_ex    = 6
+  val pc_ex           = 7
+}
+
+object instructionState {
+  val fetch = 0
+  val decode = 1
+  val execute= 2 
+  val preload= 3
+}
+
 object accumulator_v1_compiler {
 
   var labels = Map[String, Int]()
