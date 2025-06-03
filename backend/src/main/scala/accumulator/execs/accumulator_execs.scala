@@ -82,7 +82,6 @@ object accumulator_execs {
 class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], id: Int) extends PeekPokeTester(DUT) {
   val output = new FileWriter(AccumulatorFilePathes.FILE_PATH_ACCUMULATOR_V1, false);
   var instructionsArray = program
-  var stimulatedLines = Array[String]()
 
   step(1)
 
@@ -105,7 +104,7 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
         output.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
       }
     }
-    output.write("]},")
+    output.write("],")
     output.flush()
 
 
@@ -126,12 +125,15 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "}")
+    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "},")
     output.flush()
 
     //Writing stimulated lines
-    //TODO
+    output.write("stimulatedLineState: " + accumulator_v1_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt())).toString())
 
+
+    output.write("},")
+    output.flush()
     step(1)
 
     simulation_cycle = simulation_cycle + 1
