@@ -45,9 +45,10 @@ object accumulator_v1_compiler {
   var labelsValuesLengths = Map[String, Int]()
 
   val opcodeMap = Map("add" -> 0, "mul" -> 1, "st" -> 2, "ld" -> 3, "stop" -> 4, "nop" -> 5, "br" -> 6, "brz" -> 7, "brnz"-> 8)
+
+
   val add :: mul :: st :: ld :: stop :: nop :: br :: brz :: brnz :: Nil = Enum(9)
-  val fetch :: decode :: execute :: preload :: Nil = Enum(4)
-  val fetch :: decode :: add-Mul :: ld :: st :: br-brz-brnz = Enum(6)
+  
   def getHexCode(programFilename: String): Array[String] = {
 
     var instructionsHex = Array[String]()
