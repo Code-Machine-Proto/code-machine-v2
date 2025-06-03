@@ -5,3 +5,5 @@
 /.react-router/
 /build/
 /dist/
+/output_files/
+/test_run_dir/

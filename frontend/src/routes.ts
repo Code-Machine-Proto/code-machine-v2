@@ -7,10 +7,12 @@ import { type RouteConfig, index, layout, prefix, route } from "@react-router/de
  */
 export default [
     index("./routes/home.tsx"),
-    route("processor", "./routes/processor/Processor.tsx", [
+    ...prefix("processor", [
+        layout("./routes/processor/Processor.tsx", [
             index("./routes/processor/CompileAction.tsx"),
             route("accumulator", "./routes/processor/accumulator/Accumulator.tsx"),
             route("with-ma", "./routes/processor/with-ma/MaProcessor.tsx"),
             route("polyrisc", "./routes/processor/polyrisc/PolyRisc.tsx"),
         ]),
+    ]),
 ] satisfies RouteConfig;

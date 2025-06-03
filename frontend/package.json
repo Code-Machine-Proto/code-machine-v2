@@ -13,10 +13,17 @@
       "signAndEditExecutable": false,
       "icon": "public/code-machine-logo.ico"
     },
+    "msi": {
+      "oneClick": false,
+      "runAfterFinish": false
+    },
     "files": [
       "./build/**/*"
     ],
-    "extraResources": "module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar"
+    "extraResources": [
+      "module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar",
+      "output_files"
+    ]
   },
   "scripts": {
     "build": "react-router build --mode website",
@@ -30,6 +37,7 @@
   "dependencies": {
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "electron-is-dev": "^3.0.1",
     "isbot": "^5.1.27",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
