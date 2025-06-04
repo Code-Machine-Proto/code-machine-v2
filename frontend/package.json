@@ -21,8 +21,7 @@
       "./build/**/*"
     ],
     "extraResources": [
-      "module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar",
-      "output_files"
+      "module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar"
     ]
   },
   "scripts": {
