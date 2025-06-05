@@ -21,7 +21,7 @@ import spray.json.DefaultJsonProtocol._
 import scala.io.StdIn
 
 final case class Program(content: Array[String]);
-final case class CompileAndRunRequest(userId: Int, program: Array[String], processorId: Int);
+final case class CompileAndRunRequest(program: Array[String], processorId: Int);
 
 final case class testClass(id: String, age: Int);
 
@@ -35,7 +35,7 @@ object SprayJsonExample {
   implicit val executionContext = system.executionContext
 
   implicit val ProgramMarshaller: spray.json.RootJsonFormat[Program] = jsonFormat1(Program.apply);
-  implicit val compileAndRunRequestMarshaller: spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat3(CompileAndRunRequest.apply)
+  implicit val compileAndRunRequestMarshaller: spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat2(CompileAndRunRequest.apply)
   implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] = jsonFormat2(testClass.apply);
   implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] = jsonFormat2(RunResultsV1.apply);
   implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] = jsonFormat2(RunResultsV2.apply);
@@ -67,11 +67,11 @@ object SprayJsonExample {
             entity(as[CompileAndRunRequest]){
               request => {
                 if(request.processorId == 0)
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV1(request.program, request.userId))
+                  complete(accumulator.execs.accumulator_execs.compileAndRunV1(request.program, 0))
                 else if(request.processorId == 1) {
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV2(request.program, request.userId))
+                  complete(accumulator.execs.accumulator_execs.compileAndRunV2(request.program, 0))
                 }else{
-                  complete(risc_simple.risc_simple_execs.compileAndRun(request.program, request.userId))
+                  complete(risc_simple.risc_simple_execs.compileAndRun(request.program, 0))
                 }
               }
             }
