@@ -1,0 +1,9 @@
+name: Test et assurance qualité
+
+on: [push]
+jobs: 
+    Test-WorkFlow:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "Test premier"
+            - run: echo "Test deuxième"
