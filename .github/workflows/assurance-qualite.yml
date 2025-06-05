@@ -1,6 +1,6 @@
 name: Test et assurance qualité
 
-on: [pull-request]
+on: pull_request
 jobs: 
     Test-WorkFlow:
         runs-on: ubuntu-latest
