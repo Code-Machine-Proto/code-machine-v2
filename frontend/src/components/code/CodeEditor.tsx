@@ -22,7 +22,7 @@ export default function CodeEditor() {
         if( fetcher.data ) {
             dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data })
         }
-    }, [fetcher.data]);
+    }, [fetcher.data, dispatch]);
     
     useEffect(() => {
         if (numberContainer.current) {
