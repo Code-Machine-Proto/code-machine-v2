@@ -2,7 +2,7 @@ package risc_simple
 
 import chisel3.iotesters._
 
-import java.io.FileWriter
+import java.io.StringWriter
 import scala.io.Source
 
 // need further dev : stimulated lines
@@ -20,11 +20,10 @@ final case class RunResultsRiscSimple  (
 
 object risc_simple_execs {
 
-  def compileAndRun(program: Array[String], id: Int): RunResultsRiscSimple = {
+  def compileAndRun(program: Array[String]): RunResultsRiscSimple = {
   
     var result = ""
-    val filename = RiscSimpleFilePath.path
-    
+    val output = new StringWriter()
 
     val UIntText = risc_simple.compiler.asm_compiler.compileFromArray_text(program) //UInt text
     val UIntData = risc_simple.compiler.asm_compiler.compileFromArray_data(program) //UInt data
@@ -37,14 +36,10 @@ object risc_simple_execs {
 
     
     chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new RiscSimple(UIntText,UIntData)) {
-      DUT => new risc_simple_simulation(DUT, id)
+      DUT => new risc_simple_simulation(DUT, output)
     }
 
-    var content = ""
-    for(line <- Source.fromFile(filename).getLines){
-      content = content + line
-    }
-    result = content
+    result = output.toString
 
 
     // result(n) follows filenames val order
@@ -56,10 +51,9 @@ object risc_simple_execs {
   }
 }
 
-class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekPokeTester(DUT) {
+class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) extends PeekPokeTester(DUT) {
 
 
-  val output = new FileWriter(RiscSimpleFilePath.path, false);
   var simulation_ended = false
   var simulation_cycle = 0
 
@@ -142,5 +136,5 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
 object exec extends App {
   val program = risc_simple.compiler.asm_compiler.readProgramFromFile("./programs_files/fibo.txt")
   System.out.println(program.mkString(" "))
-  risc_simple.risc_simple_execs.compileAndRun(program, 112233)
+  risc_simple.risc_simple_execs.compileAndRun(program)
 }
