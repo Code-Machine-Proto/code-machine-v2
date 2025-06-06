@@ -25,6 +25,10 @@ jobs:
               working-directory: ./frontend
               if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
+            
+            - name: Vérification playwright
+              working-directory: /home/runner/.cache
+              run: ls -a
       
     lint:
         name: Vérifier les erreurs de linting
