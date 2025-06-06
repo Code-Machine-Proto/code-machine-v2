@@ -7,7 +7,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig(({ mode }) => {
     const base = mode === "electron" ? "./" : "/";
     return {
-        plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+        plugins: [tailwindcss(), !process.env.VITEST && reactRouter(), tsconfigPaths()],
         envDir: "./environment",
         appType: "spa",
         resolve: {

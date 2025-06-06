@@ -1,5 +1,6 @@
 .DS_Store
 /node_modules/
+*/node_modules/
 
 # React Router
 /.react-router/
@@ -7,3 +8,5 @@
 /dist/
 /output_files/
 /test_run_dir/
+/coverage/
+/src/coverage/

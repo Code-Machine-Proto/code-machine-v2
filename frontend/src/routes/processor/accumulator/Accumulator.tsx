@@ -15,7 +15,7 @@ export default function AccumulatorProcessor() {
 
     useEffect(() => {
         dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.ACCUMULATOR });
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="flex gap-3">
@@ -26,7 +26,7 @@ export default function AccumulatorProcessor() {
                 <HexBox name="PC" number={steps[counter].pcState} />
             </div>
             <div className="bg-[#97ffc8] size-min rounded-md" >
-                <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultBase10={true} />
+                <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultIsBase10={true} />
             </div>
         </div>
     );
