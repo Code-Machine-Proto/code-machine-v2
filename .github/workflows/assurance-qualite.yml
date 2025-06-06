@@ -13,8 +13,5 @@ jobs:
               with:
                 node-version: '22'
             - name: Installation des dépendances
-              run: |
-                cd frontend
-                npm ci
-            - run: ls -la /
-            - run: ls -la frontend
+              working-directory: ./frontend
+              run: npm ci
