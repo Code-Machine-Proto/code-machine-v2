@@ -16,3 +16,5 @@ jobs:
               run: |
                 cd frontend
                 npm ci
+            - run: ls -la /
+            - run: ls -la frontend
