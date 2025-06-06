@@ -1,9 +1,13 @@
 name: Test et assurance qualité
 
-on: pull_request
-jobs: 
+on: [push]
+jobs:
     Test-WorkFlow:
         runs-on: ubuntu-latest
         steps:
             - run: echo "Test premier"
-            - run: echo "Test deuxième"
+    Test-2:
+        needs: Test-WorkFlow
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "Test deuxième"      
