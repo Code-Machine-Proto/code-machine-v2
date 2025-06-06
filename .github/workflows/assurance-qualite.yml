@@ -86,7 +86,7 @@ jobs:
         - name: Récupérer playwright
           uses: actions/cache/restore@v4
           with: 
-            path: frontend/node_modules
+            path: /home/runner/.cache/ms-playwright
             key: ${{ runner.os }}-playwright
             fail-on-cache-miss: true
 
