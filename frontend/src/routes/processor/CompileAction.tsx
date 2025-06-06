@@ -7,7 +7,9 @@ export async function clientAction({ request }: ClientActionFunctionArgs): Promi
     const lines = data.get("lines") as string;
     const processorId = parseInt(data.get("processorId") as string);
     let { output } = await compileAndRun({ processorId: processorId, program: lines.split(",") }) as { hex: Array<string>, output: string };
+    /* eslint-disable no-magic-numbers */
     output = output.slice(0, -2) + output.slice(-1);
+    /* eslint-enable no-magic-numbers */
     return JSON.parse(output);
 }
 

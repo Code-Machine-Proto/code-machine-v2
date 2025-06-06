@@ -15,7 +15,7 @@ export default function MaProcessor() {
 
     useEffect(() => {
         dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.MA_ACCUMULATOR });
-    }, []);
+    }, [dispatch]);
     
     return (
         <div className="flex gap-3">
@@ -29,7 +29,7 @@ export default function MaProcessor() {
                 <HexBox name="MA" number={steps[counter].ma ? steps[counter].ma : 0} />
             </div>
             <div className="bg-[#97ffc8] size-min rounded-md">
-                <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultBase10={true} />
+                <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultIsBase10={true} />
             </div>
         </div>
     );

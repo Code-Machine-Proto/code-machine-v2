@@ -1,11 +1,11 @@
-import { COLUMN_CHOICE } from "@src/constants/Memory";
+import { COLUMN_CHOICE, DEFAULT_COLUMN_NUMBER } from "@src/constants/Memory";
 import { useState } from "react";
 import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
 
 export default function Memory({ memoryContent, className, stimulatedCell, nom }: { memoryContent: Array<number>, className: string, stimulatedCell?: number, nom: string }) {
-    const [columnCount, setColumnCount] = useState<number>(4);
+    const [columnCount, setColumnCount] = useState<number>(DEFAULT_COLUMN_NUMBER);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);
     const [memoryCellFormat, setMemoryCellFormat] = useState<boolean>(true);
 
@@ -21,8 +21,8 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                         }
                     </select>
                 </div> 
-                <HexSwitcher base10={adresseFormat} setBase10={setAdressFormat} name="Adresse: " />
-                <HexSwitcher base10={memoryCellFormat} setBase10={setMemoryCellFormat} name="Donnée: " />
+                <HexSwitcher isBase10={adresseFormat} setIsBase10={setAdressFormat} name="Adresse: " />
+                <HexSwitcher isBase10={memoryCellFormat} setIsBase10={setMemoryCellFormat} name="Donnée: " />
             </div>
 
             <div className="flex gap-1">
@@ -30,7 +30,7 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                 <HexNumberLine 
                     max={columnCount} 
                     divClassName={"flex flex-col size-[4rem] justify-center p-2 rounded-sm " + className}
-                    base10={adresseFormat}
+                    isBase10={adresseFormat}
                 />
             </div>
 
@@ -40,7 +40,7 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                         max={memoryContent.length} 
                         jump={columnCount} 
                         divClassName={"flex flex-col size-[4rem] justify-center p-2 rounded-sm aspect-square " + className}
-                        base10={adresseFormat}
+                        isBase10={adresseFormat}
                     />
                 </div>
                 <div className={"grid size-fit overflow-scroll no-scrollbar gap-1 " + COLUMN_CHOICE.find((value) => value.count === columnCount)?.cssclass }>
@@ -55,7 +55,7 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                                 keygen={index} 
                                 className={"text-white"}
                                 number={value}
-                                base10={memoryCellFormat}
+                                isBase10={memoryCellFormat}
                             />
                         </div>
                         );

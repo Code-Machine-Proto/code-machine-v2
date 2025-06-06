@@ -6,3 +6,5 @@ export const COLUMN_CHOICE = [
 ];
 
 export const PROCESSOR_ACTIONS = ["Fetch", "Decode", "Execute"];
+
+export const DEFAULT_COLUMN_NUMBER = 4;

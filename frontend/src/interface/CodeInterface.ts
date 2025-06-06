@@ -17,6 +17,6 @@ export interface SimulationState {
 
 export enum ProcessorId {
     ACCUMULATOR = 0,
-    MA_ACCUMULATOR = 1,
-    RISC = 2,
+    MA_ACCUMULATOR,
+    RISC,
 } 

@@ -1,8 +1,10 @@
-export default function HexNumber({ keygen, number, base10 = false, className = "" }: { number: number, base10?: boolean, className?: string, keygen?: number }) {
+import { BASE_10, BASE_16 } from "@src/constants/HexUtils";
+
+export default function HexNumber({ keygen, number, isBase10 = false, className = "" }: { number: number, isBase10?: boolean, className?: string, keygen?: number }) {
     return (
             <p key={keygen} className={ "text-right " + className }>
-                { base10 ? "" : "0x" }
-                { number.toString(base10 ? 10 : 16) }
+                { isBase10 ? "" : "0x" }
+                { number.toString(isBase10 ? BASE_10 : BASE_16) }
             </p>
     );
 }

@@ -18,7 +18,7 @@ export default function PolyRiscProcessor() {
 
     useEffect(() => {
         dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.RISC })
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="flex gap-5">
