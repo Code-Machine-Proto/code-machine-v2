@@ -8,13 +8,26 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+
             - name: Installation node
               uses: actions/setup-node@v4
               with:
                 node-version: '22'
+            - name: Enregistrer les modules node
+              id: npm-cache
+              uses: actions/cache@v4
+              with:
+                path: frontend/node_modules
+                key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
             - name: Installation des dépendances
               working-directory: ./frontend
+              if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
+            
+            - name: Vérification
+              run: ls -la frontend
+      
     lint:
         name: Vérifier les erreurs de linting
         runs-on: ubuntu-latest
