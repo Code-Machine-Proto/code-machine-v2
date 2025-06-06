@@ -13,5 +13,6 @@ jobs:
               with:
                 node-version: '22'
             - run: cd frontend
+            - run: ls -la
             - name: Installation des dépendances
               run: npm ci
