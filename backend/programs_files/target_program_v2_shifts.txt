@@ -1,9 +1,0 @@
-.text
-ld a
-and b
-st c
-stop
-.data
-a: 17
-b: 1
-c: 0
