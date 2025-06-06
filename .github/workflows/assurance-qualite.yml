@@ -2,12 +2,15 @@ name: Test et assurance qualité
 
 on: [push]
 jobs:
-    Test-WorkFlow:
+    install:
+        name: Installation des dépendances node
         runs-on: ubuntu-latest
         steps:
-            - run: echo "Test premier"
-    Test-2:
-        needs: Test-WorkFlow
-        runs-on: ubuntu-latest
-        steps:
-            - run: echo "Test deuxième"      
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Installation node
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+            - name: Installation des dépendances
+              run: npm ci
