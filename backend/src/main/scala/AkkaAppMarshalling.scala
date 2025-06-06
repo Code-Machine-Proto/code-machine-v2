@@ -67,11 +67,11 @@ object SprayJsonExample {
             entity(as[CompileAndRunRequest]){
               request => {
                 if(request.processorId == 0)
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV1(request.program, 0))
+                  complete(accumulator.execs.accumulator_execs.compileAndRunV1(request.program))
                 else if(request.processorId == 1) {
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV2(request.program, 0))
+                  complete(accumulator.execs.accumulator_execs.compileAndRunV2(request.program))
                 }else{
-                  complete(risc_simple.risc_simple_execs.compileAndRun(request.program, 0))
+                  complete(risc_simple.risc_simple_execs.compileAndRun(request.program))
                 }
               }
             }
@@ -91,7 +91,6 @@ object SprayJsonExample {
     val bindingFuture = Http().newServerAt(host, port).bind(route)
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
     StdIn.readLine() // let it run until user presses return
-    StdIn.readLine()
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
       .onComplete(_ => system.terminate()) // and shutdown when done
