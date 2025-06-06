@@ -50,3 +50,28 @@ jobs:
             - name: Exécuter le lint
               working-directory: ./frontend
               run: npm run lint
+
+    test:
+      name: Vérifier la validité des tests
+      runs-on: ubuntu-latest
+      needs: install
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Installation node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Récupérer les node_modules
+          id: npm-cache
+          uses: actions/cache/restore@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+            fail-on-cache-miss: true
+
+        - name: Exécuter les tests
+          working-directory: frontend
+          run: npm run test:headless
