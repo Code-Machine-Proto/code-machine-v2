@@ -26,10 +26,17 @@ jobs:
               if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
             
-            - name: Vérification playwright
-              working-directory: /home/runner/.cache
-              run: ls -a
-      
+            - name: Cache playwright
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                path: /home/runner/.cache/ms-playwright
+                key: ${{ runner.os }}-playwright
+            
+            - name: Installation playwright
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install
+
     lint:
         name: Vérifier les erreurs de linting
         runs-on: ubuntu-latest
@@ -75,10 +82,13 @@ jobs:
             path: frontend/node_modules
             key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
             fail-on-cache-miss: true
-
-        - name: playwright install
-          working-directory: frontend
-          run: npx playwright install
+        
+        - name: Récupérer playwright
+          uses: actions/cache/restore@v4
+          with: 
+            path: frontend/node_modules
+            key: ${{ runner.os }}-playwright
+            fail-on-cache-miss: true
 
         - name: Exécuter les tests
           working-directory: frontend
