@@ -12,7 +12,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                 node-version: '22'
-            - run: cd frontend
-            - run: ls -la
             - name: Installation des dépendances
-              run: npm ci
+              run: |
+                cd frontend
+                npm ci
