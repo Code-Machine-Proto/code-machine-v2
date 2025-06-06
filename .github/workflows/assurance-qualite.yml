@@ -13,6 +13,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                 node-version: '22'
+
             - name: Enregistrer les modules node
               id: npm-cache
               uses: actions/cache@v4
@@ -24,9 +25,6 @@ jobs:
               working-directory: ./frontend
               if: steps.npm-cache.outputs.cache-hit != 'true'
               run: npm ci
-            
-            - name: Vérification
-              run: ls -la frontend
       
     lint:
         name: Vérifier les erreurs de linting
@@ -35,10 +33,20 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+
             - name: Installation node
               uses: actions/setup-node@v4
               with:
                 node-version: '22'
-            - name: Vérfication
+            
+            - name: Récupérer les node_modules
+              id: npm-cache
+              uses: actions/cache/restore@v4
+              with:
+                path: frontend/node_modules
+                key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+                fail-on-cache-miss: true
+            
+            - name: Exécuter le lint
               working-directory: ./frontend
-              run: ls -la
+              run: npm run lint
