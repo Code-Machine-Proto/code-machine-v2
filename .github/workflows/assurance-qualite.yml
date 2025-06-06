@@ -71,6 +71,10 @@ jobs:
             path: frontend/node_modules
             key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
             fail-on-cache-miss: true
+        
+        - name: playwrigth install
+          working-directory: frontend
+          run: npx playwright install
 
         - name: Exécuter les tests
           working-directory: frontend
