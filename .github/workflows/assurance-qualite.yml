@@ -1,6 +1,6 @@
 name: Test et assurance qualité
 
-on: [push]
+on: [pull_request]
 jobs:
     install:
         name: Installation des dépendances node
@@ -72,16 +72,8 @@ jobs:
             key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
             fail-on-cache-miss: true
 
-        - name: Playwright cache
-          id: playwright-cache
-          uses: actions/cache@v4
-          with:
-            path: frontend/node_modules
-            key: ${{ runner.os }}-playwright
-        
         - name: playwright install
           working-directory: frontend
-          if: steps.playwright-cache.outputs.cache-hit != 'true'
           run: npx playwright install
 
         - name: Exécuter les tests
