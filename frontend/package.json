@@ -2,10 +2,35 @@
   "name": "frontend",
   "private": true,
   "type": "module",
+  "main": "build/main.js",
+  "description": "",
+  "author": "",
+  "version": "0.0.1",
+  "build": {
+    "productName": "CodeMachine",
+    "win": {
+      "target": "msi",
+      "signAndEditExecutable": false,
+      "icon": "public/code-machine-logo.ico"
+    },
+    "msi": {
+      "oneClick": false,
+      "runAfterFinish": false
+    },
+    "files": [
+      "./build/**/*"
+    ],
+    "extraResources": [
+      "module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar"
+    ]
+  },
   "scripts": {
-    "build:electron": "react-router build --mode electron",
-    "build:website": "react-router build --mode website",
+    "build": "react-router build --mode website",
+    "build:electron": "react-router build --mode electron && vite build -c vite.config.electron.ts",
     "dev": "react-router dev --mode website",
+    "dev:electron": "electron .",
+    "package": "electron-builder",
+    "preview": "vite preview",
     "start": "vite preview",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
@@ -16,6 +41,7 @@
   "dependencies": {
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "electron-is-dev": "^3.0.1",
     "isbot": "^5.1.27",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -28,6 +54,8 @@
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "electron": "^36.3.2",
+    "electron-builder": "^26.0.12",
     "@vitejs/plugin-react": "^4.5.0",
     "@vitest/browser": "^3.1.4",
     "@vitest/coverage-v8": "^3.1.4",
