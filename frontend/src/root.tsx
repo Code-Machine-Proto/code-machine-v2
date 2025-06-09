@@ -27,7 +27,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col h-dvh">
-        <Header />
         { children }
         <ScrollRestoration />
         <Scripts />
@@ -42,5 +41,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
  * @returns Une outlet qui affiche le reste de l'application
  */
 export default function App() {
-    return <CodeProvider> <Outlet /> </CodeProvider>;
+    return (
+      <>
+      <Header />
+      <CodeProvider>
+        <Outlet />
+      </CodeProvider>
+      </>
+    );
 }
