@@ -12,6 +12,8 @@
 - [Vite](#vite)
 - [eslint](#eslint)
 - [Vitest](#vitest)
+- [Electron](#electron)
+- [Electron-Builder](#electron-builder)
 
 ## node/npm
 
@@ -33,7 +35,15 @@ react-router dev --mode website
 
 Commande pour partir le frontend en mode dévelopement. Le mode indique qu'il sera ouvert avec les modules propres à la version pour un fureteur régulier.
 
-#### npm run build:website
+#### npm run dev:electron
+
+```
+electron .
+```
+
+Commande pour partir le frontend en mode dévelopement sur la plateforme electron. Pour pouvoir utiliser la commande, il faut effectuer la commande npm run build:electron détaillé ci-dessous.
+
+#### npm run build
 
 ```
 react-router build --mode website
@@ -44,7 +54,7 @@ Commande pour construire la plateforme en incluant les modules pour le site web 
 #### npm run build:electron
 
 ```
-react-router build --mode electron
+react-router build --mode electron && vite build -c vite.config.electron.ts
 ```
 
 Commande pour construire la plateforme en incluant les modules pour la plateforme electron. À exécuter avant de partir l'application electron.
@@ -84,10 +94,8 @@ Commande pour lancer les tests et garder une instance de test à chaque changeme
 #### npm run test:headless
 
 ```
-vitest watch
-```
-
 vitest --browser.headless
+```
 
 Commande pour lancer les tests une seule fois sans l'ouverture d'un navigateur web. Parfait pour les tests d'un pipeline.
 
@@ -98,6 +106,14 @@ npm run test:headless -- --coverage --coverage.provider v8 -r src
 ```
 
 Commande pour lancer le code coverage en mode headless avec l'engin de coverage v8 en ne prenant en compte que les fichiers sources.
+
+#### npm run package
+
+```
+electron-builder
+```
+
+Commande pour emballer l'application dans un installateur pour une plateforme en particulier, mac linux ou windows. Pour pouvoir l'exécuter, il faut avoir rouler la commande npm run build:electron au préalable détaillé ci-dessus. De plus, vous devez avoir l'exécutable jar du backend dans le dossier module-electron.
 
 ## React
 
@@ -129,6 +145,14 @@ eslint est une vérification de syntaxe pour améliorer la qualité du code. En 
 
 Vitest est un cadriciel de test adapté pour Vite et fonctionnant avec React. Nous l'avons choisi pour sa compatibilité avec Vite et React. Documentation de [Vitest](https://vitest.dev/)
 
+## Electron
+
+Electron est un cadriciel de dévelopement d'application de bureau avec html, css, javascript qui se compile vers OsX, Linux et Windows. Electron est utilisé dans ce projet pour rendre CodeMachine standalone sans trop changer sa structure si une version déployé est plus approprié. Documentation de [electron](https://www.electronjs.org/docs/latest)
+
+## Electron-builder
+
+Electron-Builder est une des façons pour emballer l'application dans un installateur de la plateforme de son choix et permets la distribution facile et rapide de ceux-ci avec une fonctionalité d'auto-update. Electron-Builder utilise des configurations dans le package.json pour choisir le format d'installateur et bien d'autre chose. Documentation de [Electron-Builder](https://www.electron.build/index.html)
+
 ## Format des fichiers
 
 ### [assets](src/assets)
@@ -146,6 +170,18 @@ Utilisé pour stocké les types et interfaces de typescript. Si besoin, créer d
 ### [components](src/components)
 
 Utilisé pour les composants réutilisables ou ponctuelles. Veuillez regrouper les composantes qui sont cohérentes entre eux. 
+
+### [constants](src/constants)
+
+Utilisé pour les constantes des divers composants.
+
+### [module-http](src/module-http)
+
+Utilisé pour stocké tout ce qui se raporte avec la communication par http. À terme, le module http ne devrait être inclut qu'avec le mode website pour pouvoir communiquer avec le serveur externe.
+
+### [module-electron](src/module-electron)
+
+Utilisé pour stocké tout les scripts se rapportant à electron et son fonctionnement. De plus, pour pouvoir partir electron il faut ajouté le fichier jar compilé depuis le backend.
 
 ## Mode d'exécution
 

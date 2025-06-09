@@ -30,7 +30,6 @@
     "dev": "react-router dev --mode website",
     "dev:electron": "electron .",
     "package": "electron-builder",
-    "preview": "vite preview",
     "start": "vite preview",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
