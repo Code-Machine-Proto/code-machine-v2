@@ -133,8 +133,3 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) 
   output.flush()
 }
 
-object exec extends App {
-  val program = risc_simple.compiler.asm_compiler.readProgramFromFile("./programs_files/fibo.txt")
-  System.out.println(program.mkString(" "))
-  risc_simple.risc_simple_execs.compileAndRun(program)
-}

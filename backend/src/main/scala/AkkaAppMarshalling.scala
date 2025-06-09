@@ -4,7 +4,6 @@
 
 //package docs.http.scaladsl
 
-import accumulator.accumulator_v2.accumulator_v2
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
@@ -13,7 +12,6 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import accumulator.execs._
-import risc_simple.exec._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import risc_simple.RunResultsRiscSimple
 import spray.json.DefaultJsonProtocol._
@@ -42,8 +40,6 @@ object SprayJsonExample {
   implicit val RunResultsRiscSimpleMarshaller: spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat3(RunResultsRiscSimple.apply)
 
   def main(args: Array[String]): Unit = {
-
- //   val accumulator_v2_instance =  new accumulator_v2()
 
     val content =
       """|<html>

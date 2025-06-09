@@ -1,7 +1,7 @@
 package accumulator.execs
 
-import accumulator.accumulator_v1.{accumulator_v1, accumulator_v1_compiler}
-import accumulator.accumulator_v2.{accumulator_v2, accumulator_v2_compiler}
+import accumulator.accumulator_v1.{accumulator_v1}
+import accumulator.accumulator_v2.{accumulator_v2}
 import chisel3.UInt
 import chisel3.iotesters._
 
@@ -24,9 +24,6 @@ final case class RunResultsV2(
                              )
 
 object accumulator_execs {
-  def runCompileFromFilename(filename: String, version: Int): Unit = {
-    System.out.println(accumulator.accumulator_compiler.compileFromFilename(filename, version).mkString("\n"));
-  }
 
   def compileAndRunV1(program: Array[String]): RunResultsV1 = {
     var result = ""
@@ -198,10 +195,3 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
   output.flush()
 }
 
-object exec extends App {
-  //accumulator_execs.runCompileFromFilename("./programs_files/target_program_acc.txt", 2)
-  // accumulator_execs.runCompileFromFilename("./programs_files/dummy_program_01.txt", 1)
-  val program = accumulator.accumulator_compiler.readProgramFromFile("./programs_files/target_program_v2_shifts.txt")
-  System.out.println(program.mkString(" "))
-  accumulator.execs.accumulator_execs.compileAndRunV2(program)
-}
