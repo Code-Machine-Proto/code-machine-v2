@@ -1,6 +1,6 @@
 import { startTransition, StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-import { createHashRouter, RouterProvider, type ClientActionFunction, type ClientActionFunctionArgs } from "react-router";
+import { createHashRouter, RouterProvider, type ClientActionFunctionArgs } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 import Home from "./routes/home";
 import App from "./root";
