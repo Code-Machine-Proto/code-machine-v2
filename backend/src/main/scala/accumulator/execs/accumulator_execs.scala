@@ -2,16 +2,13 @@ package accumulator.execs
 
 import accumulator.accumulator_v1.{accumulator_v1}
 import accumulator.accumulator_v2.{accumulator_v2}
+import accumulator.accumulator_compiler.{ compileFromArray, getHexcodeProgram }
+
 import chisel3.UInt
 import chisel3.iotesters._
 
 import java.io.StringWriter
 import scala.io.Source
-
-object AccumulatorFilePathes {
-  val FILE_PATH_ACCUMULATOR_V1 = "./output_files/output_v1.txt"
-  val FILE_PATH_ACCUMULATOR_V2 = "./output_files/output_v2.txt"
-}
 
 final case class RunResultsV1(
                              hex: Array[String],
@@ -26,47 +23,42 @@ final case class RunResultsV2(
 object accumulator_execs {
 
   def compileAndRunV1(program: Array[String]): RunResultsV1 = {
-    var result = ""
     val output = new StringWriter()
 
-    val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 1)
-    val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
+    val UIntProgram = compileFromArray(program, 1)
+    val HexProgram = getHexcodeProgram(UIntProgram)
 
-    chisel3.iotesters.Driver.execute(Array("--backend-name", "treadle"), () => new accumulator_v1(UIntProgram)) {
+    Driver.execute(Array("--backend-name", "treadle"), () => new accumulator_v1(UIntProgram)) {
       DUT => new accumulator_v1_simulation(DUT, UIntProgram, output)
     }
-
-    result = output.toString
 
     // result(n) follows filenames val order
     RunResultsV1(
       HexProgram,
-      result,
-      )
+      output.toString,
+    )
   }
 
   def compileAndRunV2(program: Array[String]): RunResultsV2 = {
-    var result = ""
     val output = new StringWriter()
 
-    val UIntProgram = accumulator.accumulator_compiler.compileFromArray(program, 2)
-    val HexProgram = accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
+    val UIntProgram = compileFromArray(program, 2)
+    val HexProgram = getHexcodeProgram(UIntProgram)
 
-    chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new accumulator_v2()) {
+    Driver.execute(Array("--generate-vcd-output", "on"), () => new accumulator_v2()) {
       DUT => new accumulator_v2_simulation(DUT, UIntProgram, output)
     }
 
-    result = output.toString
 
     // result(n) follows filenames val order
     RunResultsV2(
       HexProgram,
-      result,
+      output.toString,
     )
   }
 }
 
-class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], output: StringWriter) extends PeekPokeTester(DUT) {
+class accumulator_v1_simulation(DUT: accumulator_v1, program: Array[UInt], output: StringWriter) extends PeekPokeTester(DUT) {
   var instructionsArray = program
   var stimulatedLines = Array[String]()
 
@@ -127,7 +119,7 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
   output.flush()
 }
 
-class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, program: Array[UInt], output: StringWriter) extends PeekPokeTester(DUT) {
+class accumulator_v2_simulation(DUT: accumulator_v2, program: Array[UInt], output: StringWriter) extends PeekPokeTester(DUT) {
 
   //  var instructionsArray = accumulator_v2_compiler.compileFromArray(program)
   var instructionsArray = program
@@ -194,4 +186,3 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
   output.write("]")
   output.flush()
 }
-
