@@ -6,9 +6,9 @@ import HexSwitcher from "./HexSwitcher";
 /**
  * Permets de créer une boîte qui affichera un nombre et pourra le transformer en hexadécimal au besoin
  * Toujours l'entouré d'un div avec un bg-[<couleur>] size-min et rounded-md pour avoir le visuel voulu
- * @param name - Le nom a affiché comme nom
- * @param number - Le nombre a affiché dans la boîte
- * @param defaultIsBase10 - Si la case est par défaut en base 10. Valeur par défaut false
+ * @prop name - Le nom a affiché comme nom
+ * @prop number - Le nombre a affiché dans la boîte
+ * @prop defaultIsBase10 - Si la case est par défaut en base 10. Valeur par défaut false
  * @returns Le composant React a affiché
  */
 export default function HexBox({ name, number, defaultIsBase10 = false }: HexBoxProps) {

@@ -5,6 +5,8 @@ import { CodeAction } from "@src/interface/DispatchCode";
 
 /**
  * Sert à contrôler l'exécution de la simulation côté frontend une fois utilisé
+ * @prop enableMemory - si la mémoire est à affiché
+ * @prop setEnableMemory - changer la visibilité de la mémoire
  * @returns le composant React qui affiche la barre de contrôle 
  */
 export default function ExecutionControl({ enableMemory, setEnableMemory }: { enableMemory: boolean, setEnableMemory: Dispatch<SetStateAction<boolean>> }) {

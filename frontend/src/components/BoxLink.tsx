@@ -4,8 +4,8 @@ import { Link } from "react-router";
 /**
  * Lien en forme de boîte arrondie
  * 
- * @param nom - Nom du lien pour informer les utilisateurs
- * @param url - Chemin absolu vers lequel le lien doit pointer
+ * @prop nom - Nom du lien pour informer les utilisateurs
+ * @prop url - Chemin absolu vers lequel le lien doit pointer
  * @returns Le composant React a inséré dans le DOM
  */
 export default function BoxLink ({ nom, url }: BoxLinkProps) {
