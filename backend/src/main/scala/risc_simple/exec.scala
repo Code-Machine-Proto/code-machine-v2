@@ -4,13 +4,13 @@ import chisel3.iotesters._
 
 import java.io.StringWriter
 import scala.io.Source
-
-// need further dev : stimulated lines
-
-object RiscSimpleFilePath {
-  val path = "./output_files/output_risc_simple.txt"
+import risc_simple.compiler.asm_compiler.{
+  compileFromArray_data,
+  compileFromArray_text,
+  getHexcodeProgram,
 }
 
+// need further dev : stimulated lines
 
 final case class RunResultsRiscSimple  (
                                hex_text: Array[String],
@@ -21,39 +21,34 @@ final case class RunResultsRiscSimple  (
 object risc_simple_execs {
 
   def compileAndRun(program: Array[String]): RunResultsRiscSimple = {
-  
-    var result = ""
     val output = new StringWriter()
 
-    val UIntText = risc_simple.compiler.asm_compiler.compileFromArray_text(program) //UInt text
-    val UIntData = risc_simple.compiler.asm_compiler.compileFromArray_data(program) //UInt data
+    val UIntText = compileFromArray_text(program) //UInt text
+    val UIntData = compileFromArray_data(program) //UInt data
     
-    val Hextext = risc_simple.compiler.asm_compiler.getHexcodeProgram(UIntText)
-    val Hexdata = risc_simple.compiler.asm_compiler.getHexcodeProgram(UIntData)
+    val Hextext = getHexcodeProgram(UIntText)
+    val Hexdata = getHexcodeProgram(UIntData)
     
     System.out.println(Hextext.mkString(" "))          //Dev. 
     System.out.println(Hexdata.mkString(" "))          //Dev.
 
     
-    chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new RiscSimple(UIntText,UIntData)) {
+    Driver.execute(Array("--generate-vcd-output", "on"), () => new RiscSimple(UIntText,UIntData)) {
       DUT => new risc_simple_simulation(DUT, output)
     }
 
-    result = output.toString
 
 
     // result(n) follows filenames val order
     RunResultsRiscSimple(
       Hextext,
       Hexdata,
-      result,
+      output.toString,
     )
   }
 }
 
 class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) extends PeekPokeTester(DUT) {
-
-
   var simulation_ended = false
   var simulation_cycle = 0
 

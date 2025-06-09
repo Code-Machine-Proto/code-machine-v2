@@ -8,24 +8,6 @@ object asm_compiler {
 
   val opcodeMap = Map("add" -> 0, "sub" -> 1, "shr" -> 2, "shl" -> 3, "not" -> 4, "and" -> 5, "or" -> 6,"mv" -> 7, "ld" -> 8, "st"-> 9,"ldi"-> 10,"br"-> 12,"brz"-> 12,"brnz"-> 12,"brlz"-> 12,"brgez"-> 12,"stop"-> 15)
 
-  // One call function
-  def compile_for_print_text(filename: String): Array[String] = {
-    getHexcodeProgram(compileFromArray_text(readProgramFromFile(filename)))
-  }
-
-  def compile_for_backend_text(filename: String): Array[UInt] = {
-    compileFromArray_text(readProgramFromFile(filename))
-  }
-
-  def compile_for_print_data(filename: String): Array[String] = {
-    getHexcodeProgram(compileFromArray_data(readProgramFromFile(filename)))
-  }
-
-  def compile_for_backend_data(filename: String): Array[UInt] = {
-    compileFromArray_data(readProgramFromFile(filename))
-  }
-
-  // ---------------------------------------------------------------------
   // Hex correpondance of UInt
 
   def getHexcodeProgram(program: Array[UInt]): Array[String] = {
