@@ -15,17 +15,18 @@ export default function Processor() {
     const currentStep = useContext(StepContext);
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
+    const [isVisualMode, setVisualMode] = useState<boolean>(false);
 
     return (
                 <div className="flex grow p-5 bg-back gap-5">
                     <CodeEditor />
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
-                        <ExecutionControl enableMemory={enableMemory} setEnableMemory={setEnableMemory} />
+                        <ExecutionControl memoryState={[ enableMemory, setEnableMemory]} visualSetting={[isVisualMode, setVisualMode]} />
                         <p className="bg-white w-fit p-3 rounded-md">
                                 { PROCESSOR_ACTIONS[execution[currentStep].instructionState] }
                         </p>
                         <div className=" flex grow gap-5">
-                            <Outlet />
+                            <Outlet context={isVisualMode} />
                             {
                             enableMemory &&
                             <Memory 
