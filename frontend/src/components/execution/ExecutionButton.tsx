@@ -3,7 +3,7 @@ import type { MouseEventHandler, ReactNode } from "react"
 /**
  * Composant pour stylisé les boutons de jouer/pause dans la page des processeurs
  * 
- * @param children - Un svg sans sa balise svg
+ * @prop children - Un svg sans sa balise svg
  * @returns un composant avec un svg stylisé
  */
 export default function ExecutionButton({ children, onClick }: { children: ReactNode, onClick: MouseEventHandler<HTMLButtonElement> }) {

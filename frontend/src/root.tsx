@@ -14,7 +14,7 @@ import { CodeProvider } from "./components/code/CodeProvider";
  * Disposition de base de l'application est affiché sur toutes les pages.
  * Aucun besoin de l'appelé React-Router l'appel lorsqu'il compile l'application.
  * 
- * @param children - Le restant de l'application
+ * @prop children - Le restant de l'application
  * @returns le composant React qui sert de base à l'application
  */
 export function Layout({ children }: { children: React.ReactNode }) {

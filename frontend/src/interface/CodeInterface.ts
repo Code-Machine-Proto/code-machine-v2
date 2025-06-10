@@ -9,12 +9,18 @@ export interface CodeInterface {
     processorId: ProcessorId,
 }
 
+/**
+ * État de la simulation
+ */
 export interface SimulationState {
     codeState: CodeInterface,
     executionState: Array<ProcessorStep>,
     currentStep: number,
 }
 
+/**
+ * Les identifiants de tous le processeurs
+ */
 export enum ProcessorId {
     ACCUMULATOR = 0,
     MA_ACCUMULATOR,

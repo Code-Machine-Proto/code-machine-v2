@@ -4,6 +4,14 @@ import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
 
+/**
+ * Affiche une mémoire à partir d'un tableau 1d
+ * @prop memoryContent - Contenu à affiché
+ * @prop className - Couleur d'accent de la mémoire
+ * @prop stimulatedCell - Cellule à mettre en couleur
+ * @prop nom - Nom de la mémoire à afficher
+ * @returns le composant react à afficher
+ */
 export default function Memory({ memoryContent, className, stimulatedCell, nom }: { memoryContent: Array<number>, className: string, stimulatedCell?: number, nom: string }) {
     const [columnCount, setColumnCount] = useState<number>(DEFAULT_COLUMN_NUMBER);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);

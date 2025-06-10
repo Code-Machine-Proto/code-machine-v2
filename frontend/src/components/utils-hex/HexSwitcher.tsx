@@ -1,5 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 
+/**
+ * Permets de créer un interrupteur pour passer de hexadécimale à décimale pour un certain nombre
+ * @prop isBase10 - état de l'interrupteur
+ * @prop setIsBase10 - fonction pour changer l'état de l'interrupteur
+ * @returns 
+ */
 export default function HexSwitcher({ isBase10, setIsBase10, name="" }: { isBase10: boolean, setIsBase10: Dispatch<SetStateAction<boolean>>, name?: string}) {
     return (
     <button 
