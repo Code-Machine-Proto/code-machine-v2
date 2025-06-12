@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";

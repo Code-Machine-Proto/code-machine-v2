@@ -3,7 +3,6 @@ import HexSwitcher from "@src/components/utils-hex/HexSwitcher";
 import { useState } from "react";
 
 export default function RegisterBox({name, number, className}: { name: string, number: number, className?: string }) {
-    const chevron = ">";
     const [isBase10, setIsBase10] = useState<boolean>(true);
 
     return(
@@ -13,7 +12,7 @@ export default function RegisterBox({name, number, className}: { name: string, n
                 <HexSwitcher isBase10={isBase10} setIsBase10={setIsBase10} />
             </div>
             <HexNumber number={number} className="px-2" isBase10={isBase10} />
-            <p className="text-xl">{ chevron }</p>
+            <p className="text-xl">{ ">" }</p>
         </div>
     );
 } 
