@@ -7,8 +7,8 @@ export default function ALU() {
             <path d="M170 49.0742V330.925L0 380V211.65L75 190L0 168.349V0L170 49.0742Z" fill="#D9D9D9"/>
             <text x={5} y={95} className="font-semibold text-xl" fill="black">A</text>
             <text x={5} y={285} className="font-semibold text-xl" fill="black">B</text>
-            <text x={152} y={190} className="font-semibold text-xl" fill="black">F</text>
-            <text x={125} y={70} className="font-bold text-xl" fill="black">ALU</text>
+            <text x={165} y={190} textAnchor="end" className="font-semibold text-xl" fill="black">F</text>
+            <text x={165} y={70} textAnchor="end" className="font-bold text-xl" fill="black">ALU</text>
             <path 
                 d="M40 368L25.5662 393H54.4338L40 368ZM40 422H42.5L42.5 390.5H40H37.5L37.5 422H40Z" 
                 className={ isOpActivated ? "fill-main-500" : "fill-white" } 
