@@ -12,4 +12,6 @@ export interface ObscureMemoryProps {
     name: string,
     controlName: string,
     className: string,
+    x: number,
+    y: number,
 }

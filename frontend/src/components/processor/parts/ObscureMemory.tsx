@@ -1,9 +1,10 @@
 import type { ObscureMemoryProps } from "@src/interface/MemoryProps";
 
-export default function ObscureMemory({ children, name, controlName, className }: ObscureMemoryProps) {
+export default function ObscureMemory({ children, name, controlName, className, x, y }: ObscureMemoryProps) {
     const isWritable = false;
+    const hasControlSignal = true;
     return (
-    <svg width="95" height="250" viewBox="0 0 170 455" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg x={x} y={y} width="95" height="250" viewBox="0 0 170 455" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="170" height="380" className={className} />
         <text x={165} y={20} textAnchor="end" className="fill-black font-bold">{ name }</text>
         { children }
@@ -15,11 +16,16 @@ export default function ObscureMemory({ children, name, controlName, className }
             351.753L0.500928 335.251C0.0227847 334.975 -0.141388 334.363 0.134717 333.885Z" 
             fill="black"
         />
-        <path 
-            d="M85 380L70.5662 405H99.4338L85 380ZM85 455H87.5V402.5H85H82.5V455H85Z"
-            className={ isWritable ? "fill-main-500" : "fill-white" }
-        />
-        <text x={90} y={450} className="fill-white">{ controlName }</text>
+        {
+            hasControlSignal &&
+            <>
+            <path 
+                d="M85 380L70.5662 405H99.4338L85 380ZM85 455H87.5V402.5H85H82.5V455H85Z"
+                className={ isWritable ? "fill-main-500" : "fill-white" }
+            />
+            <text x={90} y={450} className="fill-white">{ controlName }</text>
+            </>
+        }
     </svg>
     );
 }

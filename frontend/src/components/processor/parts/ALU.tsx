@@ -1,9 +1,9 @@
-export default function ALU() {
+export default function ALU({ x, y }: { x: number, y:number }) {
     const hasNz = false;
     const isNzActivated = false;
     const isOpActivated = false;
     return (
-        <svg width="70" height="170" viewBox="0 0 170 422" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg x={x} y={y} width="70" height="170" viewBox="0 0 170 422" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M170 49.0742V330.925L0 380V211.65L75 190L0 168.349V0L170 49.0742Z" fill="#D9D9D9"/>
             <text x={5} y={95} className="font-semibold text-xl" fill="black">A</text>
             <text x={5} y={285} className="font-semibold text-xl" fill="black">B</text>
