@@ -1,11 +1,16 @@
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ALU from "@src/components/processor/parts/ALU";
-import ObscureMemory from "../parts/ObscureMemory";
+import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
+import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import { useContext } from "react";
+import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 
 export default function VisualAccumulator() {
+    const steps = useContext(ExecutionContext);
+    const counter = useContext(StepContext);
 
     return(
-        <svg width="1131" height="442" viewBox="0 0 1131 442" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100%" height="100%" viewBox="0 0 1131 442" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 id="mux-pc"
                 d="M66 131C65.4477 131 65 131.448 65 132C65 132.552 65.4477 133 66 133V131ZM121.145 132L111.145 126.226V137.774L121.145 132ZM66 132V133H112.145V132V131H66V132Z"
@@ -87,19 +92,25 @@ export default function VisualAccumulator() {
                 fill="white"
             />
 
-            <Multiplexer x={27} y={90} />
+            <Multiplexer x={27} y={90} name="sel_jump_pc" />
 
-            <Multiplexer x={313} y={115} />
+            <Multiplexer x={313} y={115} name="sel_mem_addr" />
             
-            <Multiplexer x={815} y={150} />
+            <Multiplexer x={815} y={150} name="sel_acc_data" />
             
             <ALU x={660} y={140} /> 
             
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-400" x={422.5} y={40}>
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-400" x={422.5} y={40} hasControlSignal={true} >
                 <text x="5" y="82.5" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="222" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
+
+            <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} />
+
+            <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} />
+
+            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} />
 
             <circle cx="277" cy="137" r="5" fill="white"/>
             <circle cx="270" cy="370" r="5" fill="white"/>

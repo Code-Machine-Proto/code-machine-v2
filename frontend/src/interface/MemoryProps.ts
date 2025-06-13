@@ -6,12 +6,3 @@ export interface MemoryProps {
     stimulatedCell?: number,
     nom: string,
 }
-
-export interface ObscureMemoryProps {
-    children?: ReactNode,
-    name: string,
-    controlName: string,
-    className: string,
-    x: number,
-    y: number,
-}

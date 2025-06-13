@@ -19,16 +19,16 @@ export default function MaProcessor() {
     
     return (
         <div className="flex gap-3">
-            <div className="bg-[#97fcff] size-min rounded-md">
+            <div className="bg-ir size-min rounded-md">
                 <HexBox name="IR" number={steps[counter].irState} />
             </div>
-            <div className="bg-[#abbde5] size-min rounded-md">
+            <div className="bg-pc size-min rounded-md">
                 <HexBox name="PC" number={steps[counter].pcState} />
             </div>
-            <div className="bg-[#c2ff97] size-min rounded-md">
+            <div className="bg-ma size-min rounded-md">
                 <HexBox name="MA" number={steps[counter].ma ? steps[counter].ma : 0} />
             </div>
-            <div className="bg-[#97ffc8] size-min rounded-md">
+            <div className="bg-acc size-min rounded-md">
                 <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultIsBase10={true} />
             </div>
         </div>

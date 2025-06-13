@@ -13,6 +13,10 @@
     --color-main-800: #1a4472;
     --color-main-900: #1b3a5f;
     --color-main-950: #0e1d31;
+    --color-pc: #abbde5;
+    --color-ir: #97fcff;
+    --color-ma: #c2ff97;
+    --color-acc: #97ffc8;
 }
 
 @layer utilities {

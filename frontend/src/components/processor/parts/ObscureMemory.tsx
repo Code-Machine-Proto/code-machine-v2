@@ -1,8 +1,16 @@
-import type { ObscureMemoryProps } from "@src/interface/MemoryProps";
+import type { ObscureMemoryProps } from "@src/interface/ProcessorPartsProps";
 
-export default function ObscureMemory({ children, name, controlName, className, x, y }: ObscureMemoryProps) {
-    const isWritable = false;
-    const hasControlSignal = true;
+export default function ObscureMemory({ 
+    children,
+    name,
+    controlName,
+    className,
+    x,
+    y,
+    isWritable = false,
+    hasControlSignal = false,
+    }: ObscureMemoryProps) {
+
     return (
     <svg x={x} y={y} width="95" height="250" viewBox="0 0 170 455" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="170" height="380" className={className} />
