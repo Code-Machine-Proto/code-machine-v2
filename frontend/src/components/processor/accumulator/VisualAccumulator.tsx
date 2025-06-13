@@ -33,7 +33,7 @@ export default function VisualAccumulator() {
             />
             <path
                 id="mem-alu"
-                d="M518 173C517.448 173 517 173.448 517 174C517 174.552 517.448 175 518 175V173ZM661 174L651 168.226V179.774L661 174ZM518 174V175H652V174V173H518V174Z"ç
+                d="M518 173C517.448 173 517 173.448 517 174C517 174.552 517.448 175 518 175V173ZM661 174L651 168.226V179.774L661 174ZM518 174V175H652V174V173H518V174Z"
                 fill="white"
             />
             <path
@@ -110,7 +110,7 @@ export default function VisualAccumulator() {
 
             <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} />
 
-            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} />
+            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} />
 
             <circle cx="277" cy="137" r="5" fill="white"/>
             <circle cx="270" cy="370" r="5" fill="white"/>
@@ -119,11 +119,15 @@ export default function VisualAccumulator() {
             <circle cx="588" cy="174" r="5" fill="white"/>
             <circle cx="1101" cy="196" r="5" fill="white"/>
 
-            <rect x="119.5" y="48.5" width="39" height="39" fill="white" stroke="black" />
-            <text x="139" y="68" textAnchor="middle" dominantBaseline="middle" fill="black">+1</text>
+            <g>
+                <rect x="119.5" y="48.5" width="39" height="39" fill="white" stroke="black" />
+                <text x="139" y="68" textAnchor="middle" dominantBaseline="middle" fill="black">+1</text>
+            </g>
 
-            <rect x="314.5" y="382.5" width="572" height="59" fill="white" stroke="black"/>
-            <text x="600.5" y="412" className="text-xl font-semibold" textAnchor="middle" dominantBaseline="middle" fill="black">Control Signal</text>
+            <g>
+                <rect x="314.5" y="382.5" width="572" height="59" fill="white" stroke="black"/>
+                <text x="600.5" y="412" className="text-xl font-semibold" textAnchor="middle" dominantBaseline="middle" fill="black">Control Signal</text>
+            </g>
 
             <rect x="1071.5" y="382.5" width="59" height="59" fill="white" stroke="black"/>
         </svg>

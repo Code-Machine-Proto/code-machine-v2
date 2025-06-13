@@ -24,6 +24,7 @@ export interface RegisterBoxProps extends Coordinates {
     name: string,
     number: number,
     className: string,
+    defaultIsBase10?: boolean,
 }
 
 export interface MultiplexerProps extends Coordinates {

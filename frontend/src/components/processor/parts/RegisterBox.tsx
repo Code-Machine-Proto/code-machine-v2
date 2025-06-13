@@ -3,8 +3,8 @@ import HexSwitcher from "@src/components/utils-hex/HexSwitcher";
 import type { RegisterBoxProps } from "@src/interface/ProcessorPartsProps";
 import { useState } from "react";
 
-export default function RegisterBox({name, number, className, x, y}: RegisterBoxProps) {
-    const [isBase10, setIsBase10] = useState<boolean>(true);
+export default function RegisterBox({name, number, className, x, y, defaultIsBase10 = false}: RegisterBoxProps) {
+    const [isBase10, setIsBase10] = useState<boolean>(defaultIsBase10);
 
     return(
         <foreignObject x={x} y={y} width={120} height={65}>

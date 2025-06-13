@@ -14,14 +14,14 @@ export default function AccumulatorProcessor() {
     const dispatch = useContext(DispatchCodeContext);
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
-    const isVisualMode = useOutletContext<boolean>();
+    const isProgrammerMode = useOutletContext<boolean>();
 
     useEffect(() => {
         dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.ACCUMULATOR });
     }, [dispatch]);
 
     return (
-        isVisualMode ?
+        isProgrammerMode ?
         <div className="flex gap-3">
             <div className="bg-[#97fcff] size-min rounded-md">
                 <HexBox name="IR" number={steps[counter].irState} />
