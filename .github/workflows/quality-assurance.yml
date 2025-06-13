@@ -73,7 +73,7 @@ jobs:
             fail-on-cache-miss: true
         
         - name: Installer playwright
-          run: npx playwright install --with-deps --only-shell
+          run: npx playwright install --only-shell
 
         - name: Exécuter les tests
           working-directory: frontend
