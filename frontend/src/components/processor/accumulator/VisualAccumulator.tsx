@@ -100,7 +100,7 @@ export default function VisualAccumulator() {
             
             <ALU x={660} y={140} /> 
             
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-400" x={422.5} y={40} hasControlSignal={true} >
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={422.5} y={40} hasControlSignal={true} >
                 <text x="5" y="82.5" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="222" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
@@ -121,7 +121,7 @@ export default function VisualAccumulator() {
 
             <g>
                 <rect x="119.5" y="48.5" width="39" height="39" fill="white" stroke="black" />
-                <text x="139" y="68" textAnchor="middle" dominantBaseline="middle" fill="black">+1</text>
+                <text x="139" y="68" textAnchor="middle" dominantBaseline="middle" className="text-xl fill-black">+1</text>
             </g>
 
             <g>

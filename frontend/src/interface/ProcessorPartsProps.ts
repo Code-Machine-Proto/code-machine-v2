@@ -8,7 +8,7 @@ export interface Coordinates {
 export interface ObscureMemoryProps extends Coordinates {
     children?: ReactNode,
     name: string,
-    controlName: string,
+    controlName?: string,
     className: string,
     isWritable?: boolean,
     hasControlSignal?: boolean,
