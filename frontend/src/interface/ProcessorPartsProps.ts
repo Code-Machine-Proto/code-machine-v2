@@ -31,3 +31,7 @@ export interface MultiplexerProps extends Coordinates {
     isActivated?: boolean,
     name: string,
 }
+
+export interface BusProps extends Coordinates {
+    number: number,
+}
