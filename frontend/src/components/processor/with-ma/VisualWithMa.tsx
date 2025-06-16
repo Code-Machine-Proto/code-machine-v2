@@ -1,4 +1,5 @@
 import ALU from "../parts/ALU";
+import Bus from "../parts/Bus";
 import Multiplexer from "../parts/Multiplexer";
 import ObscureMemory from "../parts/ObscureMemory";
 import RegisterBox from "../parts/RegisterBox";
@@ -231,6 +232,11 @@ export default function VisualWithMa() {
                    120.001 1125 120.001H1154.98C1154.99 120.001 1154.99 120 1155 120Z"
                 fill="white"
             />
+
+            <Bus x={590} y={147} number={16}/>
+            <Bus x={720} y={147} number={16}/>
+            <Bus x={872} y={130} number={16}/>
+            <Bus x={1130} y={112} number={16}/>
 
             <Multiplexer x={41} y={70} name="sel_pc_source" />
             <Multiplexer x={360} y={40} name="sel_mem_data" />
