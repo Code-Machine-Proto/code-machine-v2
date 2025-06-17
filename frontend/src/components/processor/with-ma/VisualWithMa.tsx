@@ -1,8 +1,8 @@
-import ALU from "../parts/ALU";
-import Bus from "../parts/Bus";
-import Multiplexer from "../parts/Multiplexer";
-import ObscureMemory from "../parts/ObscureMemory";
-import RegisterBox from "../parts/RegisterBox";
+import ALU from "@src/components/processor/parts/ALU";
+import Bus from "@src/components/processor/parts/Bus";
+import Multiplexer from "@src/components/processor/parts/Multiplexer";
+import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
+import RegisterBox from "@src/components/processor/parts/RegisterBox";
 
 export default function VisualWithMa() {
     return (

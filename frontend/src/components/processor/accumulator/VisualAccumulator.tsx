@@ -4,7 +4,7 @@ import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { useContext } from "react";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
-import Bus from "../parts/Bus";
+import Bus from "@src/components/processor/parts/Bus";
 
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);

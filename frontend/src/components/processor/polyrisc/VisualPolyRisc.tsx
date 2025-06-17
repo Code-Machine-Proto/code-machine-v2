@@ -1,8 +1,8 @@
-import ALU from "../parts/ALU";
-import Multiplexer from "../parts/Multiplexer";
-import ObscureMemory from "../parts/ObscureMemory";
-import RegisterBox from "../parts/RegisterBox";
-import Bus from "../parts/Bus";
+import ALU from "@src/components/processor/parts/ALU";
+import Multiplexer from "@src/components/processor/parts/Multiplexer";
+import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
+import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import Bus from "@src/components/processor/parts/Bus";
 
 export default function VisualPolyRisc() {
     return (
