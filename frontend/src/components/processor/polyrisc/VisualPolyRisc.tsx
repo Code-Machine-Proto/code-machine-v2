@@ -2,6 +2,7 @@ import ALU from "../parts/ALU";
 import Multiplexer from "../parts/Multiplexer";
 import ObscureMemory from "../parts/ObscureMemory";
 import RegisterBox from "../parts/RegisterBox";
+import Bus from "../parts/Bus";
 
 export default function VisualPolyRisc() {
     return (
@@ -173,6 +174,20 @@ export default function VisualPolyRisc() {
                    88.5523 580 88V1C580 0.447715 580.448 0 581 0H1229Z"
                 fill="white"
             />
+
+            <Bus x={285} y={160} number={12}/>
+            <Bus x={410} y={160} number={28}/>
+            <Bus x={590} y={160} number={28}/>
+            <Bus x={620} y={106} number={16}/>
+            <Bus x={590} y={333} number={12}/>
+            <Bus x={720} y={171} number={5}/>
+            <Bus x={720} y={191} number={5}/>
+            <Bus x={720} y={210} number={5}/>
+            <Bus x={855} y={126} number={16}/>
+            <Bus x={855} y={207} number={16}/>
+            <Bus x={900} y={73} number={8}/>
+            <Bus x={995} y={166} number={16}/>
+            <Bus x={1200} y={165} number={16}/>
 
             <Multiplexer name="do_branch" x={37} y={130} />
             <Multiplexer name="sel_reg_data" x={652} y={47} />
