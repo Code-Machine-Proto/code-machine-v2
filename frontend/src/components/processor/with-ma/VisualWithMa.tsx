@@ -1,7 +1,8 @@
-import ALU from "../parts/ALU";
-import Multiplexer from "../parts/Multiplexer";
-import ObscureMemory from "../parts/ObscureMemory";
-import RegisterBox from "../parts/RegisterBox";
+import ALU from "@src/components/processor/parts/ALU";
+import Bus from "@src/components/processor/parts/Bus";
+import Multiplexer from "@src/components/processor/parts/Multiplexer";
+import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
+import RegisterBox from "@src/components/processor/parts/RegisterBox";
 
 export default function VisualWithMa() {
     return (
@@ -232,6 +233,11 @@ export default function VisualWithMa() {
                 fill="white"
             />
 
+            <Bus x={590} y={147} number={16}/>
+            <Bus x={720} y={147} number={16}/>
+            <Bus x={872} y={130} number={16}/>
+            <Bus x={1130} y={112} number={16}/>
+
             <Multiplexer x={41} y={70} name="sel_pc_source" />
             <Multiplexer x={360} y={40} name="sel_mem_data" />
             <Multiplexer x={360} y={165} name="sel_mem_addr" />
@@ -241,7 +247,7 @@ export default function VisualWithMa() {
 
             <ALU x={755} y={123}/>
 
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-400" x={491} y={40} hasControlSignal={true} >
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={491} y={40} hasControlSignal={true} >
                 <text x="5" y="70" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="298" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>

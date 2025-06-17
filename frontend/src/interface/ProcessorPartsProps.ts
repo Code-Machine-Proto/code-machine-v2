@@ -8,7 +8,7 @@ export interface Coordinates {
 export interface ObscureMemoryProps extends Coordinates {
     children?: ReactNode,
     name: string,
-    controlName: string,
+    controlName?: string,
     className: string,
     isWritable?: boolean,
     hasControlSignal?: boolean,
@@ -30,4 +30,8 @@ export interface RegisterBoxProps extends Coordinates {
 export interface MultiplexerProps extends Coordinates {
     isActivated?: boolean,
     name: string,
+}
+
+export interface BusProps extends Coordinates {
+    number: number,
 }
