@@ -1,7 +1,8 @@
-import { useContext, useState, type Dispatch, type SetStateAction } from "react";
+import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
+import type { ExecutionControlProps } from "@src/interface/ExecutionControlProps";
 
 /**
  * Sert à contrôler l'exécution de la simulation côté frontend une fois utilisé
@@ -9,8 +10,7 @@ import { CodeAction } from "@src/interface/DispatchCode";
  * @prop setEnableMemory - changer la visibilité de la mémoire
  * @returns le composant React qui affiche la barre de contrôle 
  */
-export default function ExecutionControl({ enableMemory, setEnableMemory }: { enableMemory: boolean, setEnableMemory: Dispatch<SetStateAction<boolean>> }) {
-    const [checkbox, setCheckBox] = useState<boolean>(true);
+export default function ExecutionControl({ memoryState :[enableMemory, setEnableMemory], visualSetting: [isVisualMode, setVisualMode] }: ExecutionControlProps) {
     const dispatch = useContext(DispatchCodeContext);
     const currentStep = useContext(StepContext);
     const maxStep = useContext(ExecutionContext).length - 1;
@@ -52,11 +52,11 @@ export default function ExecutionControl({ enableMemory, setEnableMemory }: { en
             </div>
             <div className="flex items-center gap-2">
                 <label className="switch">
-                    <input type="checkbox" disabled checked={checkbox} onChange={() => setCheckBox(!checkbox)} />
+                    <input type="checkbox" checked={isVisualMode} onChange={() => setVisualMode(!isVisualMode)} />
                     <span className="slider rounded-full before:rounded-full" />
                 </label>
                 <p className="text-white">
-                    Basculer au mode {checkbox ? "visuel" : "programmeur"}
+                    Basculer au mode {isVisualMode? "visuel" : "programmeur"}
                 </p>
             </div>
         </div>

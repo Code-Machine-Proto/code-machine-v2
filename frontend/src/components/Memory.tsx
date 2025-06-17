@@ -3,6 +3,7 @@ import { useState } from "react";
 import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
+import type { MemoryProps } from "@src/interface/MemoryProps";
 
 /**
  * Affiche une mémoire à partir d'un tableau 1d
@@ -12,7 +13,7 @@ import HexSwitcher from "./utils-hex/HexSwitcher";
  * @prop nom - Nom de la mémoire à afficher
  * @returns le composant react à afficher
  */
-export default function Memory({ memoryContent, className, stimulatedCell, nom }: { memoryContent: Array<number>, className: string, stimulatedCell?: number, nom: string }) {
+export default function Memory({ memoryContent, className, stimulatedCell, nom }: MemoryProps) {
     const [columnCount, setColumnCount] = useState<number>(DEFAULT_COLUMN_NUMBER);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);
     const [memoryCellFormat, setMemoryCellFormat] = useState<boolean>(true);

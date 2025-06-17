@@ -35,7 +35,7 @@ jobs:
             
             - name: Installation playwright
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: npx playwright install
+              run: npx playwright@1.53.0 install
 
     lint:
         name: Vérifier les erreurs de linting
