@@ -1,10 +1,15 @@
+import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import ALU from "@src/components/processor/parts/ALU";
 import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import { useContext } from "react";
 
 export default function VisualWithMa() {
+    const steps = useContext(ExecutionContext);
+    const counter = useContext(StepContext);
+
     return (
         <svg width="100%" height="100%" viewBox="0 0 1175 401" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -253,10 +258,10 @@ export default function VisualWithMa() {
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>            
 
-            <RegisterBox name="PC" number={0} x={140} y={77} className="bg-pc" />
-            <RegisterBox name="IR" number={0} x={140} y={225} className="bg-ir" />
-            <RegisterBox name="ACC" number={0} x={1005} y={87} className="bg-acc" defaultIsBase10={true} />
-            <RegisterBox name="MA" number={0} x={1005} y={225} className="bg-ma" />
+            <RegisterBox name="PC" number={steps[counter].pcState} x={140} y={77} className="bg-pc" />
+            <RegisterBox name="IR" number={steps[counter].irState} x={140} y={225} className="bg-ir" />
+            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} x={1005} y={87} className="bg-acc" defaultIsBase10={true} />
+            <RegisterBox name="MA" number={steps[counter].ma ? steps[counter].ma : 0} x={1005} y={225} className="bg-ma" />
 
             <circle cx="616" cy="156" r="5" fill="white" />
             <circle cx="841" cy="97" r="5" fill="white" />

@@ -3,8 +3,13 @@ import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import Bus from "@src/components/processor/parts/Bus";
+import { useContext } from "react";
+import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 
 export default function VisualPolyRisc() {
+    const steps = useContext(ExecutionContext);
+    const counter = useContext(StepContext);
+
     return (
         <svg width="100%" height="100%" viewBox="0 0 1231 344" fill="none" xmlns="http://www.w3.org/2000/svg">
 
@@ -213,8 +218,8 @@ export default function VisualPolyRisc() {
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" className="bg-pc" number={0} x={134.5} y={137.5}/>
-            <RegisterBox name="IR" className="bg-ir" number={0} x={467.5} y={137.5}/>
+            <RegisterBox name="PC" className="bg-pc" number={steps[counter].pcState} x={134.5} y={137.5}/>
+            <RegisterBox name="IR" className="bg-ir" number={steps[counter].pcState} x={467.5} y={137.5}/>
 
             <circle cx="282" cy="170" r="5" fill="white"/>
             <circle cx="616" cy="170" r="5" fill="white"/>
