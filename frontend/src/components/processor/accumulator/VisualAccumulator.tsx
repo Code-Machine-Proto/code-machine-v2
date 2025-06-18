@@ -5,11 +5,19 @@ import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { useContext } from "react";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import Bus from "@src/components/processor/parts/Bus";
+import { LineStateAccumulator } from "@src/interface/Line";
 
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
-    const fetch = true;
+    const lineState = LineStateAccumulator.nop;
+    const fetch = lineState == LineStateAccumulator.fetch;
+    const load = lineState == LineStateAccumulator.load;
+    const store = lineState == LineStateAccumulator.store;
+    const addMul = lineState == LineStateAccumulator.add_mul;
+    const branching = lineState == LineStateAccumulator.branching;
+    const pc = lineState == LineStateAccumulator.pc;
+    const control = lineState == LineStateAccumulator.control;
 
     return(
         <svg width="100%" height="100%" viewBox="0 0 1131 442" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,78 +90,100 @@ export default function VisualAccumulator() {
             <use href="#mem-ir" fill="white"/>
             <path
                 id="acc-control"
-                d="M1101 195C1101.55 195 1102 195.448 1102 196V372H1106.77L1101 382L1095.23 372H1100V197H1061C1060.45 197 1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1101Z"
+                d="M1101 195C1101.55 195 1102 195.448 1102 196V372H1106.77L1101 382L1095.23 372H1100V197H1061C1060.45
+                   197 1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1101Z"
             />
             <use href="#acc-control" fill="white"/>
             <path
                 id="acc-mem"
-                d="M1101 0C1101.55 0 1102 0.447715 1102 1V196C1102 196.552 1101.55 197 1101 197H1061C1060.45 197 1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1100V2H382V84H414V79.2266L424 85L414 90.7734V86H381C380.448 86 380 85.5523 380 85V1C380 0.447715 380.448 0 381 0H1101Z"
+                d="M1101 0C1101.55 0 1102 0.447715 1102 1V196C1102 196.552 1101.55 197 1101 197H1061C1060.45
+                   197 1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1100V2H382V84H414V79.2266L424
+                   85L414 90.7734V86H381C380.448 86 380 85.5523 380 85V1C380 0.447715 380.448 0 381 0H1101Z"
             />
             <use href="#acc-mem" fill="white"/>
             <path
                 id="acc-alu"
-                d="M1101 195C1101.55 195 1102 195.448 1102 196V332C1102 332.086 1101.99 332.17 1101.97 332.25C1101.99 332.33 1102 332.414 1102 332.5C1102 333.052 1101.55 333.5 1101 333.5H630C629.448 333.5 629 333.052 629 332.5C629 332.414 629.012 332.33 629.032 332.25C629.012 332.17 629 332.086 629 332V257C629 256.448 629.448 256 630 256H651V251.227L661 257L651 262.773V258H631V331.5H1100V197H1061C1060.45 197 1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1101Z"
+                d="M1101 195C1101.55 195 1102 195.448 1102 196V332C1102 332.086 1101.99 332.17 1101.97
+                   332.25C1101.99 332.33 1102 332.414 1102 332.5C1102 333.052 1101.55 333.5 1101
+                   333.5H630C629.448 333.5 629 333.052 629 332.5C629 332.414 629.012 332.33 629.032
+                   332.25C629.012 332.17 629 332.086 629 332V257C629 256.448 629.448 256 630
+                   256H651V251.227L661 257L651 262.773V258H631V331.5H1100V197H1061C1060.45 197
+                   1060 196.552 1060 196C1060 195.448 1060.45 195 1061 195H1101Z"
             />
             <use href="#acc-alu" fill="white"/>
             <path
                 id="ir-mux"
-                d="M314 181L304 186.773V182H271V255C271 255.552 270.552 256 270 256H241C240.448 256 240 255.552 240 255C240 254.448 240.448 254 241 254H269V181C269 180.448 269.448 180 270 180H304V175.227L314 181Z"
+                d="M314 181L304 186.773V182H271V255C271 255.552 270.552 256 270 256H241C240.448
+                   256 240 255.552 240 255C240 254.448 240.448 254 241 254H269V181C269 180.448
+                   269.448 180 270 180H304V175.227L314 181Z"
             />
             <use href="#ir-mux" fill="white"/>
             <path
                 id="ir-control"
-                d="M270 254C270.552 254 271 254.448 271 255V411H303V406.227L313 412L303 417.773V413H270C269.448 413 269 412.552 269 412V256H241C240.448 256 240 255.552 240 255C240 254.448 240.448 254 241 254H270Z"
+                d="M270 254C270.552 254 271 254.448 271 255V411H303V406.227L313 412L303 417.773V413H270C269.448
+                   413 269 412.552 269 412V256H241C240.448 256 240 255.552 240 255C240 254.448 240.448 254 241 254H270Z"
             />
             <use href="#ir-control" fill="white"/>
             <path
                 id="ir-mux-addr"
-                d="M29 152L19 157.773V153H2V369H269V256H241C240.448 256 240 255.552 240 255C240 254.448 240.448 254 241 254H270C270.552 254 271 254.448 271 255V370C271 370.552 270.552 371 270 371H1C0.482323 371 0.0562144 370.607 0.00488281 370.103L0 370V152C0 151.448 0.447715 151 1 151H19V146.227L29 152Z"
+                d="M29 152L19 157.773V153H2V369H269V256H241C240.448 256 240 255.552 240 255C240
+                   254.448 240.448 254 241 254H270C270.552 254 271 254.448 271 255V370C271 370.552
+                   270.552 371 270 371H1C0.482323 371 0.0562144 370.607 0.00488281 370.103L0
+                   370V152C0 151.448 0.447715 151 1 151H19V146.227L29 152Z"
             />
             <use href="#ir-mux-addr" fill="white"/>
             <path
                 id="internal-control"
-                d="M1071 413C1071.55 413 1072 412.552 1072 412C1072 411.448 1071.55 411 1071 411V413ZM888 412L898 417.774V406.226L888 412ZM1071 412V411H897V412V413H1071V412Z"
+                d="M1071 413C1071.55 413 1072 412.552 1072 412C1072 411.448 1071.55 411 1071 411V413ZM888
+                   412L898 417.774V406.226L888 412ZM1071 412V411H897V412V413H1071V412Z"
             />
             <use href="#internal-control" fill="white"/>
 
             <Bus x={245} y={127.5} number={8}/>
-
             <Bus x={525} y={164.5} number={16}/>
             <Bus x={625} y={164.5} number={16}/>
             <Bus x={740} y={207} number={16}/>
             <Bus x={1075} y={187} number={16}/>
 
-            <Multiplexer x={27} y={90} name="sel_jump_pc" />
+            <Multiplexer x={27} y={90} name="sel_jump_pc" isActivated={ branching || pc } />
+            <Multiplexer x={313} y={115} name="sel_mem_addr" isActivated={ fetch || load || store || addMul } />
+            <Multiplexer x={815} y={150} name="sel_acc_data" isActivated={ load || addMul } />
 
-            <Multiplexer x={313} y={115} name="sel_mem_addr" />
-            
-            <Multiplexer x={815} y={150} name="sel_acc_data" />
-            
-            <ALU x={660} y={140} /> 
-            
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={422.5} y={40} hasControlSignal={true} >
+            <ALU x={660} y={140} isOpActivated={ addMul } />
+
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={422.5} y={40} hasControlSignal={true} isWritable={ store } >
                 <text x="5" y="82.5" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="222" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
             <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} />
-
             <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} />
-
             <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} />
 
-            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />            
-            <use href="#mux-mem" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#mux-mem" className={ fetch || load || store || addMul ? "fill-red-500" : "" } />
             <use href="#mem-ir" className={ fetch ? "fill-red-500" : "" } />
-            <use href="#ir-control" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#ir-control" className={ fetch || control ? "fill-red-500" : "" } />
+            <use href="#mem-mux" className={ load ? "fill-red-500" : "" } />
+            <use href="#mux-acc" className={ load || addMul ? "fill-red-500" : "" } />
+            <use href="#ir-mux" className={ load || store || addMul ? "fill-red-500" : "" } />
+            <use href="#acc-mem" className={ store ? "fill-red-500" : ""} />
+            <use href="#mem-alu" className={ addMul ? "fill-red-500" : "" } />
+            <use href="#acc-alu" className={ addMul ? "fill-red-500" : "" } />
+            <use href="#alu-mux" className={ addMul ? "fill-red-500" : "" } />
+            <use href="#ir-mux-addr" className={ branching ? "fill-red-500" : "" } />
+            <use href="#mux-pc" className={ branching || pc ? "fill-red-500" : "" } />
+            <use href="#inc" className={ pc ? "fill-red-500" : "" } />
+            <use href="#acc-control" className={ control ? "fill-red-500" : ""} />
+            <use href="#internal-control" className={ control ? "fill-red-500" : ""} />
 
-            <circle cx="277" cy="137" r="5" className={ fetch ? "fill-red-500" : "fill-white" } />
-            <circle cx="270" cy="370" r="5" className={ fetch ? "fill-red-500" : "fill-white" } />
-            <circle cx="270" cy="255" r="5" className={ fetch ? "fill-red-500" : "fill-white" } />
-            <circle cx="1101" cy="333" r="5" fill="white"/>
-            <circle cx="588" cy="174" r="5" className={ fetch ? "fill-red-500" : "fill-white" } />
-            <circle cx="1101" cy="196" r="5" fill="white"/>
+            <circle cx="277" cy="137" r="5" className={ fetch || pc ? "fill-red-500" : "fill-white" } />
+            <circle cx="270" cy="370" r="5" className={ fetch || branching || control ? "fill-red-500" : "fill-white" } />
+            <circle cx="270" cy="255" r="5" className={ fetch || load || store || addMul || branching || control ? "fill-red-500" : "fill-white" } />
+            <circle cx="1101" cy="333" r="5" className={ addMul || control ? "fill-red-500" : "fill-white" } />
+            <circle cx="588" cy="174" r="5" className={ fetch || load || addMul ? "fill-red-500" : "fill-white" } />
+            <circle cx="1101" cy="196" r="5" className={ store || addMul || control ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="119.5" y="48.5" width="39" height="39" fill="white" stroke="black" />
