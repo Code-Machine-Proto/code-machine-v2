@@ -4,11 +4,28 @@ import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import { LineStateMa } from "@src/interface/Line";
 import { useContext } from "react";
 
 export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
+
+    const lineState = LineStateMa.nop;
+    const fetch = lineState == LineStateMa.fetch;
+    const control = lineState == LineStateMa.control;
+    const branching = lineState == LineStateMa.branching;
+    const addSubMul = lineState == LineStateMa.addSubMul;
+    const addSubA = lineState == LineStateMa.addSubA;
+    const addSubX = lineState == LineStateMa.addSubX;
+    const sh = lineState == LineStateMa.sh;
+    const store = lineState == LineStateMa.store;
+    const load = lineState == LineStateMa.load;
+    const loadA = lineState == LineStateMa.loadA;
+    const loadI = lineState == LineStateMa.loadI;
+    const storeA = lineState == LineStateMa.storeA;
+    const storeI = lineState == LineStateMa.storeI;
+    const pc = lineState == LineStateMa.pc;
 
     return (
         <svg width="100%" height="100%" viewBox="0 0 1175 401" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,7 +187,7 @@ export default function VisualWithMa() {
                    0.0742188C330.641 0.0647401 330.665 0.0566107 330.688 0.0488281C330.693 0.0472297 330.698 0.0454702 330.703
                    0.0439453C330.765 0.0245981 330.831 0.0116928 330.897 0.00488281L331 0H1170Z"
             />
-            <use href="#M117" fill="white"/>
+            <use href="#ma-mem" fill="white"/>
             <path
                 id="ma-addr"
                 d="M362 228L352 233.773V229H331V342H1169V258H1125C1124.45 258 1124 257.552 1124 257C1124 256.448 1124.45 256
@@ -243,16 +260,16 @@ export default function VisualWithMa() {
             <Bus x={872} y={130} number={16}/>
             <Bus x={1130} y={112} number={16}/>
 
-            <Multiplexer x={41} y={70} name="sel_pc_source" />
-            <Multiplexer x={360} y={40} name="sel_mem_data" />
-            <Multiplexer x={360} y={165} name="sel_mem_addr" />
-            <Multiplexer x={669} y={200} name="alu_b_source" />
-            <Multiplexer x={900} y={80} name="sel_acc_data" /> 
-            <Multiplexer x={900} y={215} name="sel_ma_source" />
+            <Multiplexer x={41} y={70} name="sel_pc_source" isActivated={ branching } />
+            <Multiplexer x={360} y={40} name="sel_mem_data" isActivated={ store || storeA || storeI } />
+            <Multiplexer x={360} y={165} name="sel_mem_addr" isActivated={ fetch || addSubMul || addSubA || store || load || loadA || loadI || storeA || storeI } />
+            <Multiplexer x={669} y={200} name="alu_b_source" isActivated={ addSubMul || addSubA || sh } />
+            <Multiplexer x={900} y={80} name="sel_acc_data" isActivated={ addSubMul || sh || load || loadI } />
+            <Multiplexer x={900} y={215} name="sel_ma_source" isActivated={ addSubA || loadA } />
 
-            <ALU x={755} y={123}/>
+            <ALU x={755} y={123} isOpActivated={ addSubMul || addSubA || sh } />
 
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={491} y={40} hasControlSignal={true} >
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={491} y={40} hasControlSignal={true} isWritable={ store || storeA || storeI } >
                 <text x="5" y="70" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="298" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
@@ -263,16 +280,40 @@ export default function VisualWithMa() {
             <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} x={1005} y={87} className="bg-acc" defaultIsBase10={true} />
             <RegisterBox name="MA" number={steps[counter].ma ? steps[counter].ma : 0} x={1005} y={225} className="bg-ma" />
 
-            <circle cx="616" cy="156" r="5" fill="white" />
-            <circle cx="841" cy="97" r="5" fill="white" />
-            <circle cx="865" cy="195" r="5" fill="white" />
-            <circle cx="1155" cy="121" r="5" fill="white" />
-            <circle cx="302" cy="203" r="5" fill="white" />
-            <circle cx="1170" cy="257" r="5" fill="white" />
-            <circle cx="635" cy="343" r="5" fill="white" />
-            <circle cx="302" cy="258" r="5" fill="white" />
-            <circle cx="291" cy="110" r="5" fill="white" />
-            <circle cx="1155" cy="329" r="5" fill="white" />
+            <use href="#mux-pc" className={ branching || pc ? "fill-red-500" : "" } />
+            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#inc" className={ pc ? "fill-red-500" : "" } />
+            <use href="#mux3-mem" className={ fetch || addSubMul || addSubA || addSubX || store || load || loadA || loadI || storeA || storeI ? "fill-red-500" : "" } />
+            <use href="#mem-alu" className={ addSubMul || addSubA || addSubX ? "fill-red-500" : "" } />
+            <use href="#mem-ir" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#mem-acc" className={ load || loadI ? "fill-red-500" : "" } />
+            <use href="#mem-ma" className={ loadA ? "fill-red-500" : "" } />
+            <use href="#alu-acc" className={ addSubMul || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#alu-ma" className={ addSubA ? "fill-red-500" : "" } />
+            <use href="#ir-mem" className={ addSubMul || addSubA || store || load || loadA || storeA ? "fill-red-500" : "" } />
+            <use href="#ir-pc" className={ branching ? "fill-red-500" : "" } />
+            <use href="#mux-acc" className={ addSubMul || addSubX || sh || load || loadI ? "fill-red-500" : "" } />
+            <use href="#mux-ma" className={ addSubA || loadA ? "fill-red-500" : "" } />
+            <use href="#acc-alu" className={ addSubMul || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#acc-mem" className={ store || storeI ? "fill-red-500" : "" } />
+            <use href="#ma-mem" className={ storeA ? "fill-red-500" : "" } />
+            <use href="#ma-addr" className={ addSubX || loadI || storeI ? "fill-red-500" : "" } />
+            <use href="#ma-alu" className={ addSubA ? "fill-red-500" : "" } />
+            <use href="#mux-mem" className={ store || storeA || storeI ? "fill-red-500" : "" } />
+            <use href="#mux-alu" className={ addSubMul || addSubA || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#ir-control" className={ fetch || control ? "fill-red-500" : "" } />
+            <use href="#acc-control" className={ control ? "fill-red-500" : "" } />
+
+            <circle cx="616" cy="156" r="5" className={ fetch || addSubMul || addSubA || addSubX || load || loadA || loadI ? "fill-red-500" : "fill-white" } />
+            <circle cx="841" cy="97" r="5" className={ load || loadA || loadI ? "fill-red-500" : "fill-white" } />
+            <circle cx="865" cy="195" r="5" className={ addSubMul || addSubA || addSubX || sh ? "fill-red-500" : "fill-white" } />
+            <circle cx="1155" cy="121" r="5" className={ control || addSubMul || addSubX || sh || store || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="302" cy="203" r="5" className={ branching || addSubMul || addSubA || store || load || loadA || storeA ? "fill-red-500" : "fill-white" } />
+            <circle cx="1170" cy="257" r="5" className={ addSubA || addSubX || loadI || storeA || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="635" cy="343" r="5" className={ addSubA || addSubX || loadI || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="302" cy="258" r="5" className={ fetch || control || branching || addSubMul || addSubA || store || load || loadA || storeA ? "fill-red-500" : "fill-white" } />
+            <circle cx="291" cy="110" r="5" className={ fetch || pc ? "fill-red-500" : "fill-white" } />
+            <circle cx="1155" cy="329" r="5" className={ control || addSubMul || addSubX || sh ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="291.5" y="363.5" width="873" height="37" fill="white" stroke="black" />

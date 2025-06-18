@@ -4,8 +4,27 @@ export enum LineStateAccumulator {
     load,
     store,
     control,
-    add_mul,
+    addMul,
     nop,
     branching,
     pc,
+}
+
+export enum LineStateMa {
+    error = -1,
+    fetch,
+    control,
+    branching,
+    pc,
+    addSubMul,
+    addSubA,
+    addSubX,
+    sh,
+    store,
+    load,
+    loadA,
+    loadI,
+    storeA,
+    storeI,
+    nop,
 }

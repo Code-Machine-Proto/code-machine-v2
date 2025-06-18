@@ -10,11 +10,12 @@ import { LineStateAccumulator } from "@src/interface/Line";
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
+
     const lineState = LineStateAccumulator.nop;
     const fetch = lineState == LineStateAccumulator.fetch;
     const load = lineState == LineStateAccumulator.load;
     const store = lineState == LineStateAccumulator.store;
-    const addMul = lineState == LineStateAccumulator.add_mul;
+    const addMul = lineState == LineStateAccumulator.addMul;
     const branching = lineState == LineStateAccumulator.branching;
     const pc = lineState == LineStateAccumulator.pc;
     const control = lineState == LineStateAccumulator.control;
