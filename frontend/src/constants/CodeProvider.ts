@@ -10,6 +10,12 @@ export const DEFAULT_SOURCE_CODE: CodeInterface = {
     processorId: ProcessorId.ACCUMULATOR,
 };
 
+export const DEFAULT_ACCUMULATOR_CODE = "";
+
+export const DEFAULT_MA_CODE = "";
+
+export const DEFAULT_POLYRISC_CODE = "";
+
 /**
  * État d'exécution par défaut
  */

@@ -76,6 +76,7 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
  */
 function changeCode(state: SimulationState, action: CodePayload): SimulationState {
     if (action.code === "" || action.code) {
+        localStorage.setItem(`code-${state.codeState.processorId}`, action.code);
         return { ...state, codeState: { ...state.codeState, code: action.code, lines: changeLineTotal(action.code) } };
     }
     return { ...state };
@@ -97,8 +98,8 @@ function changeLineTotal(code: string): Array<string> {
  * @returns le prochain état
  */
 function changeProcessor(state: SimulationState, action: CodePayload): SimulationState {
-    if (action.processorId) {
-        return { ...state, codeState: { ...state.codeState ,processorId: action.processorId }};
+    if (action.processorId || action.processorId == 0) {
+        return { ...state, codeState: { ...state.codeState, processorId: action.processorId }};
     }
     return { ...state };
 }
