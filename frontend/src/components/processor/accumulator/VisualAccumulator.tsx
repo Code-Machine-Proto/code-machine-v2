@@ -8,7 +8,7 @@ import Bus from "@src/components/processor/parts/Bus";
 
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
 
     return(
         <svg width="100%" height="100%" viewBox="0 0 1131 442" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -136,11 +136,11 @@ export default function VisualAccumulator() {
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} />
+            <RegisterBox name="PC" number={steps[count].pcState} className="bg-pc" x={120} y={100} />
 
-            <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} />
+            <RegisterBox name="IR" number={steps[count].irState} className="bg-ir" x={120} y={220} />
 
-            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} />
+            <RegisterBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} />
 
             <circle cx="277" cy="137" r="5" fill="white"/>
             <circle cx="270" cy="370" r="5" fill="white"/>

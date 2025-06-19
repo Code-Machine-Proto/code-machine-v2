@@ -12,7 +12,7 @@ import { Outlet } from "react-router";
  */
 export default function Processor() {
     const execution = useContext(ExecutionContext);
-    const currentStep = useContext(StepContext);
+    const { count } = useContext(StepContext);
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
     const [isVisualMode, setVisualMode] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export default function Processor() {
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
                         <ExecutionControl memoryState={[ enableMemory, setEnableMemory]} visualSetting={[isVisualMode, setVisualMode]} />
                         <p className="bg-white w-fit p-3 rounded-md">
-                                { PROCESSOR_ACTIONS[execution[currentStep].instructionState] }
+                                { PROCESSOR_ACTIONS[execution[count].instructionState] }
                         </p>
                         <div className=" flex grow gap-5">
                             <Outlet context={isVisualMode} />
@@ -31,8 +31,8 @@ export default function Processor() {
                             enableMemory &&
                             <Memory 
                                 className="bg-green-500"
-                                memoryContent={execution[currentStep].memoryState}
-                                stimulatedCell={execution[currentStep].stimulatedMemory}
+                                memoryContent={execution[count].memoryState}
+                                stimulatedCell={execution[count].stimulatedMemory}
                                 nom="Mémoire principale"
                             />
                             }
