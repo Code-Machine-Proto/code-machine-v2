@@ -5,10 +5,21 @@ import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import Bus from "@src/components/processor/parts/Bus";
 import { useContext } from "react";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { LineStatePolyRisc } from "@src/interface/Line";
 
 export default function VisualPolyRisc() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
+
+    const lineState = LineStatePolyRisc.error;
+    const fetch = lineState == LineStatePolyRisc.fetch;
+    const opTwoReg = lineState == LineStatePolyRisc.opTwoReg;
+    const opThreeReg = lineState == LineStatePolyRisc.opThreeReg;
+    const branching = lineState == LineStatePolyRisc.branching;
+    const load = lineState == LineStatePolyRisc.load;
+    const store = lineState == LineStatePolyRisc.store;
+    const loadI = lineState == LineStatePolyRisc.loadI;
+    const pc = lineState == LineStatePolyRisc.pc;
 
     return (
         <svg width="100%" height="100%" viewBox="0 0 1231 344" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,17 +205,17 @@ export default function VisualPolyRisc() {
             <Bus x={995} y={166} number={16}/>
             <Bus x={1200} y={165} number={16}/>
 
-            <Multiplexer name="do_branch" x={37} y={130} />
-            <Multiplexer name="sel_reg_data" x={652} y={47} />
+            <Multiplexer name="do_branch" x={37} y={130} isActivated={ branching || pc } />
+            <Multiplexer name="sel_reg_data" x={652} y={47} isActivated={ opTwoReg || opThreeReg || load || loadI } />
 
-            <ALU x={920} y={100} hasNz={true} />
+            <ALU x={920} y={100} hasNz={true} isOpActivated={ opTwoReg } />
             
             <ObscureMemory name="Mémoire d'instruction" className="fill-green-700" x={313} y={70} >
                 <text x={5} y={182} dominantBaseline="middle" fill="black" >addr</text>
                 <text x={165} y={182} dominantBaseline="middle" textAnchor="end" fill="black">data_in</text>
             </ObscureMemory>
 
-            <ObscureMemory name="Registres" className="fill-yellow-300" x={757} y={70} >
+            <ObscureMemory name="Registres" className="fill-yellow-300" x={757} y={70} hasControlSignal={true} controlName="wr_reg" isWritable={ opTwoReg || opThreeReg || load || loadI } >
                 <text x={5} y={35} dominantBaseline="middle" fill="black">data_in</text>
                 <text x={5} y={201} dominantBaseline="middle" fill="black">rdst</text>
                 <text x={5} y={238} dominantBaseline="middle" fill="black">rsrc1</text>
@@ -212,7 +223,7 @@ export default function VisualPolyRisc() {
                 <text x={165} y={122.5} dominantBaseline="middle" textAnchor="end" fill="black">A</text>
                 <text x={165} y={267.5} dominantBaseline="middle" textAnchor="end" fill="black">B</text>
             </ObscureMemory>
-            <ObscureMemory name="Mémoire de données" className="fill-green-500" x={1101} y={70} >
+            <ObscureMemory name="Mémoire de données" className="fill-green-500" x={1101} y={70} hasControlSignal={true} controlName="wr_mem" isWritable={ store } >
                 <text x={5} y={132.5} dominantBaseline="middle" fill="black">addr</text>
                 <text x={5} y={264} dominantBaseline="middle" fill="black">data_in</text>
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
@@ -221,9 +232,26 @@ export default function VisualPolyRisc() {
             <RegisterBox name="PC" className="bg-pc" number={steps[counter].pcState} x={134.5} y={137.5}/>
             <RegisterBox name="IR" className="bg-ir" number={steps[counter].irState} x={467.5} y={137.5}/>
 
-            <circle cx="282" cy="170" r="5" fill="white"/>
-            <circle cx="616" cy="170" r="5" fill="white"/>
-            <circle cx="880" cy="217" r="5" fill="white"/>
+            <use href="#mux-pc" className={ branching || pc ? "fill-red-500" : "" } />
+            <use href="#pc-inst" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#inst-ir" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#pc-mux" className={ pc ? "fill-red-500" : "" } />
+            <use href="#mux-reg" className={ opTwoReg || load || loadI ? "fill-red-500" : "" } />
+            <use href="#ir-reg" className={ loadI ? "fill-red-500" : "" } />
+            <use href="#ir-rdst" className={ opTwoReg || opThreeReg || load || store || loadI ? "fill-red-500" : "" } />
+            <use href="#ir-rsrc1" className={ opTwoReg || opThreeReg || load ? "fill-red-500" : "" } />
+            <use href="#ir-rsrc2" className={ opThreeReg || store ? "fill-red-500" : "" } />
+            <use href="#ir-pc" className={ branching ? "fill-red-500" : "" } />
+            <use href="#reg-A" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
+            <use href="#reg-B" className={ opThreeReg ? "fill-red-500" : "" } />
+            <use href="#alu-reg" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
+            <use href="#reg-data" className={ store ? "fill-red-500" : "" } />
+            <use href="#reg-addr" className={ load || store ? "fill-red-500" : "" } />
+            <use href="#mem-reg" className={ load ? "fill-red-500" : "" } />
+
+            <circle cx="282" cy="170" r="5" className={ fetch || pc ? "fill-red-500" : "fill-white" } />
+            <circle cx="616" cy="170" r="5" className={ opTwoReg || opThreeReg || branching || load || store || loadI ? "fill-red-500" : "fill-white" } />
+            <circle cx="880" cy="217" r="5" className={ opThreeReg || store ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="134.5" y="82.5" width="39" height="39" fill="white" stroke="black"/>

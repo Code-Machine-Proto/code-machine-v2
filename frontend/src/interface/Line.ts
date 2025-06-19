@@ -28,3 +28,17 @@ export enum LineStateMa {
     storeI,
     nop,
 }
+
+export enum LineStatePolyRisc {
+    error = -1,
+    fetch,
+    opTwoReg,
+    opThreeReg,
+    control,
+    branching,
+    load,
+    store,
+    loadI,
+    pc,
+    nop,
+}
