@@ -1,6 +1,6 @@
 import Accumulator from "@src/class/Accumulator";
 import Processor from "@src/class/Processor";
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, getProcessorCode } from "@src/constants/CodeProvider";
+import { DEFAULT_EXECUTION_STATE } from "@src/constants/CodeProvider";
 import type { SimulationState } from "@src/interface/CodeInterface";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
@@ -10,7 +10,7 @@ import { createContext, useReducer, type ReactNode } from "react";
 /**
  * Contexte pour accéder au valeur du code et son état
  */
-export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE as Processor);
+export const CodeContext = createContext<Processor>(new Accumulator());
 
 /**
  * Permets d'obtenir le dispatch pour effectuer des actions
