@@ -1,4 +1,4 @@
-import type { ObscureMemoryProps } from "@src/interface/ProcessorPartsProps";
+import type { ObscureMemoryProps } from "@src/interface/props/ProcessorParts";
 
 export default function ObscureMemory({ 
     children,

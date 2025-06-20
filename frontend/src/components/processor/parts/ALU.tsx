@@ -1,4 +1,4 @@
-import type { AluProps } from "@src/interface/ProcessorPartsProps";
+import type { AluProps } from "@src/interface/props/ProcessorParts";
 
 export default function ALU({ x, y, hasNz = false, isNzActivated = false, isOpActivated = false }: AluProps) {
 

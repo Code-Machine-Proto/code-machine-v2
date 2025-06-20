@@ -1,6 +1,6 @@
 import HexNumber from "@src/components/utils-hex/HexNumber";
 import HexSwitcher from "@src/components/utils-hex/HexSwitcher";
-import type { RegisterBoxProps } from "@src/interface/ProcessorPartsProps";
+import type { RegisterBoxProps } from "@src/interface/props/ProcessorParts";
 import { useState } from "react";
 
 export default function RegisterBox({name, number, className, x, y, defaultIsBase10 = false}: RegisterBoxProps) {

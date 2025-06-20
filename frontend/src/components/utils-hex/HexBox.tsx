@@ -1,4 +1,4 @@
-import type { HexBoxProps } from "@src/interface/HexBoxProps";
+import type { HexBoxProps } from "@src/interface/props/HexBox";
 import { useState } from "react";
 import HexNumber from "./HexNumber";
 import HexSwitcher from "./HexSwitcher";

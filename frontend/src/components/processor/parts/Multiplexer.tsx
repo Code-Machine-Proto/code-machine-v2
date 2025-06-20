@@ -1,4 +1,4 @@
-import type { MultiplexerProps } from "@src/interface/ProcessorPartsProps";
+import type { MultiplexerProps } from "@src/interface/props/ProcessorParts";
 
 export default function Multiplexer({ x, y, isActivated = false, name }: MultiplexerProps) {
     return (

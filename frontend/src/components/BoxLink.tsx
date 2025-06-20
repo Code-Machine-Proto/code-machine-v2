@@ -1,4 +1,4 @@
-import type BoxLinkProps from "@src/interface/BoxLinkProps";
+import type BoxLinkProps from "@src/interface/props/BoxLink";
 import { Link } from "react-router";
 
 /**

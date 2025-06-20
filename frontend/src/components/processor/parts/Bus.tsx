@@ -1,4 +1,4 @@
-import type { BusProps } from "@src/interface/ProcessorPartsProps";
+import type { BusProps } from "@src/interface/props/ProcessorParts";
 
 export default function Bus({ x, y, number }: BusProps) {
     return (

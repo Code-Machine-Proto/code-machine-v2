@@ -2,7 +2,7 @@ import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
-import type { ExecutionControlProps } from "@src/interface/ExecutionControlProps";
+import type { ExecutionControlProps } from "@src/interface/props/ExecutionControl";
 
 /**
  * Sert à contrôler l'exécution de la simulation côté frontend une fois utilisé
