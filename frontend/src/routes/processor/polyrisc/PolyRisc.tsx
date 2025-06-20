@@ -1,9 +1,8 @@
+import PolyRisc from "@src/class/PolyRisc";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import Memory from "@src/components/Memory";
 import VisualPolyRisc from "@src/components/processor/polyrisc/VisualPolyRisc";
 import HexBox from "@src/components/utils-hex/HexBox";
-import { DEFAULT_POLYRISC_CODE } from "@src/constants/CodeProvider";
-import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
@@ -21,12 +20,7 @@ export default function PolyRiscProcessor() {
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
 
     useEffect(() => {
-        let code = localStorage.getItem(`code-${ProcessorId.RISC}`);
-        if (!code) {
-            code = DEFAULT_POLYRISC_CODE;
-        }
-        dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.RISC });
-        dispatch({ type: CodeAction.CHANGE_CODE, code: code});
+        dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new PolyRisc() });
     }, [dispatch]);
 
     return (

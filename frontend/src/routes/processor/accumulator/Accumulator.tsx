@@ -1,8 +1,7 @@
+import Accumulator from "@src/class/Accumulator";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import VisualAccumulator from "@src/components/processor/accumulator/VisualAccumulator";
 import HexBox from "@src/components/utils-hex/HexBox";
-import { DEFAULT_ACCUMULATOR_CODE } from "@src/constants/CodeProvider";
-import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect } from "react";
 import { useOutletContext } from "react-router";
@@ -18,12 +17,7 @@ export default function AccumulatorProcessor() {
     const isProgrammerMode = useOutletContext<boolean>();
 
     useEffect(() => { 
-        let code = localStorage.getItem(`code-${ProcessorId.ACCUMULATOR}`);
-        if (!code) {
-            code = DEFAULT_ACCUMULATOR_CODE;
-        }
-        dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.ACCUMULATOR });
-        dispatch({ type: CodeAction.CHANGE_CODE, code: code});
+        dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new Accumulator() });
     }, [dispatch]);
 
     return (

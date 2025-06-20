@@ -1,13 +1,16 @@
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE } from "@src/constants/CodeProvider";
-import type { CodeInterface, SimulationState } from "@src/interface/CodeInterface";
+import Accumulator from "@src/class/Accumulator";
+import Processor from "@src/class/Processor";
+import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, getProcessorCode } from "@src/constants/CodeProvider";
+import type { SimulationState } from "@src/interface/CodeInterface";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
+import { storeCode } from "@src/module-store/CodeStore";
 import { createContext, useReducer, type ReactNode } from "react";
 
 /**
  * Contexte pour accéder au valeur du code et son état
  */
-export const CodeContext = createContext<CodeInterface>(DEFAULT_SOURCE_CODE);
+export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE as Processor);
 
 /**
  * Permets d'obtenir le dispatch pour effectuer des actions
@@ -30,7 +33,7 @@ export const StepContext = createContext<number>(0);
  * @returns l'élément qui distribue les deux contextes
  */
 export function CodeProvider({ children }: { children: ReactNode}) {
-    const [ state, dispatch ] = useReducer(codeReducer, { codeState: DEFAULT_SOURCE_CODE, executionState: DEFAULT_EXECUTION_STATE, currentStep: 0 });
+    const [ state, dispatch ] = useReducer(codeReducer, { codeState: new Accumulator(), executionState: DEFAULT_EXECUTION_STATE, currentStep: 0 });
     return(
         <CodeContext.Provider value={ state.codeState } >
             <StepContext value={state.currentStep } >
@@ -76,19 +79,10 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
  */
 function changeCode(state: SimulationState, action: CodePayload): SimulationState {
     if (action.code === "" || action.code) {
-        localStorage.setItem(`code-${state.codeState.processorId}`, action.code);
-        return { ...state, codeState: { ...state.codeState, code: action.code, lines: changeLineTotal(action.code) } };
+        storeCode(state.codeState.processorId, action.code);
+        return { ...state, codeState: { ...state.codeState, code: action.code } as Processor };
     }
     return { ...state };
-}
-
-/**
- * Permets de transformer un input de texte en tableau de ligne
- * @param code code écrit sur plusieurs
- * @returns code séparé par ligne dans un tableau
- */
-function changeLineTotal(code: string): Array<string> {
-    return code.split("\n");
 }
 
 /**
@@ -98,8 +92,8 @@ function changeLineTotal(code: string): Array<string> {
  * @returns le prochain état
  */
 function changeProcessor(state: SimulationState, action: CodePayload): SimulationState {
-    if (action.processorId || action.processorId == 0) {
-        return { ...state, codeState: { ...state.codeState, processorId: action.processorId }};
+    if (action.newProcessor) {
+        return { ...state, codeState: action.newProcessor };
     }
     return { ...state };
 }

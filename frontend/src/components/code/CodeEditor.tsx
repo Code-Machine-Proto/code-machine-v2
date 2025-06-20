@@ -10,7 +10,7 @@ import { useFetcher } from "react-router";
  * @returns L'éditeur de code pour écrire de l'assembleur
  */
 export default function CodeEditor() {
-    const { code, lines, processorId } = useContext(CodeContext);
+    const processor = useContext(CodeContext);
     const dispatch = useContext(DispatchCodeContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
@@ -41,11 +41,11 @@ export default function CodeEditor() {
                     ref={numberContainer}
                     onScroll={() => handleScroll(numberContainer, textArea)}
                 >
-                    { lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
+                    { processor.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
                 <textarea 
                     className="text-white resize-none border-none outline-none w-4/5" 
-                    value={ code } 
+                    value={ processor.code } 
                     onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} 
                     wrap="off"
                     ref={textArea}
@@ -54,7 +54,7 @@ export default function CodeEditor() {
             </div>
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
-                onClick={() => fetcher.submit({ lines: JSON.stringify(lines), processorId: processorId }, { method: "POST", action: "/processor"})}
+                onClick={() => fetcher.submit({ processor: JSON.stringify(processor)  }, { method: "POST", action: "/processor"})}
             >
                 Compiler
             </button>
