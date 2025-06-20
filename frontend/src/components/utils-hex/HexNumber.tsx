@@ -1,4 +1,5 @@
 import { BASE_10, BASE_16 } from "@src/constants/HexUtils";
+import type { HexNumberProps } from "@src/interface/props/HexNumber";
 
 /**
  * Nombre qui peut être sous forme hexadécimal ou décimal
@@ -8,7 +9,7 @@ import { BASE_10, BASE_16 } from "@src/constants/HexUtils";
  * @prop className - l'apparence du nombre remonté vers le haut
  * @returns le composant react qui devra s'afficher
  */
-export default function HexNumber({ keygen, number, isBase10 = false, className = "" }: { number: number, isBase10?: boolean, className?: string, keygen?: number }) {
+export default function HexNumber({ keygen, number, isBase10 = false, className = "" }: HexNumberProps) {
     return (
             <p key={keygen} className={ "text-right " + className }>
                 { isBase10 ? "" : "0x" }
