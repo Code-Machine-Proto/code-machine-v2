@@ -1,3 +1,6 @@
+/**
+ * Paramètres pour une ligne de nombre
+ */
 export interface HexNumberLineProps {
     max: number,
     jump?: number,

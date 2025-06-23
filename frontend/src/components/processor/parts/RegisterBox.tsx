@@ -3,6 +3,17 @@ import HexSwitcher from "@src/components/utils-hex/HexSwitcher";
 import type { RegisterBoxProps } from "@src/interface/props/ProcessorParts";
 import { useState } from "react";
 
+/**
+ * Composant react englobé d'un foreignObject pour être placé dans une balise svg 
+ * Représente un registre pouvant être mis en décimal ou en hexadécimal
+ * @prop name - le nom du registre
+ * @prop number - le nombre à affiché dans le registre
+ * @prop className - le style css du registre
+ * @prop x - la position en x du composant
+ * @prop y - la position en y du composant
+ * @prop defaultIsBase10 - si la boîte commence en base 10 ou 16
+ * @returns le composant react englobé d'un svg
+ */
 export default function RegisterBox({name, number, className, x, y, defaultIsBase10 = false}: RegisterBoxProps) {
     const [isBase10, setIsBase10] = useState<boolean>(defaultIsBase10);
 
@@ -20,4 +31,4 @@ export default function RegisterBox({name, number, className, x, y, defaultIsBas
             </div>
         </foreignObject>
     );
-} 
+}
