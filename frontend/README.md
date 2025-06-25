@@ -189,8 +189,8 @@ L'application s'exécute avec deux différents modes d'exécution en ajoutant --
 
 ### Mode website
 
-Le mode website est utilisé pour représenter l'exécution dans un browser régulier. Il permets au site d'utilisé http pour comuniquer avec le serveur et d'utiliser localStorage pour sauvegarder certaines données de navigation.
+Le mode website est utilisé pour représenter l'exécution dans un browser régulier. Il permets au site d'utilisé http pour comuniquer avec le serveur.
 
 ### Mode electron
 
-Comme son nom l'indique, le mode d'exécution electron sert à compiler l'application dans le contexte d'une application electron. Il permets au client d'utiliser la communication IPC pour contacter le serveur et d'utiliser une librairie comme electron-store ou electron-setting pour sauvegarder certaines données de navigation
+Comme son nom l'indique, le mode d'exécution electron sert à compiler l'application dans le contexte d'une application electron. Il permets au client d'utiliser la communication IPC pour contacter le serveur.

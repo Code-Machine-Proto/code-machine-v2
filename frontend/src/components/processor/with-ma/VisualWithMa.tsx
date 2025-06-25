@@ -6,6 +6,10 @@ import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { useContext } from "react";
 
+/**
+ * Affiche le chemin de donnée du processeur à accumulateur avec MA
+ * @returns le composant react
+ */
 export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
