@@ -27,7 +27,7 @@ export enum CodeAction {
 export interface CodePayload {
     code?: string,
     executedCode?: Array<ProcessorStep>,
-    newProcessor: Processor,
+    newProcessor?: Processor,
     type: CodeAction,
 };
 

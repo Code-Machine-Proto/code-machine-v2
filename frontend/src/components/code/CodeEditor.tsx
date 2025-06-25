@@ -3,6 +3,7 @@ import { CodeContext, DispatchCodeContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
+import type { ProcessorStep } from "@src/interface/ProcessorStep";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -20,7 +21,7 @@ export default function CodeEditor() {
 
     useEffect(() => {
         if( fetcher.data ) {
-            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data })
+            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data as Array<ProcessorStep> })
         }
     }, [fetcher.data, dispatch]);
     
@@ -46,7 +47,7 @@ export default function CodeEditor() {
                 <textarea 
                     className="text-white resize-none border-none outline-none w-4/5" 
                     value={ processor.code } 
-                    onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} 
+                    onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
                     wrap="off"
                     ref={textArea}
                     onScroll={() => handleScroll(textArea, numberContainer)}
