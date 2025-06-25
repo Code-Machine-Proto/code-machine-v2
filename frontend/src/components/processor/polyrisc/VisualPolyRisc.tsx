@@ -223,7 +223,7 @@ export default function VisualPolyRisc() {
             </ObscureMemory>
 
             <RegisterBox name="PC" className="bg-pc" number={steps[count].pcState} x={134.5} y={137.5}/>
-            <RegisterBox name="IR" className="bg-ir" number={steps[count].pcState} x={467.5} y={137.5}/>
+            <RegisterBox name="IR" className="bg-ir" number={steps[count].irState} x={467.5} y={137.5}/>
 
             <circle cx="282" cy="170" r="5" fill="white"/>
             <circle cx="616" cy="170" r="5" fill="white"/>

@@ -182,10 +182,21 @@ function changeExecutedCode(state: SimulationState, action: CodePayload): Simula
     return { ...state };
 }
 
+/**
+ * Change l'état de lecture automatique
+ * @param state - l'état courant
+ * @returns le prochain état
+ */
 function playAndPause(state: SimulationState): SimulationState {
     return { ...state, currentStep: { ...state.currentStep, isPlaying: !state.currentStep.isPlaying } };
 }
 
+/**
+ * Change le mode d'exécution du code compilé
+ * @param state - l'état courant
+ * @param action - contient le prochain mode
+ * @returns le prochain état
+ */
 function changeMode(state: SimulationState, action: CodePayload): SimulationState {
     if( action.mode ) {
         return { ...state, currentStep: { ...state.currentStep, mode: action.mode, count: action.mode === PlayerMode.regular ? 0 : 2 } };
