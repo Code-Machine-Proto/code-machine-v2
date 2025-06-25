@@ -1,6 +1,9 @@
 import type { ProcessorId } from "@src/interface/CodeInterface";
 import { getCode } from "@src/module-store/CodeStore";
 
+/**
+ * Classe représentant l'état d'un processeur quelquonque
+ */
 export default abstract class Processor {
     code: string;
     lines: Array<string>;
