@@ -6,7 +6,7 @@ import path from "node:path";
 /**
  * Fonction pour créer et afficher la fenêtre principale
  */
-function createWindow() {
+function createWindow(): void {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,

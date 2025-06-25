@@ -1,3 +1,6 @@
+/**
+ * État d'une étape du processeur
+ */
 export interface ProcessorStep {
     accState?: number,
     pcState: number,
