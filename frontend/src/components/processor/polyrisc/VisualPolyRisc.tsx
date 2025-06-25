@@ -7,6 +7,10 @@ import { useContext } from "react";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import { LineStatePolyRisc } from "@src/interface/Line";
 
+/**
+ * Affiche le chemin de donnée du processeur PolyRisc
+ * @returns le composant react
+ */
 export default function VisualPolyRisc() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);

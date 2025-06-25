@@ -7,6 +7,10 @@ import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider
 import Bus from "@src/components/processor/parts/Bus";
 import { LineStateAccumulator } from "@src/interface/Line";
 
+/**
+ * Affiche le chemin des données du processeur à accumulateur
+ * @returns le composant react
+ */
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);

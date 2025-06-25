@@ -1,5 +1,14 @@
-import type { AluProps } from "@src/interface/ProcessorPartsProps";
+import type { AluProps } from "@src/interface/props/ProcessorParts";
 
+/**
+ * Affiche une ALU dans une svg avec l'activation des signaux de contrôle
+ * @prop x - position en x sur le svg parent
+ * @prop y - position en y sur le svg parent
+ * @prop hasNz - présence du signal nz sur le svg
+ * @prop isNzActivated - activation du signal nz
+ * @prop isOpActivated - activation du signal op
+ * @returns le svg représentant l'ALU
+ */
 export default function ALU({ x, y, hasNz = false, isNzActivated = false, isOpActivated = false }: AluProps) {
 
     return (

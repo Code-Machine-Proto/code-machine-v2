@@ -7,6 +7,10 @@ import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { LineStateMa } from "@src/interface/Line";
 import { useContext } from "react";
 
+/**
+ * Affiche le chemin de donnée du processeur à accumulateur avec MA
+ * @returns le composant react
+ */
 export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
