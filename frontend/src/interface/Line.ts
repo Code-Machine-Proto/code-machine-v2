@@ -1,3 +1,6 @@
+/**
+ * Les états des lignes de l'accumulateur
+ */
 export enum LineStateAccumulator {
     error = -1,
     fetch,
@@ -10,6 +13,9 @@ export enum LineStateAccumulator {
     pc,
 }
 
+/**
+ * Les états des lignes de l'accumulateur avec MA
+ */
 export enum LineStateMa {
     error = -1,
     fetch,
@@ -29,6 +35,9 @@ export enum LineStateMa {
     nop,
 }
 
+/**
+ * Les états des lignes du PolyRisc
+ */
 export enum LineStatePolyRisc {
     error = -1,
     fetch,
