@@ -6,6 +6,10 @@ import Bus from "@src/components/processor/parts/Bus";
 import { useContext } from "react";
 import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 
+/**
+ * Affiche le chemin de donnée du processeur PolyRisc
+ * @returns le composant react
+ */
 export default function VisualPolyRisc() {
     const steps = useContext(ExecutionContext);
     const { count } = useContext(StepContext);

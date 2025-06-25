@@ -3,7 +3,7 @@ import { useState } from "react";
 import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
-import type { MemoryProps } from "@src/interface/MemoryProps";
+import type { MemoryProps } from "@src/interface/props/Memory";
 
 /**
  * Affiche une mémoire à partir d'un tableau 1d

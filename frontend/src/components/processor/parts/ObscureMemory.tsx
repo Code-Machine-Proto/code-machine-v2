@@ -1,5 +1,17 @@
-import type { ObscureMemoryProps } from "@src/interface/ProcessorPartsProps";
+import type { ObscureMemoryProps } from "@src/interface/props/ProcessorParts";
 
+/**
+ * Affiche une mémoire simple en svg sans texte interne, il faut ajouter les entrées et les sorties
+ * @prop children - Les entrées et sorties à ajouter
+ * @prop name - Nom de la mémoire
+ * @prop controlName - Nom du signal de contrôle
+ * @prop className - Style css du rectangle englobant
+ * @prop x - la position en x du svg
+ * @prop y - la position en y du svg
+ * @prop isWritable - si la mémoire peut être écrite dedans
+ * @prop hasControlSignal - si la mémoire à un signal de contrôle
+ * @returns Affiche le contenant svg de la mémoire
+ */
 export default function ObscureMemory({ 
     children,
     name,
