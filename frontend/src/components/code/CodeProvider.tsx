@@ -1,4 +1,4 @@
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL } from "@src/constants/CodeProvider";
+import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
 import type { CodeInterface, SimulationState } from "@src/interface/CodeInterface";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
@@ -38,15 +38,15 @@ export function CodeProvider({ children }: { children: ReactNode }) {
     function callNext() {
         if( playingRef.current ) {
             dispatch({ type: CodeAction.FORWARD });
-            setTimeout(callNext, 1000);
+            setTimeout(callNext, PLAY_INTERVALL);
         }
     }
 
     useEffect(() => {
         playingRef.current = state.currentStep.isPlaying;
         if ( state.currentStep.isPlaying ) {
-            setTimeout(callNext, 1000);
-        } 
+            setTimeout(callNext, PLAY_INTERVALL);
+        }
     }, [state.currentStep.isPlaying, dispatch]);
 
     return(
@@ -129,7 +129,7 @@ function changeProcessor(state: SimulationState, action: CodePayload): Simulatio
  * @returns le prochain état 
  */
 function forward(state: SimulationState): SimulationState {
-    const inc = state.currentStep.mode === PlayerMode.regular ? 1 : 3;
+    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
     if ( state.currentStep.count + inc < state.executionState.length ) {
         return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count + inc } };
     }
@@ -142,7 +142,7 @@ function forward(state: SimulationState): SimulationState {
  * @returns le prochain état
  */
 function backward(state: SimulationState): SimulationState {
-    const inc = state.currentStep.mode === PlayerMode.regular ? 1 : 3;
+    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
     if ( state.currentStep.count - inc >= 0 ) {
         return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count - inc } };
     }
@@ -155,7 +155,7 @@ function backward(state: SimulationState): SimulationState {
  * @returns le prochain état
  */
 function toStart(state: SimulationState): SimulationState {
-    const start = state.currentStep.mode === PlayerMode.regular ? 0 : 2;
+    const start = state.currentStep.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
     return { ...state, currentStep: { ...state.currentStep, count: start } };
 }
 
@@ -165,7 +165,7 @@ function toStart(state: SimulationState): SimulationState {
  * @returns le prochain état 
  */
 function toEnd(state: SimulationState): SimulationState {
-    const end = state.currentStep.mode === PlayerMode.regular ? 1 : 2;
+    const end = state.currentStep.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
     return { ...state, currentStep: { ...state.currentStep, count: state.executionState.length - end } };
 }
 
@@ -199,7 +199,7 @@ function playAndPause(state: SimulationState): SimulationState {
  */
 function changeMode(state: SimulationState, action: CodePayload): SimulationState {
     if( action.mode ) {
-        return { ...state, currentStep: { ...state.currentStep, mode: action.mode, count: action.mode === PlayerMode.regular ? 0 : 2 } };
+        return { ...state, currentStep: { ...state.currentStep, mode: action.mode, count: action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START } };
     }
     return { ...state };
 }
