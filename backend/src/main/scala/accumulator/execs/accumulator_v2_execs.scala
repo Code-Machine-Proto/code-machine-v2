@@ -61,7 +61,6 @@ class accumulator_v2_tester_with_array(DUT: accumulator_v2, program: Array[Strin
 
 //  var instructionsArray = accumulator_v2_compiler.compileFromArray(program)
   var instructionsArray = accumulator.accumulator_compiler.compileFromArray(program, 2)
-  var stimulatedLines = Array[String]()
 
   for(idx <- 0 until instructionsArray.length) {
     poke(DUT.io.InputMemory(idx), instructionsArray(idx))
@@ -104,19 +103,8 @@ class accumulator_v2_tester_with_array(DUT: accumulator_v2, program: Array[Strin
     output_stimulated_memory.write(peek(DUT.io.StimulatedMemoryCell).toString + "\n")
     output_stimulated_memory.flush()
 
-    stimulatedLines = accumulator_v2_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt)
-
-    var lineIdx = 0
-    for(line <- stimulatedLines){
-      if(lineIdx == stimulatedLines.size - 1) {
-        output_stimulated_lines.write(line + "\r")
-      }else{
-        output_stimulated_lines.write(line + ",")
-      }
-      lineIdx = lineIdx + 1
-      output_stimulated_lines.flush()
-    }
-    output_stimulated_lines.write("\n")
+    var stimulatedLines = accumulator_v2_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt))
+    output_stimulated_lines.write(stimulatedLines + "\n")
     output_stimulated_lines.flush()
 
     step(1)

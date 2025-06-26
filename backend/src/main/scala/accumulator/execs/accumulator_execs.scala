@@ -198,11 +198,12 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "}")
+    output.write("stimulatedMemory : {" + peek(DUT.io.StimulatedMemoryCell).toString + "},")
     output.flush()
 
     //Writing stimulated lines
-    //TODO
+    output.write("stimulatedLineState: " + accumulator_v2_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt())).toString())
+    output.write("},")
     step(1)
 
     simulation_cycle = simulation_cycle + 1

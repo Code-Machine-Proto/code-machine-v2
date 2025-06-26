@@ -149,7 +149,8 @@ class accumulator_v1_tester_with_array(DUT: accumulator_v1, program: Array[Strin
     output_stimulated_memory.flush()
 
     var stimulatedLines = accumulator_v1_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt))
-
+    output_stimulated_memory.write(stimulatedLines + "\n")
+    output_stimulated_memory.flush()
     step(1)
   }
 }
