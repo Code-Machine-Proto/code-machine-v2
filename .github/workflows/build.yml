@@ -6,4 +6,6 @@ jobs:
         name: Construction du backend
         runs-on: ubuntu-latest
         steps:
-            - run: echo "allo"
+            - name: Installer sdkman
+              working-directory: ./backend
+              run: curl -s "https://get.sdkman.io" | bash
