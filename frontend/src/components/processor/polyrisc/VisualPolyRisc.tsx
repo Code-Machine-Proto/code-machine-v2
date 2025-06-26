@@ -16,17 +16,19 @@ export default function VisualPolyRisc() {
     const counter = useContext(StepContext);
 
     const lineState = LineStatePolyRisc.error;
+
     const fetch = lineState == LineStatePolyRisc.fetch;
+    const decode = lineState == LineStatePolyRisc.decode;
     const opTwoReg = lineState == LineStatePolyRisc.opTwoReg;
     const opThreeReg = lineState == LineStatePolyRisc.opThreeReg;
-    const branching = lineState == LineStatePolyRisc.branching;
     const load = lineState == LineStatePolyRisc.load;
     const store = lineState == LineStatePolyRisc.store;
     const loadI = lineState == LineStatePolyRisc.loadI;
-    const pc = lineState == LineStatePolyRisc.pc;
+    const branching = lineState == LineStatePolyRisc.branching;
+    const nop = lineState == LineStatePolyRisc.nop || opTwoReg || opThreeReg || load || store || loadI;
 
     return (
-        <svg width="100%" height="100%" viewBox="0 0 1231 344" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100%" height="100%" viewBox="0 0 1231 400" fill="none" xmlns="http://www.w3.org/2000/svg">
 
             <path
                 id="mux-pc"
@@ -194,6 +196,35 @@ export default function VisualPolyRisc() {
                    88.5523 580 88V1C580 0.447715 580.448 0 581 0H1229Z"
             />
             <use href="#mem-reg" fill="white" />
+            <path
+                id="ir-control1"
+                d="M605.103 169.005C605.23 169.018 605.349 169.055 605.458 169.111C605.468 169.116 605.477 169.122
+                   605.486 169.127C605.564 169.17 605.634 169.223 605.697 169.284C605.7 169.287 605.704 169.29
+                   605.707 169.293L616.709 180.295C616.916 180.502 617.013 180.778 617 181.05V255H696L696.103
+                   255.005C696.169 255.012 696.234 255.025 696.296 255.044C696.301 255.045 696.306 255.047 696.311
+                   255.049C696.334 255.057 696.358 255.065 696.381 255.074C696.394 255.079 696.406 255.086 696.418
+                   255.092C696.435 255.1 696.453 255.108 696.47 255.117C696.477 255.121 696.484 255.126 696.491
+                   255.13C696.51 255.141 696.529 255.152 696.548 255.164C696.558 255.171 696.568 255.178 696.578
+                   255.185C696.595 255.197 696.612 255.209 696.629 255.223C696.634 255.227 696.639 255.232 696.645
+                   255.236C696.662 255.251 696.68 255.267 696.696 255.283C696.703 255.29 696.709 255.296 696.716
+                   255.303C696.752 255.34 696.786 255.381 696.816 255.424C696.823 255.434 696.83 255.444 696.837
+                   255.454C696.863 255.494 696.886 255.536 696.906 255.58C696.927 255.624 696.945 255.67 696.959
+                   255.718C696.972 255.763 696.981 255.809 696.988 255.856C696.995 255.903 697 255.951 697
+                   256V350H701.773L696 360L690.227 350H695V257H616C615.448 257 615 256.552 615 256V181.414L604.586
+                   171H587C586.448 171 586 170.552 586 170C586 169.448 586.448 169 587 169H605L605.103 169.005Z"
+            />
+            <use href="#ir-control1" fill="white" />
+            <path
+                id="ir-control2"
+                d="M599 169C599.056 169 599.111 169.006 599.165 169.015C599.174 169.016 599.183 169.017 599.191
+                   169.019L599.201 169.021C599.211 169.023 599.221 169.025 599.23 169.027C599.251 169.032 599.272
+                   169.037 599.292 169.043C599.341 169.058 599.387 169.078 599.433 169.1C599.447 169.106 599.461
+                   169.113 599.475 169.12C599.56 169.166 599.639 169.225 599.707 169.293L610.709 180.295C610.916
+                   180.502 611.013 180.778 611 181.05V270H675C675.552 270 676 270.448 676 271V350H680.773L675
+                   360L669.227 350H674V272H610C609.448 272 609 271.552 609 271V181.414L598.586 171H587C586.448
+                   171 586 170.552 586 170C586 169.448 586.448 169 587 169H599Z"
+            />
+            <use href="#ir-control2" fill="white" />
 
             <Bus x={285} y={160} number={12}/>
             <Bus x={410} y={160} number={28}/>
@@ -208,11 +239,32 @@ export default function VisualPolyRisc() {
             <Bus x={900} y={73} number={8}/>
             <Bus x={995} y={166} number={16}/>
             <Bus x={1200} y={165} number={16}/>
+            <Bus x={670} y={247} number={4} />
+            <Bus x={645} y={262} number={4} />
 
-            <Multiplexer name="do_branch" x={37} y={130} isActivated={ branching || pc } />
+            <use href="#mux-pc" className={ branching || nop ? "fill-red-500" : "" } />
+            <use href="#pc-inst" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#inst-ir" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#pc-mux" className={ nop ? "fill-red-500" : "" } />
+            <use href="#mux-reg" className={ opTwoReg || opThreeReg || load || loadI ? "fill-red-500" : "" } />
+            <use href="#ir-reg" className={ loadI ? "fill-red-500" : "" } />
+            <use href="#ir-rdst" className={ opTwoReg || opThreeReg || load || loadI ? "fill-red-500" : "" } />
+            <use href="#ir-rsrc1" className={ opTwoReg || opThreeReg || load || store ? "fill-red-500" : "" } />
+            <use href="#ir-rsrc2" className={ opThreeReg || store ? "fill-red-500" : "" } />
+            <use href="#ir-pc" className={ branching ? "fill-red-500" : "" } />
+            <use href="#reg-A" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
+            <use href="#reg-B" className={ opThreeReg ? "fill-red-500" : "" } />
+            <use href="#alu-reg" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
+            <use href="#reg-data" className={ store ? "fill-red-500" : "" } />
+            <use href="#reg-addr" className={ load || store ? "fill-red-500" : "" } />
+            <use href="#mem-reg" className={ load ? "fill-red-500" : "" } />
+            <use href="#ir-control1" className={ decode ? "fill-red-500" : "" } />
+            <use href="#ir-control2" className={ decode ? "fill-red-500" : "" } />
+
+            <Multiplexer name="do_branch" x={37} y={130} isActivated={ branching || nop } />
             <Multiplexer name="sel_reg_data" x={652} y={47} isActivated={ opTwoReg || opThreeReg || load || loadI } />
 
-            <ALU x={920} y={100} hasNz={true} isOpActivated={ opTwoReg } />
+            <ALU x={920} y={100} hasNz={true} isActivated={ opTwoReg || opThreeReg } />
             
             <ObscureMemory name="Mémoire d'instruction" className="fill-green-700" x={313} y={70} >
                 <text x={5} y={182} dominantBaseline="middle" fill="black" >addr</text>
@@ -233,33 +285,20 @@ export default function VisualPolyRisc() {
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" className="bg-pc" number={steps[counter].pcState} x={134.5} y={137.5}/>
-            <RegisterBox name="IR" className="bg-ir" number={steps[counter].irState} x={467.5} y={137.5}/>
+            <RegisterBox name="PC" className="bg-pc" number={steps[counter].pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
+            <RegisterBox name="IR" className="bg-ir" number={steps[counter].irState} x={467.5} y={137.5} isActivated={ fetch } />
 
-            <use href="#mux-pc" className={ branching || pc ? "fill-red-500" : "" } />
-            <use href="#pc-inst" className={ fetch ? "fill-red-500" : "" } />
-            <use href="#inst-ir" className={ fetch ? "fill-red-500" : "" } />
-            <use href="#pc-mux" className={ pc ? "fill-red-500" : "" } />
-            <use href="#mux-reg" className={ opTwoReg || load || loadI ? "fill-red-500" : "" } />
-            <use href="#ir-reg" className={ loadI ? "fill-red-500" : "" } />
-            <use href="#ir-rdst" className={ opTwoReg || opThreeReg || load || store || loadI ? "fill-red-500" : "" } />
-            <use href="#ir-rsrc1" className={ opTwoReg || opThreeReg || load ? "fill-red-500" : "" } />
-            <use href="#ir-rsrc2" className={ opThreeReg || store ? "fill-red-500" : "" } />
-            <use href="#ir-pc" className={ branching ? "fill-red-500" : "" } />
-            <use href="#reg-A" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
-            <use href="#reg-B" className={ opThreeReg ? "fill-red-500" : "" } />
-            <use href="#alu-reg" className={ opTwoReg || opThreeReg ? "fill-red-500" : "" } />
-            <use href="#reg-data" className={ store ? "fill-red-500" : "" } />
-            <use href="#reg-addr" className={ load || store ? "fill-red-500" : "" } />
-            <use href="#mem-reg" className={ load ? "fill-red-500" : "" } />
-
-            <circle cx="282" cy="170" r="5" className={ fetch || pc ? "fill-red-500" : "fill-white" } />
+            <circle cx="282" cy="170" r="5" className={ fetch || nop ? "fill-red-500" : "fill-white" } />
             <circle cx="616" cy="170" r="5" className={ opTwoReg || opThreeReg || branching || load || store || loadI ? "fill-red-500" : "fill-white" } />
             <circle cx="880" cy="217" r="5" className={ opThreeReg || store ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="134.5" y="82.5" width="39" height="39" fill="white" stroke="black"/>
                 <text x={154} y={102} textAnchor="middle" dominantBaseline="middle" className="fill-black text-xl">+1</text>
+            </g>
+            <g>
+                <rect x="264.5" y="360.5" width="799" height="39" fill="white" stroke="black"/>
+                <text x={ 664 } y={ 380 } textAnchor="middle" dominantBaseline="middle" className="text-xl font-semibold fill-black">Control Signal</text>
             </g>
         </svg>
     );

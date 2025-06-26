@@ -15,14 +15,15 @@ export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
     const counter = useContext(StepContext);
 
-    const lineState = LineStateAccumulator.nop;
+    const lineState = LineStateAccumulator.error;
+
     const fetch = lineState == LineStateAccumulator.fetch;
+    const decode = lineState == LineStateAccumulator.decode;
     const load = lineState == LineStateAccumulator.load;
     const store = lineState == LineStateAccumulator.store;
-    const addMul = lineState == LineStateAccumulator.addMul;
+    const alu = lineState == LineStateAccumulator.alu;
     const branching = lineState == LineStateAccumulator.branching;
-    const pc = lineState == LineStateAccumulator.pc;
-    const control = lineState == LineStateAccumulator.control;
+    const inc = lineState == LineStateAccumulator.nop || load || store || alu;
 
     return(
         <svg width="100%" height="100%" viewBox="0 0 1131 442" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,11 +151,28 @@ export default function VisualAccumulator() {
             <Bus x={740} y={207} number={16}/>
             <Bus x={1075} y={187} number={16}/>
 
-            <Multiplexer x={27} y={90} name="sel_jump_pc" isActivated={ branching || pc } />
-            <Multiplexer x={313} y={115} name="sel_mem_addr" isActivated={ fetch || load || store || addMul } />
-            <Multiplexer x={815} y={150} name="sel_acc_data" isActivated={ load || addMul } />
+            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#mux-mem" className={ fetch || load || store || alu ? "fill-red-500" : "" } />
+            <use href="#mem-ir" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#ir-control" className={ decode ? "fill-red-500" : "" } />
+            <use href="#mem-mux" className={ load ? "fill-red-500" : "" } />
+            <use href="#mux-acc" className={ load || alu ? "fill-red-500" : "" } />
+            <use href="#ir-mux" className={ load || store || alu ? "fill-red-500" : "" } />
+            <use href="#acc-mem" className={ store ? "fill-red-500" : ""} />
+            <use href="#mem-alu" className={ alu ? "fill-red-500" : "" } />
+            <use href="#acc-alu" className={ alu ? "fill-red-500" : "" } />
+            <use href="#alu-mux" className={ alu ? "fill-red-500" : "" } />
+            <use href="#ir-mux-addr" className={ branching ? "fill-red-500" : "" } />
+            <use href="#mux-pc" className={ branching || inc ? "fill-red-500" : "" } />
+            <use href="#inc" className={ inc ? "fill-red-500" : "" } />
+            <use href="#acc-control" className={ decode ? "fill-red-500" : ""} />
+            <use href="#internal-control" className={ decode ? "fill-red-500" : ""} />
 
-            <ALU x={660} y={140} isOpActivated={ addMul } />
+            <Multiplexer x={27} y={90} name="sel_jump_pc" isActivated={ branching || inc } />
+            <Multiplexer x={313} y={115} name="sel_mem_addr" isActivated={ fetch || load || store || alu } />
+            <Multiplexer x={815} y={150} name="sel_acc_data" isActivated={ load || alu } />
+
+            <ALU x={660} y={140} isActivated={ alu } />
 
             <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={422.5} y={40} hasControlSignal={true} isWritable={ store } >
                 <text x="5" y="82.5" dominantBaseline="middle" fill="black">data_in</text>
@@ -162,33 +180,16 @@ export default function VisualAccumulator() {
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} />
-            <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} />
-            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} />
+            <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
+            <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
+            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
 
-            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />
-            <use href="#mux-mem" className={ fetch || load || store || addMul ? "fill-red-500" : "" } />
-            <use href="#mem-ir" className={ fetch ? "fill-red-500" : "" } />
-            <use href="#ir-control" className={ fetch || control ? "fill-red-500" : "" } />
-            <use href="#mem-mux" className={ load ? "fill-red-500" : "" } />
-            <use href="#mux-acc" className={ load || addMul ? "fill-red-500" : "" } />
-            <use href="#ir-mux" className={ load || store || addMul ? "fill-red-500" : "" } />
-            <use href="#acc-mem" className={ store ? "fill-red-500" : ""} />
-            <use href="#mem-alu" className={ addMul ? "fill-red-500" : "" } />
-            <use href="#acc-alu" className={ addMul ? "fill-red-500" : "" } />
-            <use href="#alu-mux" className={ addMul ? "fill-red-500" : "" } />
-            <use href="#ir-mux-addr" className={ branching ? "fill-red-500" : "" } />
-            <use href="#mux-pc" className={ branching || pc ? "fill-red-500" : "" } />
-            <use href="#inc" className={ pc ? "fill-red-500" : "" } />
-            <use href="#acc-control" className={ control ? "fill-red-500" : ""} />
-            <use href="#internal-control" className={ control ? "fill-red-500" : ""} />
-
-            <circle cx="277" cy="137" r="5" className={ fetch || pc ? "fill-red-500" : "fill-white" } />
-            <circle cx="270" cy="370" r="5" className={ fetch || branching || control ? "fill-red-500" : "fill-white" } />
-            <circle cx="270" cy="255" r="5" className={ fetch || load || store || addMul || branching || control ? "fill-red-500" : "fill-white" } />
-            <circle cx="1101" cy="333" r="5" className={ addMul || control ? "fill-red-500" : "fill-white" } />
-            <circle cx="588" cy="174" r="5" className={ fetch || load || addMul ? "fill-red-500" : "fill-white" } />
-            <circle cx="1101" cy="196" r="5" className={ store || addMul || control ? "fill-red-500" : "fill-white" } />
+            <circle cx="277" cy="137" r="5" className={ fetch || inc ? "fill-red-500" : "fill-white" } />
+            <circle cx="270" cy="370" r="5" className={ branching || decode ? "fill-red-500" : "fill-white" } />
+            <circle cx="270" cy="255" r="5" className={ load || store || alu || branching || decode ? "fill-red-500" : "fill-white" } />
+            <circle cx="1101" cy="333" r="5" className={ alu || decode ? "fill-red-500" : "fill-white" } />
+            <circle cx="588" cy="174" r="5" className={ fetch || load || alu ? "fill-red-500" : "fill-white" } />
+            <circle cx="1101" cy="196" r="5" className={ store || alu || decode ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="119.5" y="48.5" width="39" height="39" fill="white" stroke="black" />
@@ -197,7 +198,7 @@ export default function VisualAccumulator() {
 
             <g>
                 <rect x="314.5" y="382.5" width="572" height="59" fill="white" stroke="black"/>
-                <text x="600.5" y="412" className="text-xl font-semibold" textAnchor="middle" dominantBaseline="middle" fill="black">Control Signal</text>
+                <text x="600.5" y="412" className="text-xl font-semibold fill-black" textAnchor="middle" dominantBaseline="middle">Control Signal</text>
             </g>
 
             <rect x="1071.5" y="382.5" width="59" height="59" fill="white" stroke="black"/>

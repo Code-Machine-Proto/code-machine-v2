@@ -9,7 +9,7 @@ import type { AluProps } from "@src/interface/props/ProcessorParts";
  * @prop isOpActivated - activation du signal op
  * @returns le svg représentant l'ALU
  */
-export default function ALU({ x, y, hasNz = false, isNzActivated = false, isOpActivated = false }: AluProps) {
+export default function ALU({ x, y, hasNz = false, isActivated = false }: AluProps) {
 
     return (
         <svg x={x} y={y} width="70" height="170" viewBox="0 0 170 422" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@ export default function ALU({ x, y, hasNz = false, isNzActivated = false, isOpAc
             <text x={165} y={70} textAnchor="end" className="font-bold text-xl" fill="black">ALU</text>
             <path 
                 d="M40 368L25.5662 393H54.4338L40 368ZM40 422H42.5L42.5 390.5H40H37.5L37.5 422H40Z" 
-                className={ isOpActivated ? "fill-main-500" : "fill-white" } 
+                className={ isActivated ? "fill-main-500" : "fill-white" } 
             />
             <text x={50} y={410} fill="white">op_alu</text>
             {
@@ -28,7 +28,7 @@ export default function ALU({ x, y, hasNz = false, isNzActivated = false, isOpAc
             <>
             <path 
                 d="M122 398L136.434 373H107.566L122 398ZM122 375.5H124.5L124.5 344H122H119.5L119.5 375.5H122Z" 
-                className={ isNzActivated ? "fill-main-500" : "fill-white" }
+                className={ isActivated ? "fill-main-500" : "fill-white" }
             />
             <text x={130} y={400} fill="white">NZ</text>
             </>

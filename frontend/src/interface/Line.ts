@@ -4,13 +4,12 @@
 export enum LineStateAccumulator {
     error = -1,
     fetch,
+    decode,
     load,
     store,
-    control,
-    addMul,
-    nop,
+    alu,
     branching,
-    pc,
+    nop,
 }
 
 /**
@@ -19,9 +18,7 @@ export enum LineStateAccumulator {
 export enum LineStateMa {
     error = -1,
     fetch,
-    control,
-    branching,
-    pc,
+    decode,
     addSubMul,
     addSubA,
     addSubX,
@@ -32,6 +29,7 @@ export enum LineStateMa {
     loadI,
     storeA,
     storeI,
+    branching,
     nop,
 }
 
@@ -41,13 +39,12 @@ export enum LineStateMa {
 export enum LineStatePolyRisc {
     error = -1,
     fetch,
+    decode,
     opTwoReg,
     opThreeReg,
-    control,
-    branching,
     load,
     store,
     loadI,
-    pc,
+    branching,
     nop,
 }
