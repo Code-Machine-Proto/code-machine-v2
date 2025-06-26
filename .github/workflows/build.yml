@@ -1,0 +1,9 @@
+name: Construction de l'installateur
+
+on: [push]
+jobs: 
+    build-backend:
+        name: Construction du backend
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "allo"
