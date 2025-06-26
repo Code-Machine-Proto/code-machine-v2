@@ -5,15 +5,15 @@ import {
     Scripts,
     ScrollRestoration,
 } from "react-router";
-
 import "./app.css";
 import Header from "@src/components/Header";
+import { CodeProvider } from "./components/code/CodeProvider";
 
 /**
  * Disposition de base de l'application est affiché sur toutes les pages.
  * Aucun besoin de l'appelé React-Router l'appel lorsqu'il compile l'application.
  * 
- * @param children - Le restant de l'application
+ * @prop children - Le restant de l'application
  * @returns le composant React qui sert de base à l'application
  */
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col h-dvh">
-        <Header />
         { children }
         <ScrollRestoration />
         <Scripts />
@@ -41,5 +40,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
  * @returns Une outlet qui affiche le reste de l'application
  */
 export default function App() {
-    return <Outlet />;
+    return (
+      <>
+      <Header />
+      <CodeProvider>
+        <Outlet />
+      </CodeProvider>
+      </>
+    );
 }

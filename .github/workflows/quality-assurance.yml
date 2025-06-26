@@ -1,0 +1,95 @@
+name: Test et assurance qualité
+
+on: [pull_request]
+jobs:
+    install:
+        name: Installation des dépendances node
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Installation node
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+
+            - name: Enregistrer les modules node
+              id: npm-cache
+              uses: actions/cache@v4
+              with:
+                path: frontend/node_modules
+                key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+            - name: Installation des dépendances
+              working-directory: ./frontend
+              if: steps.npm-cache.outputs.cache-hit != 'true'
+              run: npm ci
+            
+            - name: Cache playwright
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                path: /home/runner/.cache/ms-playwright
+                key: ${{ runner.os }}-playwright
+            
+            - name: Installation playwright
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright@1.53.0 install
+
+    lint:
+        name: Vérifier les erreurs de linting
+        runs-on: ubuntu-latest
+        needs: install
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Installation node
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+            
+            - name: Récupérer les node_modules
+              id: npm-cache
+              uses: actions/cache/restore@v4
+              with:
+                path: frontend/node_modules
+                key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+                fail-on-cache-miss: true
+            
+            - name: Exécuter le lint
+              working-directory: ./frontend
+              run: npm run lint
+
+    test:
+      name: Vérifier la validité des tests
+      runs-on: ubuntu-latest
+      needs: install
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Installation node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Récupérer les node_modules
+          id: npm-cache
+          uses: actions/cache/restore@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+            fail-on-cache-miss: true
+        
+        - name: Récupérer playwright
+          uses: actions/cache/restore@v4
+          with: 
+            path: /home/runner/.cache/ms-playwright
+            key: ${{ runner.os }}-playwright
+            fail-on-cache-miss: true
+
+        - name: Exécuter les tests
+          working-directory: frontend
+          run: npm run test:headless
