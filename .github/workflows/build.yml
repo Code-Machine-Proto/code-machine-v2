@@ -7,5 +7,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Installer sdkman
-              working-directory: ./backend
               run: curl -s "https://get.sdkman.io" | bash
