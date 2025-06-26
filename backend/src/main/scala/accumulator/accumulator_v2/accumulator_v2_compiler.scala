@@ -14,6 +14,56 @@ object accumulator_v2_compiler {
   val opcodeMap = Map("add" -> 0, "sub" -> 1, "mul" -> 2, "adda" -> 3, "suba" -> 4, "addx" -> 5, "subx" -> 6, "ld" -> 7, "st" -> 8,
     "lda" -> 9, "sta" -> 10, "ldi" -> 11, "sti" -> 12, "br" -> 13, "brz" -> 14, "brnz" -> 15, "stop" -> 16, "nop" -> 17)
 
+  object lineStates {
+    val lineError       = -1
+    val fetchLines      = 0 
+    val cntrl_dec       = 1
+    val branching_ex    = 2
+    val pc_ex           = 3
+    val add_sub_mul_dec = 4
+    val adda_suba_dec   = 5
+    val addx_subx_dec   = 6
+    val sh_dec          = 7
+    val st_dec          = 8
+    val ld_dec          = 9
+    val lda_dec         = 10
+    val ldi_dec         = 11
+    val sta_dec         = 12
+    val sti_dec         = 13
+    val nop_dec         = 14
+  }
+
+  object instructionState {
+    val fetch =  0
+    val decode = 1
+    val execute= 2 
+    val preload= 3
+  }
+
+  object opcode {
+    val add = 0
+    val sub = 1
+    val mul = 2
+    val adda =3
+    val suba =4
+    val addx =5
+    val subx =6
+    val ld  = 7
+    val st  = 8
+    val lda = 9
+    val sta = 10
+    val ldi = 11
+    val sti = 12
+    val br  = 13
+    val brz = 14
+    val brnz= 15
+    val shl = 16
+    val shr = 17
+    val and = 18
+    val stop =19
+    val nop = 20
+  }
+
   val add :: sub :: mul :: adda :: suba :: addx :: subx :: ld :: st :: lda :: sta :: ldi :: sti :: br :: brz :: brnz :: stop :: nop :: Nil = Enum(18)
 
   def compile(programFilename: String): Array[UInt] = {
@@ -333,117 +383,36 @@ object accumulator_v2_compiler {
     toReturn
   }
 
-  def getStimulatedLines(instruction: Int, state: Int): Array[String] = {
-
+  def getStimulatedLines(instruction: Int, state: Int, accValue: BigInt): Int = {
+    var lineState = lineStates.lineError
+    if (state == instructionState.fetch) {
+      lineState = lineStates.fetchLines
+    } else if(state == instructionState.decode) {
+        if (instruction == opcode.nop) {lineState = lineStates.nop_dec}
+        else if(instruction == opcode.add || instruction == opcode.sub || instruction == opcode.mul) {lineState = lineStates.add_sub_mul_dec}
+        else if (instruction == opcode.adda || instruction == opcode.suba) {lineState = lineStates.adda_suba_dec}
+        else if (instruction == opcode.addx || instruction == opcode.subx) {lineState = lineStates.addx_subx_dec}
+        else if (instruction == opcode.st) {lineState = lineStates.st_dec}
+        else if(instruction == opcode.ld) {lineState = lineStates.ld_dec}
+        else if(instruction == opcode.lda) {lineState = lineStates.lda_dec}
+        else if(instruction == opcode.ldi) {lineState = lineStates.ldi_dec}
+        else if(instruction == opcode.sta) {lineState = lineStates.sta_dec}
+        else if(instruction == opcode.sti) {lineState = lineStates.sti_dec}
+        else if(instruction == opcode.shl || instruction == opcode.shr) {lineState = lineStates.sh_dec}
+        else if (instruction == opcode.br || instruction == opcode.brz || instruction == opcode.brnz) {lineState = lineStates.cntrl_dec}
+    } else if(state == instructionState.execute){
+      if((instruction == opcode.br 
+          || (instruction == opcode.brz && accValue == 0 ) 
+          || instruction == opcode.brnz && accValue != 0 )) 
+          
+        {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
+      
+      else {lineState = lineStates.pc_ex}
+    }
+    lineState
+  }
 //    "add" -> 0, "sub" -> 1, "mul" -> 2, "adda" -> 3, "suba" -> 4, "addx" -> 5, "subx" -> 6, "ld" -> 7, "st" -> 8,
 //    "lda" -> 9, "sta" -> 10, "ldi" -> 11, "sti" -> 12, "br" -> 13, "brz" -> 14, "brnz" -> 15, "stop" -> 16, "nop" -> 17
-
-    val fetch = 0
-    val decode = 1
-    val execute = 2
-
-    val addInt = 0
-    val subInt = 1
-    val mulInt = 2
-    val addaInt = 3
-    val subaInt = 4
-    val addxInt = 5
-    val subxInt = 6
-    val ldInt = 7
-    val stInt = 8
-    val ldaInt = 9
-    val staInt = 10
-    val ldiInt = 11
-    val stiInt = 12
-    val brInt = 13
-    val brzInt = 14
-    val brnzInt = 15
-    val stopInt = 16
-    val nopInt = 17
-
-    var lines = Array[String](
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false",
-      "false"
-    )
-
-    if(state == fetch){
-      lines = setStimulatedLines(Array(3, 4, 5, 37, 38, 6, 7), lines)
-    }else if(state == decode){
-      // Not a label or a directive
-
-      if(instruction != nopInt && instruction != stopInt){
-        lines = setStimulatedLines(Array(32, 33, 18, 21, 42), lines)
-      }
-
-      if(instruction == addInt || instruction == subInt || instruction == mulInt){
-        lines = setStimulatedLines(Array(31, 32, 28, 37, 5, 38, 6, 9, 12, 13, 11, 17, 18, 42, 24, 39, 26, 40), lines)
-      }else if(instruction == addaInt || instruction == subaInt){
-        lines = setStimulatedLines(Array(32, 31, 28, 37, 5, 38, 6, 9, 12, 14, 41, 16, 19, 20, 25, 39, 26, 40), lines)
-      }else if(instruction == addxInt || instruction == subxInt){
-        lines = setStimulatedLines(Array(19, 20, 27, 37, 5, 38, 6, 9, 40, 12, 13, 11, 17, 18, 42, 24, 39, 26), lines)
-      }else if(instruction == stInt){
-        lines = setStimulatedLines(Array(18, 22, 36, 34, 38, 32, 31, 28, 37, 5), lines)
-      }else if(instruction == ldInt){
-        lines = setStimulatedLines(Array(32, 31, 28, 37, 5, 38, 6, 8, 10, 11, 17), lines)
-      }else if(instruction == staInt){
-        lines = setStimulatedLines(Array(32, 31, 28, 37, 5, 38, 19, 23, 36, 34), lines)
-      }else if(instruction == ldaInt){
-        lines = setStimulatedLines(Array(32, 31, 28, 37, 5, 38, 6, 8, 15, 41, 16), lines)
-      }else if(instruction == stiInt){
-        lines = setStimulatedLines(Array(19, 20, 27, 37, 5, 38, 18, 22, 36, 34), lines)
-      }else if(instruction == ldiInt){
-        lines = setStimulatedLines(Array(19, 20, 27, 37, 5, 38, 6, 8, 10, 11, 17), lines)
-      }
-
-    }else if(state == execute){
-      if(instruction == brInt || instruction == brnzInt || instruction == brzInt){
-        lines = setStimulatedLines(Array(32, 31, 29, 35, 30), lines)
-      }else if(instruction != nopInt && instruction != stopInt) {
-        lines = setStimulatedLines(Array(3, 2, 1, 35, 30), lines)
-      }
-    }
-    lines
-  }
 
   def setStimulatedLines(linesToSet: Array[Int], lines: Array[String]): Array[String] = {
     val toReturn = lines;
