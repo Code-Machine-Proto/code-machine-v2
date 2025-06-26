@@ -13,5 +13,7 @@ jobs:
               run: |
                 curl -s "https://get.sdkman.io" | bash
                 source "/home/runner/.sdkman/bin/sdkman-init.sh"
-            - name: Tester sdk autre chose 
-              run: sdk version
+            - name: Installer java 
+              run: sdk install java 17.0.10-tem
+            - name: Test java
+              run: java -version
