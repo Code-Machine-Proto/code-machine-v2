@@ -101,15 +101,15 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) 
     output.flush()
     
 // ----------- State
-    output.write("\"instructionState\" : " + peek(DUT.io.debug.State).toString + "},")
+    output.write("\"instructionState\" : " + peek(DUT.io.debug.State).toString + ",")
     output.flush()
     
 // ----------- Stimulated lines
 
   //TODO: complete -- Check la valeur pendant le debug
-  output.write("stimulatedLines : " + risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.IR).toInt,peek(DUT.io.debug.IR).toInt, peek(DUT.io.debug.FlagNZ).toInt) + ",")
+  output.write("\"stimulatedLines\" : " + risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.IR).toInt,peek(DUT.io.debug.IR).toInt, peek(DUT.io.debug.FlagNZ).toInt) + ",")
 //------- IM (If needed )
-  output.write("imState : " + peek(DUT.io.debug.Inst_mem))
+  output.write("\"imState\" : " + peek(DUT.io.debug.Inst_mem) + ",")
    /*
     for(memIdx <- 0 until DUT.io.debug.Inst_mem.length){
     
