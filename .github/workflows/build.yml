@@ -1,8 +1,11 @@
 name: Construction de l'installateur
 
 on: [push]
-jobs: 
+jobs:
     build-backend:
+        defaults:
+            run:
+                shell: bash -ieo pipefail {0}
         name: Construction du backend
         runs-on: ubuntu-latest
         steps:
