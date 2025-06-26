@@ -10,5 +10,5 @@ jobs:
               run: |
                 curl -s "https://get.sdkman.io" | bash
                 source "/home/runner/.sdkman/bin/sdkman-init.sh"
-                sdk version
-
+            - name: Tester sdk autre chose 
+              run: sdk version
