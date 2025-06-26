@@ -81,7 +81,7 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
         output.write(peek(DUT.io.debug.Data_mem(memIdx)).toString + "\r")
       }
     }
-    output.write("]},")
+    output.write("],")
     output.flush()
     
 // ---------  Reg
@@ -95,25 +95,27 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
         output.write(peek(DUT.io.debug.Registers(memIdx)).toString + "\r")
       }
     }
-    output.write("]},")
+    output.write("],")
     output.flush()
         
 // ---------- PC
-    output.write("irState : {" + peek(DUT.io.debug.PC).toString + "},")
+    output.write("irState :" + peek(DUT.io.debug.PC).toString + ",")
     output.flush()
 
 // ----------- IR
-    output.write("irState : {" + peek(DUT.io.debug.IR).toString + "},")
+    output.write("irState : " + peek(DUT.io.debug.IR).toString + ",")
     output.flush()
     
 // ----------- State
-    output.write("instructionState : {" + peek(DUT.io.debug.State).toString + "},")
+    output.write("instructionState :" + peek(DUT.io.debug.State).toString + ",")
     output.flush()
     
 // ----------- Stimulated lines
-  //TODO: complete
 
+  //TODO: complete -- Check la valeur pendant le debug
+  output.write("stimulatedLines : " + risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.IR).toInt,peek(DUT.io.debug.IR).toInt, peek(DUT.io.debug.FlagNZ).toInt) + ",")
 //------- IM (If needed )
+  output.write("imState : " + peek(DUT.io.debug.Inst_mem))
    /*
     for(memIdx <- 0 until DUT.io.debug.Inst_mem.length){
     
@@ -129,11 +131,11 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, id: Int) extends PeekP
     output_im.write("\n")
     output_im.flush()
   */
-
+  output.write("},")
     step(1)
 
     simulation_cycle = simulation_cycle + 1    //Debug. purposes
-    simulation_ended = (peek(DUT.io.debug.State).toInt == 4) || (simulation_cycle == 512)
+    simulation_ended = (peek(DUT.io.debug.State).toInt == 4) || (simulation_cycle == 20)
   }
   output.write("]")
   output.flush()
