@@ -20,4 +20,3 @@ jobs:
             - name: Obtenir le build
               run: |
                 ls
-                sbt assembly
