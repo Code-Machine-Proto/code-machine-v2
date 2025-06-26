@@ -7,8 +7,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Installer sdkman
-              run: curl -s "https://get.sdkman.io" | bash
-            - name: Faire le lien avec sdkman
-              run: source "/home/runner/.sdkman/bin/sdkman-init.sh"
-            - name: Essaie sdk
-              run: sdk help
+              run: |
+                curl -s "https://get.sdkman.io" | bash
+                source "/home/runner/.sdkman/bin/sdkman-init.sh"
+                sdk version
+
