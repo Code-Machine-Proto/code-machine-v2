@@ -10,3 +10,4 @@
 /test_run_dir/
 /coverage/
 /src/coverage/
+module-electron/*.jar
