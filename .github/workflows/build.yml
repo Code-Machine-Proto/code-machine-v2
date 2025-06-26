@@ -19,5 +19,5 @@ jobs:
               run: sdk install sbt
             - name: Obtenir le build
               run: |
-                cd backend  
+                ls
                 sbt assembly
