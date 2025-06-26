@@ -18,4 +18,5 @@ jobs:
             - name: Installer sbt
               run: sdk install sbt
             - name: Obtenir le build
+              working-directory: ./backend
               run: sbt assembly
