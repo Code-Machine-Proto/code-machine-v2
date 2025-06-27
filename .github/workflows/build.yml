@@ -19,6 +19,6 @@ jobs:
                 sdk install sbt
             - name: Obtenir le build
               run: |
-                cd backend
                 source "/home/runner/.sdkman/bin/sdkman-init.sh"
+                cd backend
                 sbt assembly
