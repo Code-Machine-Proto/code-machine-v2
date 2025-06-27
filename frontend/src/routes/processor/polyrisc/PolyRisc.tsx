@@ -14,7 +14,7 @@ import { useOutletContext } from "react-router";
 export default function PolyRiscProcessor() {
     const dispatch = useContext(DispatchCodeContext);
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
@@ -29,10 +29,10 @@ export default function PolyRiscProcessor() {
             <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
                     <div className="bg-[#97fcff] size-min rounded-md">
-                        <HexBox name="IR" number={steps[counter].irState} />
+                        <HexBox name="IR" number={steps[count].irState} />
                     </div>
                     <div className="bg-[#abbde5] size-min rounded-md">
-                        <HexBox name="PC" number={steps[counter].pcState} />
+                        <HexBox name="PC" number={steps[count].pcState} />
                     </div>
                 </div>
             
@@ -42,8 +42,8 @@ export default function PolyRiscProcessor() {
                 </div>
             </div>
             {
-                enableMemory && steps[counter].regState &&
-                <Memory className="bg-yellow-300" memoryContent={ steps[counter].regState } nom="Registres" />
+                enableMemory && steps[count].regState &&
+                <Memory className="bg-yellow-300" memoryContent={ steps[count].regState } nom="Registres" />
             }
         </div>
         : <VisualPolyRisc />

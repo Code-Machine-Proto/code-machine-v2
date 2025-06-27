@@ -13,7 +13,7 @@ import { useOutletContext } from "react-router";
 export default function MaProcessor() {
     const dispatch = useContext(DispatchCodeContext);
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext();
 
     useEffect(() => {
@@ -24,16 +24,16 @@ export default function MaProcessor() {
         isProgrammerMode ?
         <div className="flex gap-3">
             <div className="bg-ir size-min rounded-md">
-                <HexBox name="IR" number={steps[counter].irState} />
+                <HexBox name="IR" number={steps[count].irState} />
             </div>
             <div className="bg-pc size-min rounded-md">
-                <HexBox name="PC" number={steps[counter].pcState} />
+                <HexBox name="PC" number={steps[count].pcState} />
             </div>
             <div className="bg-ma size-min rounded-md">
-                <HexBox name="MA" number={steps[counter].ma ? steps[counter].ma : 0} />
+                <HexBox name="MA" number={steps[count].ma ? steps[count].ma : 0} />
             </div>
             <div className="bg-acc size-min rounded-md">
-                <HexBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} defaultIsBase10={true} />
+                <HexBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} defaultIsBase10={true} />
             </div>
         </div>
         :

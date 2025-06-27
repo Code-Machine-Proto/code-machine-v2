@@ -55,7 +55,9 @@ export default function CodeEditor() {
             </div>
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
-                onClick={() => fetcher.submit({ processor: JSON.stringify(processor)  }, { method: "POST", action: "/processor"})}
+                onClick={() => {
+                    fetcher.submit({ processor: JSON.stringify(processor)   }, { method: "POST", action: "/processor"})
+                }}
             >
                 Compiler
             </button>

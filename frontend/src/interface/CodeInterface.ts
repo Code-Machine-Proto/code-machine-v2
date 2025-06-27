@@ -1,5 +1,6 @@
 import type Processor from "@src/class/Processor";
 import type { ProcessorStep } from "./ProcessorStep";
+import type { StepControl } from "./StepControl";
 
 /**
  * État de la simulation
@@ -7,7 +8,7 @@ import type { ProcessorStep } from "./ProcessorStep";
 export interface SimulationState {
     codeState: Processor,
     executionState: Array<ProcessorStep>,
-    currentStep: number,
+    currentStep: StepControl,
 }
 
 /**

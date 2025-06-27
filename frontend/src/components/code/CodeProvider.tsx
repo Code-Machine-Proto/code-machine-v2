@@ -1,11 +1,11 @@
-import Accumulator from "@src/class/Accumulator";
 import Processor from "@src/class/Processor";
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE } from "@src/constants/CodeProvider";
 import type { SimulationState } from "@src/interface/CodeInterface";
+import { storeCode } from "@src/module-store/CodeStore";
+import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
+import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
-import { storeCode } from "@src/module-store/CodeStore";
-import { createContext, useReducer, type ReactNode } from "react";
+import { PlayerMode, type StepControl } from "@src/interface/StepControl";
 
 /**
  * Contexte pour accéder au valeur du code et son état
@@ -25,18 +25,35 @@ export const ExecutionContext = createContext<Array<ProcessorStep>>(DEFAULT_EXEC
 /**
  * Étape courante de l'exécution
  */
-export const StepContext = createContext<number>(0);
+export const StepContext = createContext<StepControl>(DEFAULT_STEP_CONTROL);
 
 /**
  * Permets au enfant d'utiliser les deux contextes ainsi que de créer le reducer
  * @prop children - Noeuds à l'intérieur lors de son utilisation
  * @returns l'élément qui distribue les deux contextes
  */
-export function CodeProvider({ children }: { children: ReactNode}) {
-    const [ state, dispatch ] = useReducer(codeReducer, { codeState: new Accumulator(), executionState: DEFAULT_EXECUTION_STATE, currentStep: 0 });
+export function CodeProvider({ children }: { children: ReactNode }) {
+    const [ state, dispatch ] = useReducer(codeReducer, { codeState: DEFAULT_SOURCE_CODE, executionState: DEFAULT_EXECUTION_STATE, currentStep: DEFAULT_STEP_CONTROL });
+
+    const playingRef = useRef<boolean>(state.currentStep.isPlaying);
+
+    function callNext() {
+        if( playingRef.current ) {
+            dispatch({ type: CodeAction.FORWARD });
+            setTimeout(callNext, PLAY_INTERVALL);
+        }
+    }
+
+    useEffect(() => {
+        playingRef.current = state.currentStep.isPlaying;
+        if ( state.currentStep.isPlaying ) {
+            setTimeout(callNext, PLAY_INTERVALL);
+        }
+    }, [state.currentStep.isPlaying, dispatch]);
+
     return(
         <CodeContext.Provider value={ state.codeState } >
-            <StepContext value={state.currentStep } >
+            <StepContext value={ state.currentStep } >
                 <ExecutionContext.Provider value={ state.executionState } >
                     <DispatchCodeContext.Provider value={ dispatch } >
                         { children }
@@ -55,6 +72,8 @@ actionMap.set(CodeAction.BACKWARD, backward);
 actionMap.set(CodeAction.TO_START, toStart);
 actionMap.set(CodeAction.TO_END, toEnd);
 actionMap.set(CodeAction.CHANGE_EXECUTED_CODE, changeExecutedCode);
+actionMap.set(CodeAction.PLAY_AND_PAUSE, playAndPause);
+actionMap.set(CodeAction.CHANGE_MODE, changeMode);
 
 /**
  * Associe le type d'action avec la bonne fonction pour mettre à jour l'état
@@ -80,7 +99,7 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
 function changeCode(state: SimulationState, action: CodePayload): SimulationState {
     if (action.code === "" || action.code) {
         storeCode(state.codeState.processorId, action.code);
-        return { ...state, codeState: { ...state.codeState, code: action.code } as Processor };
+        return { ...state, codeState: { ...state.codeState, code: action.code, lines: action.code.split("\n") } as Processor };
     }
     return { ...state };
 }
@@ -104,8 +123,9 @@ function changeProcessor(state: SimulationState, action: CodePayload): Simulatio
  * @returns le prochain état 
  */
 function forward(state: SimulationState): SimulationState {
-    if ( state.currentStep + 1 < state.executionState.length ) {
-        return { ...state, currentStep: state.currentStep + 1 };
+    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
+    if ( state.currentStep.count + inc < state.executionState.length ) {
+        return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count + inc } };
     }
     return { ... state };
 }
@@ -116,8 +136,9 @@ function forward(state: SimulationState): SimulationState {
  * @returns le prochain état
  */
 function backward(state: SimulationState): SimulationState {
-    if ( state.currentStep - 1 >= 0 ) {
-        return { ...state, ...state.executionState, currentStep: state.currentStep - 1 };
+    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
+    if ( state.currentStep.count - inc >= 0 ) {
+        return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count - inc } };
     }
     return { ...state };
 }
@@ -128,7 +149,8 @@ function backward(state: SimulationState): SimulationState {
  * @returns le prochain état
  */
 function toStart(state: SimulationState): SimulationState {
-    return { ...state, currentStep: 0 };
+    const start = state.currentStep.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
+    return { ...state, currentStep: { ...state.currentStep, count: start } };
 }
 
 /**
@@ -137,7 +159,8 @@ function toStart(state: SimulationState): SimulationState {
  * @returns le prochain état 
  */
 function toEnd(state: SimulationState): SimulationState {
-    return { ...state, currentStep: state.executionState.length - 1 };
+    const end = state.currentStep.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
+    return { ...state, currentStep: { ...state.currentStep, count: state.executionState.length - end } };
 }
 
 /**
@@ -149,6 +172,28 @@ function toEnd(state: SimulationState): SimulationState {
 function changeExecutedCode(state: SimulationState, action: CodePayload): SimulationState {
     if ( action.executedCode ) {
         return { ...state, executionState: action.executedCode };
+    }
+    return { ...state };
+}
+
+/**
+ * Change l'état de lecture automatique
+ * @param state - l'état courant
+ * @returns le prochain état
+ */
+function playAndPause(state: SimulationState): SimulationState {
+    return { ...state, currentStep: { ...state.currentStep, isPlaying: !state.currentStep.isPlaying } };
+}
+
+/**
+ * Change le mode d'exécution du code compilé
+ * @param state - l'état courant
+ * @param action - contient le prochain mode
+ * @returns le prochain état
+ */
+function changeMode(state: SimulationState, action: CodePayload): SimulationState {
+    if( action.mode ) {
+        return { ...state, currentStep: { ...state.currentStep, mode: action.mode, count: action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START } };
     }
     return { ...state };
 }
