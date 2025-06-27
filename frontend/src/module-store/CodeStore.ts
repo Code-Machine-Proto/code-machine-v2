@@ -17,3 +17,7 @@ export function storeCode(id: ProcessorId, code: string): void {
 export function getCode(id: ProcessorId): string | null {
     return localStorage.getItem(`code-${id}`);
 }
+
+export function hasCode(id: ProcessorId): boolean {
+    return !!getCode(id);
+}
