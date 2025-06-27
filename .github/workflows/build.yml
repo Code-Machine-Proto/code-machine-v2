@@ -14,8 +14,9 @@ jobs:
                 source "/home/runner/.sdkman/bin/sdkman-init.sh"
                 sdk install java 17.0.10-tem
             - name: Installer sbt
+              run: |
                 source "/home/runner/.sdkman/bin/sdkman-init.sh"
-              run: sdk install sbt
+                sdk install sbt
             - name: Obtenir le build
               run: |
                 cd backend
