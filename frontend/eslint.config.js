@@ -33,6 +33,7 @@ export default defineConfig([
             "no-var": "error",
             "prefer-const": "error",
             "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "_" }],
+            "react-hooks/exhaustive-deps": "off",
         },
         settings:{
             "react": {

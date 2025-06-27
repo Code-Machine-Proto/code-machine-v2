@@ -7,15 +7,46 @@ import scala.io.Source
 import scala.reflect.ClassTag
 
 object accumulator_v1_compiler {
+  object opcode {
+    val add = 0
+    val stop= 1
+    val mul = 2
+    val st  = 3
+    val ld  = 4
+    val nop = 5
+    val startup = 6
+    val br  = 7
+    val brz = 8
+    val brnz= 9
+  }
+
+  object lineStates {
+    val lineError      = -1
+    val fetchLines     = 0
+    val ld_ex          = 1
+    val st_ex          = 2
+    val dec            = 3
+    val add_mul_ex     = 4
+    val nop_ex         = 5
+    val branching_ex   = 6
+  }
+
+  object instructionState {
+    val fetch =  0
+    val decode = 1
+    val execute= 2 
+    val preload= 3
+  }
 
   var labels = Map[String, Int]()
   var values = Map[String, Array[Int]]()
   var labelsValuesLengths = Map[String, Int]()
 
   val opcodeMap = Map("add" -> 0, "mul" -> 1, "st" -> 2, "ld" -> 3, "stop" -> 4, "nop" -> 5, "br" -> 6, "brz" -> 7, "brnz"-> 8)
-  val add :: mul :: st :: ld :: stop :: nop :: br :: brz :: brnz :: Nil = Enum(9)
-  val fetch :: decode :: execute :: preload :: Nil = Enum(4)
 
+
+  val add :: mul :: st :: ld :: stop :: nop :: br :: brz :: brnz :: Nil = Enum(9)
+  
   def getHexCode(programFilename: String): Array[String] = {
 
     var instructionsHex = Array[String]()
@@ -436,69 +467,24 @@ object accumulator_v1_compiler {
     }
   }
 
-  def getStimulatedLines(instruction: Int, state: Int): Array[String] = {
-    // Could use setStimulatedLines
-
-    val fetch = 0
-    val decode = 1
-    val execute = 2
-
-    val addInt = 0
-    val mulInt = 1
-    val stInt = 2
-    val ldInt = 3
-    val stopInt = 4
-    val nopInt = 5
-    val brInt = 6
-    val brzInt = 7
-    val brnzInt = 8
-
-    val nLines = 31
-
-    var lines = Array[String]()
-
-    for(i <- 1 to nLines){
-      lines = lines :+ "false"
+  def getStimulatedLines(instruction: Int, state: Int, accValue: BigInt): Int = {
+    var lineState = lineStates.lineError
+    if (state == instructionState.fetch) {
+      lineState = lineStates.fetchLines
+    } else if(state == instructionState.decode) {
+      lineState = lineStates.dec
+    } else if(state == instructionState.execute){
+      if (instruction == opcode.nop) {lineState = lineStates.nop_ex}
+        else if(instruction == opcode.add || instruction == opcode.mul) {lineState = lineStates.add_mul_ex}
+        else if(instruction == opcode.ld) {lineState = lineStates.ld_ex}
+        else if (instruction == opcode.st) {lineState = lineStates.st_ex}
+        else if((instruction == opcode.br 
+          || (instruction == opcode.brz && accValue == 0 ) 
+          || instruction == opcode.brnz && accValue != 0 )) 
+          
+        {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
     }
-
-    if(state == fetch){
-      // Goes to opcode "box" producing control signals and IR register
-      // Should not pass through the ACC
-      // TODO: Add more lines
-      lines = setStimulatedLines(Array(3, 4, 5, 6, 7, 19, 20), lines)
-    }else if(state == decode){
-      // Not a label or a directive
-      if(instruction != nopInt && instruction != stopInt){
-        lines = setStimulatedLines(Array(26, 14, 23, 17, 27), lines)
-
-        if(instruction == addInt || instruction == mulInt){
-          lines = setStimulatedLines(Array(24, 25, 5, 6, 9, 12, 13, 14, 23, 15, 19, 20, 21, 22), lines)
-        }else if(instruction == ldInt){
-          lines = setStimulatedLines(Array(24, 25, 5, 6, 8, 13, 19, 20, 22), lines)
-        }else if(instruction == stInt){
-          lines = setStimulatedLines(Array(24, 25, 5, 14, 16, 19, 20), lines)
-        }
-      }
-    }else if(state == execute){
-      // Not a label or a directive
-      if((instruction == brInt || instruction == brzInt || instruction == brnzInt)){
-        // TODO: Add corresponding lines on the diagram for PC <= value
-        lines = setStimulatedLines(Array(24, 26, 28, 29, 31), lines)
-      }else{
-        if(instruction != nopInt && instruction != stopInt){
-          lines = setStimulatedLines(Array(1, 2, 3, 29), lines)
-        }
-      }
-    }
-    lines
-  }
-
-  def setStimulatedLines(linesToSet: Array[Int], lines: Array[String]): Array[String] = {
-    val toReturn = lines;
-    for(line <- linesToSet){
-      toReturn(line - 1) = "true"
-    }
-    toReturn
+    lineState
   }
 
   def getNumberOfInstructions(program: Array[String]): Int = {

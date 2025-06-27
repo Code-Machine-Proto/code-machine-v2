@@ -1,4 +1,5 @@
 import type { ProcessorStep } from "./ProcessorStep";
+import type { StepControl } from "./StepControl";
 
 /**
  * État du code dans le textarea
@@ -15,7 +16,7 @@ export interface CodeInterface {
 export interface SimulationState {
     codeState: CodeInterface,
     executionState: Array<ProcessorStep>,
-    currentStep: number,
+    currentStep: StepControl,
 }
 
 /**

@@ -13,7 +13,7 @@ import { LineStatePolyRisc } from "@src/interface/Line";
  */
 export default function VisualPolyRisc() {
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
 
     const lineState = LineStatePolyRisc.error;
 
@@ -285,8 +285,8 @@ export default function VisualPolyRisc() {
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" className="bg-pc" number={steps[counter].pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
-            <RegisterBox name="IR" className="bg-ir" number={steps[counter].irState} x={467.5} y={137.5} isActivated={ fetch } />
+            <RegisterBox name="PC" className="bg-pc" number={steps[count].pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
+            <RegisterBox name="IR" className="bg-ir" number={steps[count].irState} x={467.5} y={137.5} isActivated={ fetch } />
 
             <circle cx="282" cy="170" r="5" className={ fetch || nop ? "fill-red-500" : "fill-white" } />
             <circle cx="616" cy="170" r="5" className={ opTwoReg || opThreeReg || branching || load || store || loadI ? "fill-red-500" : "fill-white" } />

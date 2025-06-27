@@ -13,7 +13,7 @@ import { LineStateAccumulator } from "@src/interface/Line";
  */
 export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
 
     const lineState = LineStateAccumulator.error;
 
@@ -180,9 +180,9 @@ export default function VisualAccumulator() {
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" number={steps[counter].pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
-            <RegisterBox name="IR" number={steps[counter].irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
-            <RegisterBox name="ACC" number={steps[counter].accState ? steps[counter].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
+            <RegisterBox name="PC" number={steps[count].pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
+            <RegisterBox name="IR" number={steps[count].irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
+            <RegisterBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
 
             <circle cx="277" cy="137" r="5" className={ fetch || inc ? "fill-red-500" : "fill-white" } />
             <circle cx="270" cy="370" r="5" className={ branching || decode ? "fill-red-500" : "fill-white" } />

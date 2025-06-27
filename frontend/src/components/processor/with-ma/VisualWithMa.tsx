@@ -13,7 +13,7 @@ import { useContext } from "react";
  */
 export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
 
     const lineState = LineStateMa.error;
 
@@ -306,18 +306,18 @@ export default function VisualWithMa() {
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>            
 
-            <RegisterBox name="PC" number={steps[counter].pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
-            <RegisterBox name="IR" number={steps[counter].irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
+            <RegisterBox name="PC" number={steps[count].pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
+            <RegisterBox name="IR" number={steps[count].irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
             <RegisterBox 
                 name="ACC"
-                number={steps[counter].accState ? steps[counter].accState : 0}
+                number={steps[count].accState ? steps[count].accState : 0}
                 x={1005}
                 y={87}
                 className="bg-acc" defaultIsBase10={true} isActivated={ addSubMul || load || loadI || addSubX || sh }
             />
             <RegisterBox
                 name="MA"
-                number={steps[counter].ma ? steps[counter].ma : 0}
+                number={steps[count].ma ? steps[count].ma : 0}
                 x={1005}
                 y={225}
                 className="bg-ma"
