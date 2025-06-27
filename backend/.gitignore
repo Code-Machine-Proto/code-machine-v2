@@ -8,3 +8,4 @@ scala-2.13.0.deb
 .bloop
 output_files
 project
+.vscode
