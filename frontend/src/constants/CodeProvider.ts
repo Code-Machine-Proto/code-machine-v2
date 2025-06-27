@@ -1,3 +1,5 @@
+import type Processor from "@src/class/Processor";
+import { ProcessorId } from "@src/interface/CodeInterface";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 
 /**
@@ -10,3 +12,9 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     instructionState: 0,
     memoryState: [0],
  }];
+
+ export const DEFAULT_SOURCE_CODE = {
+    code: "",
+    lines: [""],
+    processorId: ProcessorId.ACCUMULATOR,
+ } as Processor;
