@@ -51,6 +51,11 @@ class accumulator_v2() extends Module {
 
     when(State === decode){
       State := execute
+      }
+
+    when(State === execute){
+      State := fetch
+      PC := PC + 1.U(1.W)
 
       when(IR.op === add){
         ACC := ACC + InternalMemory(IR.addr).asSInt()
@@ -113,10 +118,9 @@ class accumulator_v2() extends Module {
       when(IR.op === and){
         ACC := ACC & InternalMemory(IR.addr).asSInt()
       }
-    }
-    when(State === execute && IR.op =/= stop){
-      State := fetch
-      PC := PC + 1.U(1.W)
+    // }
+    // when(State === execute && IR.op =/= stop){
+      // State := fetch
 
       when(IR.op === br){
         PC := IR.addr

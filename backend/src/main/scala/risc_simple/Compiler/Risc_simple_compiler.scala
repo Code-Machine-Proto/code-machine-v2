@@ -3,10 +3,30 @@ package risc_simple.compiler
 import chisel3._
 import chisel3.util._
 import scala.io.Source
-
+import scala.language.postfixOps
 object asm_compiler {
 
   val opcodeMap = Map("add" -> 0, "sub" -> 1, "shr" -> 2, "shl" -> 3, "not" -> 4, "and" -> 5, "or" -> 6,"mv" -> 7, "ld" -> 8, "st"-> 9,"ldi"-> 10,"br"-> 12,"brz"-> 12,"brnz"-> 12,"brlz"-> 12,"brgez"-> 12,"stop"-> 15)
+  
+  object lineStates {
+    val lineError    = -1
+    val fetchLines   = 0
+    val decode       = 1
+    val opTwoReg     = 2
+    val opThreeReg   = 3
+    val ld           = 4
+    val st           = 5
+    val ldi          = 6
+    val branching_ex = 7
+    val nop_dec      = 8
+  }
+
+  object instructionState {
+    val start = 0
+    val fetch = 1
+    val decode = 2
+    val execute = 3
+  }
 
   // One call function
   def compile_for_print_text(filename: String): Array[String] = {
@@ -674,55 +694,70 @@ object asm_compiler {
   }
 
   // -----------------------------------------------------------------------
+  val MSB_opcode = 27
+  val opcode = 1 << MSB_opcode  
+  val read_mem = 1 << 27
+  val write_mem = 1 << 27 + 1 << 24
+  val ldi = 1 << 27 + 1 << 25
+  val jump = 1 << 27 + 1 << 25
+  val stop = 1 << 27 + 1 << 26 + 1 << 25 + 1 << 24
+  val lastPartMask = 1 << 27 + 1 << 26 + 1 << 25 + 1 << 24
+  
+  val opAdd = 0
+  val opSub = 1 << 24
+  val opShr = 1 << 25
+  val opShl = opShr + 1 << 24
+  val opNot = 1 << 26
+  val opAnd = 1 << 26 + 1 << 24
+  val opOr = 1 << 26 + 1 << 25
+  val opMv  = 1 << 26 + 1 << 25 + 1 << 24
 
-  def getStimulatedLines(instruction: Int, state: Int): Array[String] = {
-    // Could use setStimulatedLines
+  val jumpNo = 0
+  val jumpZ = 1 << 24
+  val jumpNZ = 1 << 25
+  val jumpNeg = 1 << 25 + 1 << 24
+  val jumpNeNeg = 1 << 26
+  val jTypeMask = 1 << 19 + 1 << 18 + 1 << 17 + 1 << 16
+  val flagZ = 1
+  val flagN = 2
 
-    val fetch = 1
-    val decode = 2
-    val execute = 3
 
-    val alu = 0
-    val rm = 1
-    val wm = 2
-    val ldi = 3
-    val branch = 4
-    val stope = 5
+  def getStimulatedLines(instruction: Int, state: Int, flagNZ: Int): Int = {
+    var opALU = 1
+    var lineState = lineStates.lineError
 
-    val nLines = 31
-
-    var lines = Array[String]()
-
-    for(i <- 1 to nLines){
-      lines = lines :+ "false"
-    }
-
-    if(state == fetch){
-      lines = setStimulatedLines(Array(1, 2, 3, 4, 5, 6), lines)
-    }
-    /*
-    else if(state == decode){
-      lines = setStimulatedLines(Array(27, 28, 29, 30, 31), lines)
-    }
-    */
-    else if(state == execute){
-      if(instruction != stope){
-        if(instruction == alu){
-          lines = setStimulatedLines(Array(21, 26, 18, 19, 22, 23, 15, 16, 17, 7, 9, 10, 11, 12, 13, 29), lines)
-        }else if(instruction == rm){
-          lines = setStimulatedLines(Array(25, 20, 18, 26, 7, 9, 10, 11, 12, 13, 17, 16, 28, 31), lines)
-        }else if(instruction == wm){
-          lines = setStimulatedLines(Array(18, 20, 22, 24, 7, 9, 10, 11, 12, 13, 15, 17, 30), lines)
+    if(state == instructionState.fetch){
+      lineState = lineStates.fetchLines
+    } else if (state == instructionState.decode){
+      lineState = lineStates.decode
+    } else if (state == instructionState.execute){
+      if ( (instruction & lastPartMask) == read_mem ){
+        lineState = lineStates.ld
+      } else if ( (instruction & lastPartMask) == write_mem) {
+        lineState = lineStates.st
+      } else if ( (instruction & lastPartMask) == ldi) {
+        lineState = lineStates.ldi
+      } else if ( (instruction & jTypeMask) == jump) {
+        lineState = lineStates.nop_dec
+        if ((instruction & lastPartMask) == jumpNo){
+          lineState = lineStates.branching_ex
+        } else if (((instruction & lastPartMask) == jumpZ) && flagNZ >= flagZ
+                    || ((instruction & lastPartMask) == jumpNZ) && flagNZ != flagZ && flagNZ != flagN + flagZ
+                    || ((instruction & lastPartMask) == jumpNeg) && flagNZ >= flagN
+                    || ((instruction & lastPartMask) == jumpNeNeg) && flagNZ != flagN && flagNZ != flagN + flagZ){
+          lineState = lineStates.branching_ex
         }
-        else if(instruction == ldi){
-          lines = setStimulatedLines(Array(26, 7, 9, 10, 11, 12, 13, 8, 17, 28, 31), lines)
-        }
-        else if(instruction == branch){
-          lines = setStimulatedLines(Array(3, 14, 7, 9, 13, 27), lines)
+      } else { //op ALU
+        if ((instruction & lastPartMask) == opAdd || (instruction & lastPartMask) == opSub || 
+            (instruction & lastPartMask) == opAnd || (instruction & lastPartMask) == opOr){
+          lineState = lineStates.opThreeReg
+        } else if ((instruction & lastPartMask) == opShr || (instruction & lastPartMask) == opShl ||
+                   (instruction & lastPartMask) == opMv){
+          lineState = lineStates.opTwoReg
         }
       }
     }
-    lines
+    lineState
   }
 
   def setStimulatedLines(linesToSet: Array[Int], lines: Array[String]): Array[String] = {

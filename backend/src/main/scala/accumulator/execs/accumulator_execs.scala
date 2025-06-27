@@ -71,7 +71,6 @@ object accumulator_execs {
 
 class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, program: Array[UInt], output: StringWriter) extends PeekPokeTester(DUT) {
   var instructionsArray = program
-  var stimulatedLines = Array[String]()
 
   step(1)
 
@@ -115,16 +114,19 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + "},")
+    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + ",")
     output.flush()
 
     //Writing stimulated lines
-    //TODO
+    output.write("\"stimulatedLineState\" : " + accumulator_v1_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt())).toString())
 
+
+    output.write("},")
+    output.flush()
     step(1)
 
     simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 5) || (simulation_cycle == 512)    
+    simulation_ended = (peek(DUT.io.Instruction).toInt == 5) || (simulation_cycle == 1024)    
   }
   output.write("]")
   output.flush()
@@ -184,15 +186,16 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + "},")
+    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + ",")
     output.flush()
 
     //Writing stimulated lines
-    //TODO
+    output.write("\"stimulatedLineState\": " + accumulator_v2_compiler.getStimulatedLines(peek(DUT.io.Instruction).toInt, peek(DUT.io.State).toInt, peek(DUT.io.ACC.asSInt())).toString())
+    output.write("},")
     step(1)
 
     simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || (simulation_cycle == 512)
+    simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || (simulation_cycle == 1024)
   }
   output.write("]")
   output.flush()

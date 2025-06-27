@@ -14,6 +14,7 @@ class Debug extends Bundle{
   val Data_mem = Vec(256,SInt(16.W))
   val Inst_mem = Vec(4096,UInt(28.W))
   val Instruction = UInt(3.W)
+  val FlagNZ = UInt(2.W)
 }
 
 class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
@@ -77,8 +78,7 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
   switch(StateReg) {    
     is(start) {PCReg := 0.U}
     is(fetch) {
-      IRReg := IM.io.inst
-      PCReg := PCReg + 1.U}
+      IRReg := IM.io.inst}
     is(decode){  
       when (DEC.io.decode_out.op_type === branch) {
         when ((IRReg(19,16) === 0.U) |
@@ -92,6 +92,7 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
       }           
      }
     is(execute) {
+    PCReg := PCReg + 1.U
     FlagReg(0) := ALU.io.Z
     FlagReg(1) := ALU.io.N
     }
@@ -106,6 +107,7 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
   io.debug.Data_mem := DM.io.Sim_DataMemoryOut
   io.debug.Inst_mem := IM.io.Sim_InstMemoryOut
   io.debug.Instruction := DEC.io.decode_out.op_type
+  io.debug.FlagNZ := (ALU.io.N << 1) + (ALU.io.Z << 0)
 }
 
 /*
