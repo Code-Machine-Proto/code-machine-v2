@@ -10,7 +10,6 @@ import { useEffect } from "react";
  */
 export default function Home() {
     useEffect(() => {
-        console.log(hasCode(ProcessorId.ACCUMULATOR));
         if ( !hasCode(ProcessorId.ACCUMULATOR) ) {
             storeCode(ProcessorId.ACCUMULATOR, ".text");
         }
