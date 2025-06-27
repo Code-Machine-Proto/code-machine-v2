@@ -15,22 +15,21 @@ object accumulator_v2_compiler {
     "lda" -> 9, "sta" -> 10, "ldi" -> 11, "sti" -> 12, "br" -> 13, "brz" -> 14, "brnz" -> 15, "stop" -> 16, "nop" -> 17)
 
   object lineStates {
-    val lineError       = -1
-    val fetchLines      = 0 
-    val cntrl_dec       = 1
-    val branching_ex    = 2
-    val pc_ex           = 3
-    val add_sub_mul_dec = 4
-    val adda_suba_dec   = 5
-    val addx_subx_dec   = 6
-    val sh_dec          = 7
-    val st_dec          = 8
-    val ld_dec          = 9
-    val lda_dec         = 10
-    val ldi_dec         = 11
-    val sta_dec         = 12
-    val sti_dec         = 13
-    val nop_dec         = 14
+    val lineError      = -1
+    val fetchLines     = 0 
+    val dec            = 1
+    val add_sub_mul_ex = 2
+    val adda_suba_ex   = 3
+    val addx_subx_ex   = 4
+    val sh_ex          = 5
+    val st_ex          = 6
+    val ld_ex          = 7
+    val lda_ex         = 8
+    val ldi_ex         = 9
+    val sta_ex         = 10
+    val sti_ex         = 11
+    val branching_ex   = 12
+    val nop            = 13
   }
 
   object instructionState {
@@ -44,10 +43,10 @@ object accumulator_v2_compiler {
     val add = 0
     val sub = 1
     val mul = 2
-    val adda =3
-    val suba =4
-    val addx =5
-    val subx =6
+    val adda= 3
+    val suba= 4
+    val addx= 5
+    val subx= 6
     val ld  = 7
     val st  = 8
     val lda = 9
@@ -388,26 +387,23 @@ object accumulator_v2_compiler {
     if (state == instructionState.fetch) {
       lineState = lineStates.fetchLines
     } else if(state == instructionState.decode) {
-        if (instruction == opcode.nop) {lineState = lineStates.nop_dec}
-        else if(instruction == opcode.add || instruction == opcode.sub || instruction == opcode.mul) {lineState = lineStates.add_sub_mul_dec}
-        else if (instruction == opcode.adda || instruction == opcode.suba) {lineState = lineStates.adda_suba_dec}
-        else if (instruction == opcode.addx || instruction == opcode.subx) {lineState = lineStates.addx_subx_dec}
-        else if (instruction == opcode.st) {lineState = lineStates.st_dec}
-        else if(instruction == opcode.ld) {lineState = lineStates.ld_dec}
-        else if(instruction == opcode.lda) {lineState = lineStates.lda_dec}
-        else if(instruction == opcode.ldi) {lineState = lineStates.ldi_dec}
-        else if(instruction == opcode.sta) {lineState = lineStates.sta_dec}
-        else if(instruction == opcode.sti) {lineState = lineStates.sti_dec}
-        else if(instruction == opcode.shl || instruction == opcode.shr) {lineState = lineStates.sh_dec}
-        else if (instruction == opcode.br || instruction == opcode.brz || instruction == opcode.brnz) {lineState = lineStates.cntrl_dec}
+      lineState = lineStates.dec
     } else if(state == instructionState.execute){
-      if((instruction == opcode.br 
+        if (instruction == opcode.nop) {lineState = lineStates.nop}
+        else if(instruction == opcode.add || instruction == opcode.sub || instruction == opcode.mul) {lineState = lineStates.add_sub_mul_ex}
+        else if (instruction == opcode.adda || instruction == opcode.suba) {lineState = lineStates.adda_suba_ex}
+        else if (instruction == opcode.addx || instruction == opcode.subx) {lineState = lineStates.addx_subx_ex}
+        else if (instruction == opcode.st) {lineState = lineStates.st_ex}
+        else if(instruction == opcode.ld) {lineState = lineStates.ld_ex}
+        else if(instruction == opcode.lda) {lineState = lineStates.lda_ex}
+        else if(instruction == opcode.ldi) {lineState = lineStates.ldi_ex}
+        else if(instruction == opcode.sta) {lineState = lineStates.sta_ex}
+        else if(instruction == opcode.sti) {lineState = lineStates.sti_ex}
+        else if(instruction == opcode.shl || instruction == opcode.shr) {lineState = lineStates.sh_ex}
+        else if((instruction == opcode.br 
           || (instruction == opcode.brz && accValue == 0 ) 
           || instruction == opcode.brnz && accValue != 0 )) 
-          
         {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
-      
-      else {lineState = lineStates.pc_ex}
     }
     lineState
   }

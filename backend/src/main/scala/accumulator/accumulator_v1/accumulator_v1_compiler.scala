@@ -21,15 +21,14 @@ object accumulator_v1_compiler {
   }
 
   object lineStates {
-    val lineError       = -1
-    val fetchLines      = 0
-    val ld_dec          = 1
-    val st_dec          = 2
-    val cntrl_dec       = 3
-    val add_mul_dec     = 4
-    val nop_dec         = 5
-    val branching_ex    = 6
-    val pc_ex           = 7
+    val lineError      = -1
+    val fetchLines     = 0
+    val ld_ex          = 1
+    val st_ex          = 2
+    val dec            = 3
+    val add_mul_ex     = 4
+    val nop_ex         = 5
+    val branching_ex   = 6
   }
 
   object instructionState {
@@ -473,19 +472,17 @@ object accumulator_v1_compiler {
     if (state == instructionState.fetch) {
       lineState = lineStates.fetchLines
     } else if(state == instructionState.decode) {
-        if (instruction == opcode.nop) {lineState = lineStates.nop_dec}
-        else if(instruction == opcode.add || instruction == opcode.mul) {lineState = lineStates.add_mul_dec}
-        else if(instruction == opcode.ld) {lineState = lineStates.ld_dec}
-        else if (instruction == opcode.st) {lineState = lineStates.st_dec}
-        else if (instruction == opcode.br || instruction == opcode.brz || instruction == opcode.brnz) {lineState = lineStates.cntrl_dec}
+      lineState = lineStates.dec
     } else if(state == instructionState.execute){
-      if((instruction == opcode.br 
+      if (instruction == opcode.nop) {lineState = lineStates.nop_ex}
+        else if(instruction == opcode.add || instruction == opcode.mul) {lineState = lineStates.add_mul_ex}
+        else if(instruction == opcode.ld) {lineState = lineStates.ld_ex}
+        else if (instruction == opcode.st) {lineState = lineStates.st_ex}
+        else if((instruction == opcode.br 
           || (instruction == opcode.brz && accValue == 0 ) 
           || instruction == opcode.brnz && accValue != 0 )) 
           
         {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
-      
-      else {lineState = lineStates.pc_ex}
     }
     lineState
   }
