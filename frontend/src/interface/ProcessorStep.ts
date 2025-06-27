@@ -10,4 +10,6 @@ export interface ProcessorStep {
     memoryState: Array<number>,
     ma?: number,
     regState?: Array<number>,
+    stimulatedLineState: number,
+    imState?: Array<number>,
 }

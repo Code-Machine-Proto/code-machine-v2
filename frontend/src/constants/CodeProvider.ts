@@ -20,6 +20,7 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     stimulatedMemory: 0,
     instructionState: 0,
     memoryState: [0],
+    stimulatedLineState: -1,
 }];
 
 /**

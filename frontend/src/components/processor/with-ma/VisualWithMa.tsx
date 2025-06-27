@@ -15,7 +15,7 @@ export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
     const { count } = useContext(StepContext);
 
-    const lineState = LineStateMa.error;
+    const lineState = steps[count].stimulatedLineState;
 
     const fetch = lineState == LineStateMa.fetch;
     const decode = lineState == LineStateMa.decode;

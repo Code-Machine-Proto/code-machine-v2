@@ -15,7 +15,7 @@ export default function VisualAccumulator() {
     const steps = useContext(ExecutionContext);
     const { count } = useContext(StepContext);
 
-    const lineState = LineStateAccumulator.error;
+    const lineState = steps[count].stimulatedLineState;
 
     const fetch = lineState == LineStateAccumulator.fetch;
     const decode = lineState == LineStateAccumulator.decode;

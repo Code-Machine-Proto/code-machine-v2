@@ -4,12 +4,12 @@
 export enum LineStateAccumulator {
     error = -1,
     fetch,
-    decode,
     load,
     store,
+    decode,
     alu,
-    branching,
     nop,
+    branching,
 }
 
 /**
