@@ -59,6 +59,7 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) 
 
   output.write("[")
   output.flush()
+  step(1)
   while(!simulation_ended){
     output.write("{")
     output.flush()
