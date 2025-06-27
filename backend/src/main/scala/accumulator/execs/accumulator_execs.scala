@@ -114,7 +114,7 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
     output.flush()
 
     //Writing stimulated memory
-    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + "},")
+    output.write("\"stimulatedMemory\" : " + peek(DUT.io.StimulatedMemoryCell).toString + ",")
     output.flush()
 
     //Writing stimulated lines
