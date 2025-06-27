@@ -18,7 +18,7 @@ object asm_compiler {
     val st           = 5
     val ldi          = 6
     val branching_ex = 7
-    val nop_dec      = 8
+    val nop          = 8
   }
 
   object instructionState {
@@ -692,40 +692,46 @@ object asm_compiler {
     }
     ("b" + binaryString.slice(binaryString.length - 16, binaryString.length))
   }
-
-  // -----------------------------------------------------------------------
-  val MSB_opcode = 27
-  val opcode = 1 << MSB_opcode  
-  val read_mem = 1 << 27
-  val write_mem = 1 << 27 + 1 << 24
-  val ldi = 1 << 27 + 1 << 25
-  val jump = 1 << 27 + 1 << 25
-  val stop = 1 << 27 + 1 << 26 + 1 << 25 + 1 << 24
-  val lastPartMask = 1 << 27 + 1 << 26 + 1 << 25 + 1 << 24
   
+  
+  val MSB = 27
+  val opcodeMSB     = 1 << MSB
+  
+  // Instruction base opcodes
+  val read_mem   = opcodeMSB
+  val write_mem  = opcodeMSB | (1 << 24)
+  val ldi        = opcodeMSB | (1 << 25)
+  val jump       = opcodeMSB | (1 << 26)
+  val stop       = opcodeMSB | (1 << 26) | (1 << 25) | (1 << 24)
+  
+  val lastPartMask = (1 << 27) | (1 << 26) | (1 << 25) | (1 << 24)
+  
+  // ALU operation subcodes (added to base)
   val opAdd = 0
   val opSub = 1 << 24
   val opShr = 1 << 25
-  val opShl = opShr + 1 << 24
+  val opShl = (1 << 25) | (1 << 24)
   val opNot = 1 << 26
-  val opAnd = 1 << 26 + 1 << 24
-  val opOr = 1 << 26 + 1 << 25
-  val opMv  = 1 << 26 + 1 << 25 + 1 << 24
-
-  val jumpNo = 0
-  val jumpZ = 1 << 24
-  val jumpNZ = 1 << 25
-  val jumpNeg = 1 << 25 + 1 << 24
+  val opAnd = (1 << 26) | (1 << 24)
+  val opOr  = (1 << 26) | (1 << 25)
+  val opMv  = (1 << 26) | (1 << 25) | (1 << 24)
+  
+  // Jump condition codes (used with `jump`)
+  val jumpNo    = 0
+  val jumpZ     = 1 << 24
+  val jumpNZ    = 1 << 25
+  val jumpNeg   = (1 << 25) | (1 << 24)
   val jumpNeNeg = 1 << 26
-  val jTypeMask = 1 << 19 + 1 << 18 + 1 << 17 + 1 << 16
+  
+  val jTypeMask = (1 << 19) | (1 << 18) | (1 << 17) | (1 << 16)
+  
+  // CPU flags
   val flagZ = 1
   val flagN = 2
-
 
   def getStimulatedLines(instruction: Int, state: Int, flagNZ: Int): Int = {
     var opALU = 1
     var lineState = lineStates.lineError
-
     if(state == instructionState.fetch){
       lineState = lineStates.fetchLines
     } else if (state == instructionState.decode){
@@ -737,17 +743,19 @@ object asm_compiler {
         lineState = lineStates.st
       } else if ( (instruction & lastPartMask) == ldi) {
         lineState = lineStates.ldi
-      } else if ( (instruction & jTypeMask) == jump) {
-        lineState = lineStates.nop_dec
-        if ((instruction & lastPartMask) == jumpNo){
+      } else if ( (instruction & lastPartMask) == jump) {
+        lineState = lineStates.nop
+        if ((instruction & jTypeMask) == jumpNo){
           lineState = lineStates.branching_ex
-        } else if (((instruction & lastPartMask) == jumpZ) && flagNZ >= flagZ
-                    || ((instruction & lastPartMask) == jumpNZ) && flagNZ != flagZ && flagNZ != flagN + flagZ
-                    || ((instruction & lastPartMask) == jumpNeg) && flagNZ >= flagN
-                    || ((instruction & lastPartMask) == jumpNeNeg) && flagNZ != flagN && flagNZ != flagN + flagZ){
+        } else if (((instruction & jTypeMask) == jumpZ) && flagNZ >= flagZ
+                    || ((instruction & jTypeMask) == jumpNZ) && flagNZ != flagZ && flagNZ != flagN + flagZ
+                    || ((instruction & jTypeMask) == jumpNeg) && flagNZ >= flagN
+                    || ((instruction & jTypeMask) == jumpNeNeg) && flagNZ != flagN && flagNZ != flagN + flagZ){
           lineState = lineStates.branching_ex
+        } else {
+          lineState = lineStates.nop
         }
-      } else { //op ALU
+      }  else { //op ALU
         if ((instruction & lastPartMask) == opAdd || (instruction & lastPartMask) == opSub || 
             (instruction & lastPartMask) == opAnd || (instruction & lastPartMask) == opOr){
           lineState = lineStates.opThreeReg
