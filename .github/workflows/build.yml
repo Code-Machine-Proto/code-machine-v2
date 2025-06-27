@@ -3,9 +3,6 @@ name: Construction de l'installateur
 on: [push]
 jobs:
     build-backend:
-        defaults:
-            run:
-                shell: bash -ieo pipefail {0}
         name: Construction du backend
         runs-on: ubuntu-latest
         steps:
@@ -18,5 +15,4 @@ jobs:
             - name: Installer sbt
               run: sdk install sbt
             - name: Obtenir le build
-              working-directory: backend
               run: sbt assembly
