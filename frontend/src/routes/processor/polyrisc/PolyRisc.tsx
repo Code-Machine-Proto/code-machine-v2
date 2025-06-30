@@ -1,8 +1,8 @@
+import PolyRisc from "@src/class/PolyRisc";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import Memory from "@src/components/Memory";
 import VisualPolyRisc from "@src/components/processor/polyrisc/VisualPolyRisc";
 import HexBox from "@src/components/utils-hex/HexBox";
-import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
@@ -14,13 +14,13 @@ import { useOutletContext } from "react-router";
 export default function PolyRiscProcessor() {
     const dispatch = useContext(DispatchCodeContext);
     const steps = useContext(ExecutionContext);
-    const counter = useContext(StepContext);
+    const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
 
     useEffect(() => {
-        dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.RISC })
+        dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new PolyRisc() });
     }, [dispatch]);
 
     return (
@@ -29,10 +29,10 @@ export default function PolyRiscProcessor() {
             <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
                     <div className="bg-[#97fcff] size-min rounded-md">
-                        <HexBox name="IR" number={steps[counter].irState} />
+                        <HexBox name="IR" number={steps[count].irState} />
                     </div>
                     <div className="bg-[#abbde5] size-min rounded-md">
-                        <HexBox name="PC" number={steps[counter].pcState} />
+                        <HexBox name="PC" number={steps[count].pcState} />
                     </div>
                 </div>
             
@@ -42,8 +42,8 @@ export default function PolyRiscProcessor() {
                 </div>
             </div>
             {
-                enableMemory && steps[counter].regState &&
-                <Memory className="bg-yellow-300" memoryContent={ steps[counter].regState } nom="Registres" />
+                enableMemory && steps[count].regState &&
+                <Memory className="bg-yellow-300" memoryContent={ steps[count].regState } nom="Registres" />
             }
         </div>
         : <VisualPolyRisc />
