@@ -15,7 +15,10 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     stimulatedLineState: -1,
 }];
 
- export const DEFAULT_SOURCE_CODE = {
+/**
+ * Code source par défaut pour l'initialisation
+ */
+export const DEFAULT_SOURCE_CODE = {
     code: "",
     lines: [""],
     processorId: ProcessorId.ACCUMULATOR,

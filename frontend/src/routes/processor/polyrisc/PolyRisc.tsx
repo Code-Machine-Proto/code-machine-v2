@@ -44,7 +44,7 @@ export default function PolyRiscProcessor() {
 
                 <div className="flex items-center gap-1">
                     <input type="checkbox"  checked={enableInstructionMemory} onChange={() => setEnableInstructionMemory(!enableInstructionMemory)}/>
-                    <p className="text-white">Afficher la mémoire d'instruction</p>
+                    <p className="text-white">Afficher la mémoire d&apos;instruction</p>
                 </div>
             </div>
             {
