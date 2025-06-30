@@ -32,3 +32,36 @@ jobs:
               with:
                 name: backend-build
                 path: ./backend/target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar
+
+    build-frontend:
+      name: Construction du frontend
+      runs-on: ubuntu-latest
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder les modules node
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+        - name: Installer les dépendances node
+          working-directory: ./frontend
+          run: npm ci
+        
+        - name: Compiler le build du frontend
+          working-directory: ./frontend
+          run: npm run build:electron
+        
+        - name: Transférer le build
+          uses: actions/upload-artifact@v4
+          with:
+            name: frontend-build
+            path: ./frontend/build
+          
