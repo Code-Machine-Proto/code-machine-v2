@@ -9,6 +9,16 @@ jobs:
         - name: Récupérer le code
           uses: actions/checkout@v4
 
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - id: step
+          run: echo "allo" >> $GITHUB_OUTPUT
+        
+        - run: echo ${{ steps.step.outputs }}
+
         - name: Créer une release brouillon
           env:
             GH_TOKEN: ${{ github.token }}
