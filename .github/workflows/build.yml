@@ -93,7 +93,7 @@ jobs:
     package-mac:
       name: Emballage de l'application pour mac
       runs-on: macos-latest
-      needs: [build-frontend, build-backend]
+      needs: [build-frontend, build-backend, create-release]
       steps:
         - name: Récupérer le code
           uses: actions/checkout@v4
@@ -131,10 +131,16 @@ jobs:
           working-directory: ./frontend
           run: npm run package -- --universal
 
+        - name: Uploader le build
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-mac-universal.dmg
+
     package-linux-windows:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest]
+          os: [ubuntu-latest, windows-latest, create-release]
           arch: [x64, arm64]
       runs-on: ${{ matrix.os }}
       needs: [build-frontend, build-backend]

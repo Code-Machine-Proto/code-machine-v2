@@ -8,7 +8,7 @@
   "version": "0.0.1",
   "build": {
     "productName": "CodeMachine",
-    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "mac": {
       "target": "dmg"
     },
