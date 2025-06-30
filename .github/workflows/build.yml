@@ -15,6 +15,7 @@ jobs:
             node-version: '22'
         
         - id: get-version
+          working-directory: ./frontend
           run: echo "version=$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
         
         - run: echo ${{ steps.get-version.outputs.version }}
