@@ -108,4 +108,12 @@ jobs:
           working-directory: ./frontend
           run: npm run package -- --universal
 
-        - run: ls frontend/dist
+    package-linux-windows:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest]
+          arch: [x64, arm64]
+      runs-on: ${{ matrix.os }}
+      name: ${{ matrix.os }}-${{ matrix.arch }}
+      steps:
+        - run: echo "Hello World!"
