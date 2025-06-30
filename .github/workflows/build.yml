@@ -1,6 +1,9 @@
 name: Construction de l'installateur
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
     create-release:
       name: Publier une release
