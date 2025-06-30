@@ -46,6 +46,7 @@ jobs:
             node-version: '22'
         
         - name: Sauvegarder les modules node
+          id: npm-cache
           uses: actions/cache@v4
           with:
             path: frontend/node_modules
@@ -53,6 +54,7 @@ jobs:
 
         - name: Installer les dépendances node
           working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
           run: npm ci
         
         - name: Compiler le build du frontend
@@ -64,3 +66,35 @@ jobs:
           with:
             name: frontend-build
             path: ./frontend/build
+
+    package-mac:
+      name: Emballage de l'application pour mac
+      runs-on: macos-latest
+      needs: [build-frontend]
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+        
+        - name: Installer node
+          id: npm-cache
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder les modules node
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+        - name: Installer les modules node
+          working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
+          run: npm ci
+
+        - name: Obtenir le build du frontend
+          uses: actions/download-artifact@v4
+          with:
+            name: frontend-build
+
+        - run: ls -R
