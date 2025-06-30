@@ -6,6 +6,9 @@ jobs:
       name: Publier une release
       runs-on: ubuntu-latest
       steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
         - name: Créer une release brouillon
           env:
             GH_TOKEN: ${{ github.token }}
