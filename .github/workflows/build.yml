@@ -6,4 +6,4 @@ jobs:
         name: Construction du backend
         runs-on: ubuntu-latest
         steps:
-          - run: ls
+          - run: echo ls
