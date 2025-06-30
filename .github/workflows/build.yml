@@ -140,10 +140,10 @@ jobs:
     package-linux-windows:
       strategy:
         matrix:
-          os: [ubuntu-latest, windows-latest, create-release]
+          os: [ubuntu-latest, windows-latest]
           arch: [x64, arm64]
       runs-on: ${{ matrix.os }}
-      needs: [build-frontend, build-backend]
+      needs: [build-frontend, build-backend, create-release]
       name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
       steps:
         - name: Récupérer le code
@@ -181,3 +181,17 @@ jobs:
         - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
           working-directory: ./frontend
           run: npm run package -- --${{ matrix.arch }}
+        
+        - name: Uploader les distributions
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          if: runner.os == 'Windows'
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-win-${{ matrix.arch }}.msi
+
+        - name: Uploader les distributions
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          if: runner.os == 'Linux'
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-${{ matrix.arch }}.AppImage
