@@ -5,6 +5,8 @@ jobs:
     create-release:
       name: Publier une release
       runs-on: ubuntu-latest
+      outputs:
+        version: ${{ steps.get-version.outputs.version }}
       steps:
         - name: Récupérer le code
           uses: actions/checkout@v4
@@ -16,7 +18,7 @@ jobs:
         
         - id: get-version
           working-directory: ./frontend
-          run: echo "version=$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
+          run: echo "version=v$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
         
         - run: echo ${{ steps.get-version.outputs.version }}
 
