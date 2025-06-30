@@ -114,6 +114,43 @@ jobs:
           os: [ubuntu-latest, windows-latest]
           arch: [x64, arm64]
       runs-on: ${{ matrix.os }}
-      name: ${{ matrix.os }}-${{ matrix.arch }}
+      needs: [build-frontend, build-backend]
+      name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
       steps:
-        - run: echo "Hello World!"
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder ou récupérer les node_modules
+          id: npm-cache
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+        
+        - name: Installer les dépendances
+          working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
+          run: npm ci
+
+        - name: Récupérer le build du frontend
+          uses: actions/download-artifact@v4
+          with:
+            name: frontend-build
+            path: frontend/build
+
+        - name: Récupérer le build du backend
+          uses: actions/download-artifact@v4
+          with:
+            name: backend-build
+            path: frontend/module-electron
+        
+        - name: Emballer l'application pour ${{ runner.os }}-${{ runner.arch }}
+          working-directory: ./frontend
+          run: npm run package -- --${{ runner.arch }}
+
+        - run: ls frontend/dist
