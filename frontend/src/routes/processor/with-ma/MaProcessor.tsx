@@ -1,7 +1,7 @@
+import MaAccumulator from "@src/class/MaAccumulator";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import VisualWithMa from "@src/components/processor/with-ma/VisualWithMa";
 import HexBox from "@src/components/utils-hex/HexBox";
-import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect } from "react";
 import { useOutletContext } from "react-router";
@@ -17,7 +17,7 @@ export default function MaProcessor() {
     const isProgrammerMode = useOutletContext();
 
     useEffect(() => {
-        dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.MA_ACCUMULATOR });
+        dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new MaAccumulator() });
     }, [dispatch]);
     
     return (

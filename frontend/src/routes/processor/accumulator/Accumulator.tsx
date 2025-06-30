@@ -1,7 +1,7 @@
+import Accumulator from "@src/class/Accumulator";
 import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
 import VisualAccumulator from "@src/components/processor/accumulator/VisualAccumulator";
 import HexBox from "@src/components/utils-hex/HexBox";
-import { ProcessorId } from "@src/interface/CodeInterface";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { useContext, useEffect } from "react";
 import { useOutletContext } from "react-router";
@@ -16,8 +16,8 @@ export default function AccumulatorProcessor() {
     const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 
-    useEffect(() => {
-        dispatch({ type: CodeAction.CHANGE_PROCESSOR, processorId: ProcessorId.ACCUMULATOR });
+    useEffect(() => { 
+        dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new Accumulator() });
     }, [dispatch]);
 
     return (

@@ -1,15 +1,7 @@
-import { ProcessorId, type CodeInterface } from "@src/interface/CodeInterface";
+import type Processor from "@src/class/Processor";
+import { ProcessorId } from "@src/interface/CodeInterface";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import { PlayerMode, type StepControl } from "@src/interface/StepControl";
-
-/**
- * Code source par défaut
- */
-export const DEFAULT_SOURCE_CODE: CodeInterface = {
-    code: "",
-    lines: [""],
-    processorId: ProcessorId.ACCUMULATOR,
-};
 
 /**
  * État d'exécution par défaut
@@ -22,6 +14,12 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     memoryState: [0],
     stimulatedLineState: -1,
 }];
+
+ export const DEFAULT_SOURCE_CODE = {
+    code: "",
+    lines: [""],
+    processorId: ProcessorId.ACCUMULATOR,
+ } as Processor;
 
 /**
  * État courant d'exécution par défaut
