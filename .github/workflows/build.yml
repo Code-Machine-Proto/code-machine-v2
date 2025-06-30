@@ -149,8 +149,8 @@ jobs:
             name: backend-build
             path: frontend/module-electron
         
-        - name: Emballer l'application pour ${{ runner.os }}-${{ runner.arch }}
+        - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
           working-directory: ./frontend
-          run: npm run package -- --${{ runner.arch }}
+          run: npm run package -- --${{ matrix.arch }}
 
         - run: ls frontend/dist
