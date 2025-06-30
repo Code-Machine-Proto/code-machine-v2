@@ -3,20 +3,7 @@ name: Construction de l'installateur
 on: [push]
 jobs:
     build-backend:
-        defaults:
-            run:
-                shell: bash -ieo pipefail {0}
         name: Construction du backend
         runs-on: ubuntu-latest
         steps:
-            - name: Installer sdkman
-              run: |
-                curl -s "https://get.sdkman.io" | bash
-                source "/home/runner/.sdkman/bin/sdkman-init.sh"
-            - name: Installer java 
-              run: sdk install java 17.0.10-tem
-            - name: Installer sbt
-              run: sdk install sbt
-            - name: Obtenir le build
-              working-directory: ./backend
-              run: sbt assembly
+          - run: ls
