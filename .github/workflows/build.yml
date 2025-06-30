@@ -98,5 +98,14 @@ jobs:
             name: frontend-build
             path: frontend/build
 
-        - working-directory: ./frontend
-          run: ls build
+        - name: Obtenir le build du backend
+          uses: actions/download-artifact@v4
+          with:
+            name: backend-build
+            path: frontend/module-electron
+
+        - name: Package l'application pour mac
+          working-directory: ./frontend
+          run: npm run package -- --universal
+
+        - run: ls frontend/dist
