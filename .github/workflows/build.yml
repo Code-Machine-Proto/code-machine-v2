@@ -14,10 +14,10 @@ jobs:
           with:
             node-version: '22'
         
-        - id: step
-          run: echo "value=allo" >> $GITHUB_OUTPUT
+        - id: get-version
+          run: echo "version=$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
         
-        - run: echo ${{ steps.step.outputs.value }}
+        - run: echo ${{ steps.get-version.outputs.version }}
 
         - name: Créer une release brouillon
           env:
