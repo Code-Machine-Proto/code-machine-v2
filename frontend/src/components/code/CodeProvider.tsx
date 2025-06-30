@@ -1,14 +1,16 @@
+import Processor from "@src/class/Processor";
+import type { SimulationState } from "@src/interface/CodeInterface";
+import { storeCode } from "@src/module-store/CodeStore";
+import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
 import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
-import type { CodeInterface, SimulationState } from "@src/interface/CodeInterface";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import { PlayerMode, type StepControl } from "@src/interface/StepControl";
-import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
 
 /**
  * Contexte pour accéder au valeur du code et son état
  */
-export const CodeContext = createContext<CodeInterface>(DEFAULT_SOURCE_CODE);
+export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
 
 /**
  * Permets d'obtenir le dispatch pour effectuer des actions
@@ -96,18 +98,10 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
  */
 function changeCode(state: SimulationState, action: CodePayload): SimulationState {
     if (action.code === "" || action.code) {
-        return { ...state, codeState: { ...state.codeState, code: action.code, lines: changeLineTotal(action.code) } };
+        storeCode(state.codeState.processorId, action.code);
+        return { ...state, codeState: { ...state.codeState, code: action.code, lines: action.code.split("\n") } as Processor };
     }
     return { ...state };
-}
-
-/**
- * Permets de transformer un input de texte en tableau de ligne
- * @param code code écrit sur plusieurs
- * @returns code séparé par ligne dans un tableau
- */
-function changeLineTotal(code: string): Array<string> {
-    return code.split("\n");
 }
 
 /**
@@ -117,8 +111,8 @@ function changeLineTotal(code: string): Array<string> {
  * @returns le prochain état
  */
 function changeProcessor(state: SimulationState, action: CodePayload): SimulationState {
-    if (action.processorId) {
-        return { ...state, codeState: { ...state.codeState ,processorId: action.processorId }};
+    if (action.newProcessor) {
+        return { ...state, codeState: action.newProcessor };
     }
     return { ...state };
 }

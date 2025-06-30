@@ -1,20 +1,12 @@
+import type Processor from "@src/class/Processor";
 import type { ProcessorStep } from "./ProcessorStep";
 import type { StepControl } from "./StepControl";
-
-/**
- * État du code dans le textarea
- */
-export interface CodeInterface {
-    code: string,
-    lines: Array<string>,
-    processorId: ProcessorId,
-}
 
 /**
  * État de la simulation
  */
 export interface SimulationState {
-    codeState: CodeInterface,
+    codeState: Processor,
     executionState: Array<ProcessorStep>,
     currentStep: StepControl,
 }

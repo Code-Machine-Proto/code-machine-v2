@@ -3,6 +3,7 @@ import { CodeContext, DispatchCodeContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
+import type { ProcessorStep } from "@src/interface/ProcessorStep";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -10,7 +11,7 @@ import { useFetcher } from "react-router";
  * @returns L'éditeur de code pour écrire de l'assembleur
  */
 export default function CodeEditor() {
-    const { code, lines, processorId } = useContext(CodeContext);
+    const processor = useContext(CodeContext);
     const dispatch = useContext(DispatchCodeContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
@@ -20,7 +21,7 @@ export default function CodeEditor() {
 
     useEffect(() => {
         if( fetcher.data ) {
-            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data })
+            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data as Array<ProcessorStep> })
         }
     }, [fetcher.data, dispatch]);
     
@@ -41,12 +42,12 @@ export default function CodeEditor() {
                     ref={numberContainer}
                     onScroll={() => handleScroll(numberContainer, textArea)}
                 >
-                    { lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
+                    { processor.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
                 <textarea 
                     className="text-white resize-none border-none outline-none w-4/5" 
-                    value={ code } 
-                    onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value })} 
+                    value={ processor.code } 
+                    onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
                     wrap="off"
                     ref={textArea}
                     onScroll={() => handleScroll(textArea, numberContainer)}
@@ -54,7 +55,9 @@ export default function CodeEditor() {
             </div>
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
-                onClick={() => fetcher.submit({ lines: JSON.stringify(lines), processorId: processorId }, { method: "POST", action: "/processor"})}
+                onClick={() => {
+                    fetcher.submit({ processor: JSON.stringify(processor)   }, { method: "POST", action: "/processor"})
+                }}
             >
                 Compiler
             </button>
