@@ -108,7 +108,7 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) 
 // ----------- Stimulated lines
 
   //TODO: complete -- Check la valeur pendant le debug
-  output.write("\"stimulatedLines\" : " + risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.IR).toInt,peek(DUT.io.debug.IR).toInt, peek(DUT.io.debug.FlagNZ).toInt) + ",")
+  output.write("\"stimulatedLineState\" : " + risc_simple.compiler.asm_compiler.getStimulatedLines(peek(DUT.io.debug.IR).toInt,peek(DUT.io.debug.State).toInt, peek(DUT.io.debug.FlagNZ).toInt) + ",")
 //------- IM (If needed )
   output.write("\"imState\" : [")
   for(memIdx <- 0 until DUT.io.debug.Inst_mem.length){
@@ -121,28 +121,14 @@ class risc_simple_simulation(DUT: risc_simple.RiscSimple, output: StringWriter) 
     }
   }
   output.write("]")
-  output.flush()
 
-   /*
-    for(memIdx <- 0 until DUT.io.debug.Inst_mem.length){
-    
-      if(memIdx < DUT.io.debug.Inst_mem.length - 1){
-        output_im.write(peek(DUT.io.debug.Inst_mem(memIdx)).toString + ",")
-      }
-      else{
-        output_im.write(peek(DUT.io.debug.Inst_mem(memIdx)).toString + "\r")
-      }
-      output_im.flush()
-    }
-    
-    output_im.write("\n")
-    output_im.flush()
-  */
+  
   output.write("},")
+  output.flush()
     step(1)
 
     simulation_cycle = simulation_cycle + 1    //Debug. purposes
-    simulation_ended = (peek(DUT.io.debug.State).toInt == 4) || (simulation_cycle == 20)
+    simulation_ended = (peek(DUT.io.debug.State).toInt == 4) || (simulation_cycle == 1024)
   }
   output.write("]")
   output.flush()

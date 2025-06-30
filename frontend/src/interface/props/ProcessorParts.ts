@@ -25,8 +25,7 @@ export interface ObscureMemoryProps extends Coordinates {
  */
 export interface AluProps extends Coordinates {
     hasNz?: boolean,
-    isNzActivated?: boolean,
-    isOpActivated?: boolean,
+    isActivated?: boolean,
 }
 
 /**
@@ -37,6 +36,7 @@ export interface RegisterBoxProps extends Coordinates {
     number: number,
     className: string,
     defaultIsBase10?: boolean,
+    isActivated: boolean,
 }
 
 /**
