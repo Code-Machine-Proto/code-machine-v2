@@ -180,14 +180,14 @@ jobs:
         
         - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
           working-directory: ./frontend
-          run: npm run package -- --${{ matrix.arch }}
+          run: npm run package:${{ matrix.arch }}
         
         - name: Uploader les distributions
           env:
             GH_TOKEN: ${{ github.token }}
             tag: ${{ needs.create-release.outputs.version }}
           if: runner.os == 'Windows'
-          run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-x64.msi"
+          run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-${{ matrix.arch }}.msi"
 
         - name: Uploader les distributions
           env:
