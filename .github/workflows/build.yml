@@ -187,7 +187,7 @@ jobs:
             GH_TOKEN: ${{ github.token }}
             tag: ${{ needs.create-release.outputs.version }}
           if: runner.os == 'Windows'
-          run: gh release upload $tag frontend\dist\CodeMachine-$tag-win-${{ matrix.arch }}.msi
+          run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-x64.msi"
 
         - name: Uploader les distributions
           env:
