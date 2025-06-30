@@ -8,6 +8,12 @@
   "version": "0.0.1",
   "build": {
     "productName": "CodeMachine",
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
     "win": {
       "target": "msi",
       "signAndEditExecutable": false,
