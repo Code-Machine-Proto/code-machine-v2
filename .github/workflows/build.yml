@@ -97,4 +97,4 @@ jobs:
           with:
             name: frontend-build
 
-        - run: ls -R
+        - run: ls
