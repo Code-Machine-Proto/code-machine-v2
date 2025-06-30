@@ -6,7 +6,10 @@ jobs:
       name: Publier une release
       runs-on: ubuntu-latest
       steps:
-        - run: gh release create v1.0.0 -F release-notes.md
+        - name: Créer une release brouillon
+          env:
+            GH_TOKEN: ${{ github.token }}
+          run: gh release create v1.0.0 -d -F release-notes.md
 
     build-backend:
         defaults:
