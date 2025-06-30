@@ -23,6 +23,12 @@ jobs:
             - name: Installer sbt
               run: sdk install sbt
 
-            - name: Obtenir le build
+            - name: Compiler le jar
               working-directory: ./backend
               run: sbt assembly
+
+            - name: Artéfacter le jar
+              uses: actions/upload-artifact@v4
+              with:
+                name: backend-build
+                path: ./backend/target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar
