@@ -17,7 +17,8 @@ export default function PolyRiscProcessor() {
     const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 
-    const [enableMemory, setEnableMemory] = useState<boolean>(false);
+    const [enableRegister, setEnableRegister] = useState<boolean>(false);
+    const [enableInstructionMemory, setEnableInstructionMemory] = useState<boolean>(false);
 
     useEffect(() => {
         dispatch({ type: CodeAction.CHANGE_PROCESSOR, newProcessor: new PolyRisc() });
@@ -37,13 +38,23 @@ export default function PolyRiscProcessor() {
                 </div>
             
                 <div className="flex items-center gap-1">
-                    <input type="checkbox"  checked={enableMemory} onChange={() => setEnableMemory(!enableMemory)}/>
+                    <input type="checkbox"  checked={enableRegister} onChange={() => setEnableRegister(!enableRegister)}/>
                     <p className="text-white">Afficher les registres</p>
+                </div>
+
+                <div className="flex items-center gap-1">
+                    <input type="checkbox"  checked={enableInstructionMemory} onChange={() => setEnableInstructionMemory(!enableInstructionMemory)}/>
+                    <p className="text-white">Afficher la mémoire d&apos;instruction</p>
                 </div>
             </div>
             {
-                enableMemory && steps[count].regState &&
+                enableRegister && steps[count].regState &&
                 <Memory className="bg-yellow-300" memoryContent={ steps[count].regState } nom="Registres" />
+            }
+
+            {
+                enableInstructionMemory && steps[count].imState &&
+                <Memory className="bg-green-700" memoryContent={ steps[count].imState } nom="Mémoire d'instruction" />
             }
         </div>
         : <VisualPolyRisc />

@@ -4,6 +4,7 @@ import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import { LineStateMa } from "@src/interface/Line";
 import { useContext } from "react";
 
 /**
@@ -14,22 +15,41 @@ export default function VisualWithMa() {
     const steps = useContext(ExecutionContext);
     const { count } = useContext(StepContext);
 
+    const lineState = steps[count].stimulatedLineState;
+
+    const fetch = lineState == LineStateMa.fetch;
+    const decode = lineState == LineStateMa.decode;
+    const addSubMul = lineState == LineStateMa.addSubMul;
+    const addSubA = lineState == LineStateMa.addSubA;
+    const addSubX = lineState == LineStateMa.addSubX;
+    const sh = lineState == LineStateMa.sh;
+    const store = lineState == LineStateMa.store;
+    const load = lineState == LineStateMa.load;
+    const loadA = lineState == LineStateMa.loadA;
+    const loadI = lineState == LineStateMa.loadI;
+    const storeA = lineState == LineStateMa.storeA;
+    const storeI = lineState == LineStateMa.storeI;
+    const branching = lineState == LineStateMa.branching;
+    const nop = lineState == LineStateMa.nop || addSubMul || addSubA || addSubX || sh || store || load || loadA || loadI || storeA || storeI;
+
+    const addr = addSubMul || addSubA || store || load || loadA || storeA;
+
     return (
         <svg width="100%" height="100%" viewBox="0 0 1175 401" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 id="mux-pc"
                 d="M80 109C79.4477 109 79 109.448 79 110C79 110.552 79.4477 111 80 111L80 109ZM141 110L131
                    104.226L131 115.774L141 110ZM80 110L80 111L132 111L132 110L132 109L80 109L80 110Z"
-                fill="white"
             />
+            <use href="#mux-pc" fill="white"/>
             <path
                 id="pc-mux"
                 d="M291 109C291.552 109 292 109.448 292 110V175H352V170.227L362 176L352 181.773V177H291C290.965
                    177 290.931 176.999 290.897 176.995C290.595 176.964 290.333 176.799 290.171 176.56C290.117
                    176.48 290.074 176.392 290.045 176.298C290.025 176.235 290.012 176.17 290.005 176.103C290.001
                    176.069 290 176.035 290 176V111H261C260.448 111 260 110.552 260 110C260 109.448 260.448 109 261 109H291Z"
-                fill="white"
             />
+            <use href="#pc-mux" fill="white"/>
             <path
                 id="inc"
                 d="M291 39C291.552 39 292 39.4477 292 40V110C292 110.552 291.552 111 291 111H261C260.448 111 260 110.552 260
@@ -43,20 +63,20 @@ export default function VisualWithMa() {
                    87.6343 1.22266 87.6289C1.20933 87.6125 1.19685 87.5954 1.18457 87.5781C1.17751 87.5682 1.17076 87.5581 1.16406
                    87.5479C1.13691 87.5065 1.11268 87.4632 1.0918 87.418C1.08608 87.4056 1.07944 87.3935 1.07422 87.3809C1.03828 87.2937
                    1.01481 87.2001 1.00488 87.1025L1 87V40C1 39.4477 1.44772 39 2 39H291Z"
-                fill="white"
             />
+            <use href="#inc" fill="white"/>
             <path
                 id="mux3-mem"
                 d="M399 202C398.448 202 398 202.448 398 203C398 203.552 398.448 204 399 204V202ZM492 203L482 197.226V208.774L492 203ZM399
                    203V204H483V203V202H399V203Z"
-                fill="white"
             />
+            <use href="#mux3-mem" fill="white"/>
             <path
                 id="mem-alu"
                 d="M586 155C585.448 155 585 155.448 585 156C585 156.552 585.448 157 586 157V155ZM758.012 156L748.012 150.226V161.774L758.012
                    156ZM586 156V157H749.012V156V155H586V156Z"
-                fill="white"
             />
+            <use href="#mem-alu" fill="white"/>
             <path
                 id="mem-ir"
                 d="M616 155C616.552 155 617 155.448 617 156V328C617 328.552 616.552 329 616 329H112C111.482 329 111.056 328.607 111.005 328.103L111
@@ -68,39 +88,39 @@ export default function VisualWithMa() {
                    258.093C111.597 258.085 111.613 258.077 111.63 258.07C111.635 258.068 111.64 258.066 111.646 258.064C111.669 258.055 111.693
                    258.047 111.718 258.04C111.763 258.027 111.809 258.018 111.856 258.011C111.903 258.004 111.951 258 112 258H131V253.227L141
                    259L131 264.773V260H113V327H615V157H586C585.448 157 585 156.552 585 156C585 155.448 585.448 155 586 155H616Z"
-                fill="white"
             />
+            <use href="#mem-ir" fill="white"/>
             <path
                 id="mem-acc"
                 d="M902 97L892 102.773V98H617V156C617 156.552 616.552 157 616 157H586C585.448 157 585 156.552 585 156C585
                    155.448 585.448 155 586 155H615V97C615 96.4477 615.448 96 616 96H892V91.2266L902 97Z"
-                fill="white"
             />
+            <use href="#mem-acc" fill="white"/>
             <path
                 id="mem-ma"
                 d="M841 96C841.552 96 842 96.4477 842 97V276H892V271.227L902 277L892 282.773V278H841C840.448 278 840
                    277.552 840 277V98H617V156C617 156.552 616.552 157 616 157H586C585.448 157 585 156.552 585 156C585
                    155.448 585.448 155 586 155H615V97C615 96.4477 615.448 96 616 96H841Z"
-                fill="white"
             />
+            <use href="#mem-ma" fill="white"/>
             <path
                 id="alu-acc"
                 d="M902 139L892 144.773V140H866V195C866 195.552 865.552 196 865 196H825C824.448 196 824 195.552 824
                    195C824 194.448 824.448 194 825 194H864V139C864 138.448 864.448 138 865 138H892V133.227L902 139Z"
-                fill="white"
             />
+            <use href="#alu-acc" fill="white"/>
             <path
                 id="alu-ma"
                 d="M865 194C865.552 194 866 194.448 866 195V232H892V227.227L902 233L892 238.773V234H865C864.448 234
                    864 233.552 864 233V196H825C824.448 196 824 195.552 824 195C824 194.448 824.448 194 825 194H865Z"
-                fill="white"
             />
+            <use href="#alu-ma" fill="white"/>
             <path
                 id="ir-mem"
                 d="M362 203L352 208.773V204H303V258C303 258.552 302.552 259 302 259H261C260.448 259 260 258.552 260
                    258C260 257.448 260.448 257 261 257H301V203C301 202.448 301.448 202 302 202H352V197.227L362 203Z"
-                fill="white"
             />
+            <use href="#ir-mem" fill="white"/>
             <path
                 id="ir-pc"
                 d="M43 131L33 136.773V132H2V202H302C302.552 202 303 202.448 303 203V258C303 258.048 302.995 258.096
@@ -115,28 +135,28 @@ export default function VisualWithMa() {
                    302.296 258.955C302.234 258.974 302.169 258.988 302.103 258.995L302 259H261C260.448 259 260 258.552
                    260 258C260 257.448 260.448 257 261 257H301V204H1C0.482323 204 0.0562144 203.607 0.00488281 203.103L0
                    203V131C0 130.448 0.447715 130 1 130H33V125.227L43 131Z"
-                fill="white"
             />
+            <use href="#ir-pc" fill="white"/>
             <path
                 id="mux-acc"
                 d="M939 120C938.448 120 938 120.448 938 121C938 121.552 938.448 122 939 122V120ZM1005 121L995
                    115.226V126.774L1005 121ZM939 121V122H996V121V120H939V121Z"
-                fill="white"
             />
+            <use href="#mux-acc" fill="white"/>
             <path
                 id="mux-ma"
                 d="M939 254C938.448 254 938 254.448 938 255C938 255.552 938.448 256 939 256V254ZM1005 255L995
                    249.226V260.774L1005 255ZM939 255V256H996V255V254H939V255Z"
-                fill="white"
             />
+            <use href="#mux-ma" fill="white"/>
             <path
                 id="acc-alu"
                 d="M1155 120C1155.55 120 1156 120.448 1156 121V329C1156 329.552 1155.55 330 1155 330H654C653.482
                    330 653.056 329.607 653.005 329.103L653 329V260C653 259.448 653.448 259 654 259H661V254.227L671
                    260L661 265.773V261H655V328H1154V122H1125C1124.45 122 1124 121.552 1124 121C1124 120.448 1124.45
                    120 1125 120H1155Z"
-                fill="white"
             />
+            <use href="#acc-alu" fill="white"/>
             <path
                 id="acc-mem"
                 d="M1155 15C1155.55 15.0002 1156 15.4478 1156 16C1156 16.0055 1156 16.0111 1156 16.0166V121C1156 121.552
@@ -152,8 +172,8 @@ export default function VisualWithMa() {
                    15.0947C313.591 15.0874 313.606 15.0798 313.622 15.0732C313.635 15.0678 313.649 15.0635 313.663 15.0586C313.678
                    15.0534 313.692 15.0475 313.707 15.043C313.765 15.0253 313.824 15.0129 313.886 15.0059C313.89 15.0054 313.894
                    15.0053 313.897 15.0049L314 15H1155Z"
-                fill="white"
             />
+            <use href="#acc-mem" fill="white"/>
             <path id="ma-mem"
                 d="M1170 0C1170.55 0 1171 0.447715 1171 1V257C1171 257.048 1170.99 257.096 1170.99 257.143C1170.99 257.162
                    1170.98 257.182 1170.98 257.201C1170.96 257.278 1170.94 257.35 1170.91 257.419C1170.89 257.463 1170.86
@@ -173,8 +193,8 @@ export default function VisualWithMa() {
                    0.117188C330.546 0.108141 330.564 0.0998808 330.581 0.0917969C330.593 0.0860705 330.606 0.0794465 330.618
                    0.0742188C330.641 0.0647401 330.665 0.0566107 330.688 0.0488281C330.693 0.0472297 330.698 0.0454702 330.703
                    0.0439453C330.765 0.0245981 330.831 0.0116928 330.897 0.00488281L331 0H1170Z"
-                   fill="white"
             />
+            <use href="#ma-mem" fill="white"/>
             <path
                 id="ma-addr"
                 d="M362 228L352 233.773V229H331V342H1169V258H1125C1124.45 258 1124 257.552 1124 257C1124 256.448 1124.45 256
@@ -199,8 +219,8 @@ export default function VisualWithMa() {
                    343.92 329.598 343.915 329.588 343.91C329.54 343.889 329.495 343.864 329.451 343.835C329.441 343.828 329.431 343.822
                    329.421 343.814C329.166 343.633 328.999 343.336 328.999 343C328.999 342.993 329 342.987 329 342.98V228C329 227.448
                    329.448 227 330 227H352V222.227L362 228Z"
-                fill="white"
             />
+            <use href="#ma-addr" fill="white"/>
             <path
                 id="ma-alu"
                 d="M671 220.773L661 226.547V221.773H636V341.773H1169V257.773H1125C1124.45 257.773 1124 257.326 1124 256.773C1124
@@ -214,73 +234,110 @@ export default function VisualWithMa() {
                 256.264 1170.88 256.306 1170.9 256.349C1170.91 256.364 1170.92 256.38 1170.93 256.396C1170.96 256.482 1170.99 256.574 1171
                 256.671L1171 256.773V342.779C1171 343.332 1170.55 343.779 1170 343.779C1169.96 343.779 1169.93 343.777 1169.89 343.773H635L634.897
                 343.769C634.427 343.721 634.053 343.346 634.005 342.876L634 342.773V220.773C634 220.221 634.448 219.773 635 219.773H661V215L671 220.773Z"
-                fill="white"
             />
+            <use href="#ma-alu" fill="white"/>
             <path
                 id="mux-mem"
                 d="M399 76C398.448 76 398 76.4477 398 77C398 77.5523 398.448 78 399
                    78V76ZM492 77L482 71.2265V82.7735L492 77ZM399 77V78H483V77V76H399V77Z"
-                fill="white"
             />
+            <use href="#mux-mem" fill="white"/>
             <path
                 id="mux-alu"
                 d="M708 241C707.448 241 707 241.448 707 242C707 242.552 707.448 243 708
                    243V241ZM757 242L747 236.226V247.774L757 242ZM708 242V243H748V242V241H708V242Z"
-                fill="white"
             />
+            <use href="#mux-alu" fill="white"/>
             <path
                 id="ir-control"
                 d="M302 257C302.552 257 303 257.448 303 258V353H307.773L302 363L296.227 353H301V259H261C260.448
                    259 260 258.552 260 258C260 257.448 260.448 257 261 257H302Z"
-                fill="white"
             />
+            <use href="#ir-control" fill="white"/>
             <path
                 id="acc-control"
                 d="M1155 120C1155.55 120 1156 120.448 1156 121V353.002H1160.77L1155 363.002L1149.23
                    353.002H1154V122.001H1125C1124.45 122.001 1124 121.553 1124 121.001C1124 120.449 1124.45
                    120.001 1125 120.001H1154.98C1154.99 120.001 1154.99 120 1155 120Z"
-                fill="white"
             />
+            <use href="#acc-control" fill="white"/>
 
             <Bus x={590} y={147} number={16}/>
             <Bus x={720} y={147} number={16}/>
             <Bus x={872} y={130} number={16}/>
             <Bus x={1130} y={112} number={16}/>
 
-            <Multiplexer x={41} y={70} name="sel_pc_source" />
-            <Multiplexer x={360} y={40} name="sel_mem_data" />
-            <Multiplexer x={360} y={165} name="sel_mem_addr" />
-            <Multiplexer x={669} y={200} name="alu_b_source" />
-            <Multiplexer x={900} y={80} name="sel_acc_data" /> 
-            <Multiplexer x={900} y={215} name="sel_ma_source" />
+            <use href="#mux-pc" className={ branching || nop ? "fill-red-500" : "" } />
+            <use href="#pc-mux" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#inc" className={ nop ? "fill-red-500" : "" } />
+            <use href="#mux3-mem" className={ fetch || addr|| addSubX || loadI || storeI ? "fill-red-500" : "" } />
+            <use href="#mem-alu" className={ addSubMul || addSubA || addSubX ? "fill-red-500" : "" } />
+            <use href="#mem-ir" className={ fetch ? "fill-red-500" : "" } />
+            <use href="#mem-acc" className={ load || loadI ? "fill-red-500" : "" } />
+            <use href="#mem-ma" className={ loadA ? "fill-red-500" : "" } />
+            <use href="#alu-acc" className={ addSubMul || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#alu-ma" className={ addSubA ? "fill-red-500" : "" } />
+            <use href="#ir-mem" className={ addr ? "fill-red-500" : "" } />
+            <use href="#ir-pc" className={ branching ? "fill-red-500" : "" } />
+            <use href="#mux-acc" className={ addSubMul || addSubX || sh || load || loadI ? "fill-red-500" : "" } />
+            <use href="#mux-ma" className={ addSubA || loadA ? "fill-red-500" : "" } />
+            <use href="#acc-alu" className={ addSubMul || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#acc-mem" className={ store || storeI ? "fill-red-500" : "" } />
+            <use href="#ma-mem" className={ storeA ? "fill-red-500" : "" } />
+            <use href="#ma-addr" className={ addSubX || loadI || storeI ? "fill-red-500" : "" } />
+            <use href="#ma-alu" className={ addSubA ? "fill-red-500" : "" } />
+            <use href="#mux-mem" className={ store || storeA || storeI ? "fill-red-500" : "" } />
+            <use href="#mux-alu" className={ addSubMul || addSubA || addSubX || sh ? "fill-red-500" : "" } />
+            <use href="#ir-control" className={ decode ? "fill-red-500" : "" } />
+            <use href="#acc-control" className={ decode ? "fill-red-500" : "" } />
 
-            <ALU x={755} y={123}/>
+            <Multiplexer x={41} y={70} name="sel_pc_source" isActivated={ branching || nop } />
+            <Multiplexer x={360} y={40} name="sel_mem_data" isActivated={ store || storeA || storeI } />
+            <Multiplexer x={360} y={165} name="sel_mem_addr" isActivated={ fetch || addr || loadI || storeI || addSubX } />
+            <Multiplexer x={669} y={200} name="alu_b_source" isActivated={ addSubMul || addSubA || sh || addSubX } />
+            <Multiplexer x={900} y={80} name="sel_acc_data" isActivated={ addSubMul || sh || load || loadI || addSubX } />
+            <Multiplexer x={900} y={215} name="sel_ma_source" isActivated={ addSubA || loadA } />
 
-            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={491} y={40} hasControlSignal={true} >
+            <ALU x={755} y={123} isActivated={ addSubMul || addSubA || sh || addSubX } />
+
+            <ObscureMemory name="Mémoire" controlName="wr_mem" className="fill-green-500" x={491} y={40} hasControlSignal={true} isWritable={ store || storeA || storeI } >
                 <text x="5" y="70" dominantBaseline="middle" fill="black">data_in</text>
                 <text x="5" y="298" dominantBaseline="middle" fill="black">addr</text>
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>            
 
-            <RegisterBox name="PC" number={steps[count].pcState} x={140} y={77} className="bg-pc" />
-            <RegisterBox name="IR" number={steps[count].irState} x={140} y={225} className="bg-ir" />
-            <RegisterBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} x={1005} y={87} className="bg-acc" defaultIsBase10={true} />
-            <RegisterBox name="MA" number={steps[count].ma ? steps[count].ma : 0} x={1005} y={225} className="bg-ma" />
+            <RegisterBox name="PC" number={steps[count].pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
+            <RegisterBox name="IR" number={steps[count].irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
+            <RegisterBox 
+                name="ACC"
+                number={steps[count].accState ? steps[count].accState : 0}
+                x={1005}
+                y={87}
+                className="bg-acc" defaultIsBase10={true} isActivated={ addSubMul || load || loadI || addSubX || sh }
+            />
+            <RegisterBox
+                name="MA"
+                number={steps[count].ma ? steps[count].ma : 0}
+                x={1005}
+                y={225}
+                className="bg-ma"
+                isActivated={ addSubA || loadA }
+            />
 
-            <circle cx="616" cy="156" r="5" fill="white" />
-            <circle cx="841" cy="97" r="5" fill="white" />
-            <circle cx="865" cy="195" r="5" fill="white" />
-            <circle cx="1155" cy="121" r="5" fill="white" />
-            <circle cx="302" cy="203" r="5" fill="white" />
-            <circle cx="1170" cy="257" r="5" fill="white" />
-            <circle cx="635" cy="343" r="5" fill="white" />
-            <circle cx="302" cy="258" r="5" fill="white" />
-            <circle cx="291" cy="110" r="5" fill="white" />
-            <circle cx="1155" cy="329" r="5" fill="white" />
+            <circle cx="616" cy="156" r="5" className={ fetch || addSubMul || addSubA || addSubX || load || loadA || loadI ? "fill-red-500" : "fill-white" } />
+            <circle cx="841" cy="97" r="5" className={ load || loadA || loadI ? "fill-red-500" : "fill-white" } />
+            <circle cx="865" cy="195" r="5" className={ addSubMul || addSubA || addSubX || sh ? "fill-red-500" : "fill-white" } />
+            <circle cx="1155" cy="121" r="5" className={ decode || addSubMul || addSubX || sh || store || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="302" cy="203" r="5" className={ branching || addr ? "fill-red-500" : "fill-white" } />
+            <circle cx="1170" cy="257" r="5" className={ addSubA || addSubX || loadI || storeA || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="635" cy="343" r="5" className={ addSubA || addSubX || loadI || storeI ? "fill-red-500" : "fill-white" } />
+            <circle cx="302" cy="258" r="5" className={ decode || branching || addr ? "fill-red-500" : "fill-white" } />
+            <circle cx="291" cy="110" r="5" className={ fetch || nop ? "fill-red-500" : "fill-white" } />
+            <circle cx="1155" cy="329" r="5" className={ decode || addSubMul || addSubX || sh ? "fill-red-500" : "fill-white" } />
 
             <g>
                 <rect x="291.5" y="363.5" width="873" height="37" fill="white" stroke="black" />
-                <text textAnchor="middle" dominantBaseline="middle" x={728} y={382} className="text-xl fill-black">Control Signal</text>
+                <text textAnchor="middle" dominantBaseline="middle" x={728} y={382} className="text-xl font-semibold fill-black">Control Signal</text>
             </g>
 
             <g>
