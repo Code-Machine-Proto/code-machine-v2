@@ -99,4 +99,4 @@ jobs:
             path: frontend/build
 
         - working-directory: ./frontend
-          run: ls
+          run: ls build
