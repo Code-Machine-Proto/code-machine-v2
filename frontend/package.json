@@ -5,9 +5,16 @@
   "main": "build/main.js",
   "description": "",
   "author": "",
-  "version": "0.0.1",
+  "version": "25.1.0",
   "build": {
     "productName": "CodeMachine",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
     "win": {
       "target": "msi",
       "signAndEditExecutable": false,
@@ -30,6 +37,8 @@
     "dev": "react-router dev --mode website",
     "dev:electron": "electron .",
     "package": "electron-builder",
+    "package:x64": "electron-builder --x64",
+    "package:arm64": "electron-builder --arm64",
     "start": "vite preview",
     "lint": "eslint",
     "lint:fix": "eslint --fix",

@@ -1,0 +1,221 @@
+name: Construction de l'installateur
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+    create-release:
+      name: Publier une release
+      runs-on: ubuntu-latest
+      outputs:
+        version: ${{ steps.get-version.outputs.version }}
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - id: get-version
+          working-directory: ./frontend
+          run: echo "version=v$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
+
+        - name: Créer une release brouillon
+          env:
+            GH_TOKEN: ${{ github.token }}
+          run: gh release create ${{ steps.get-version.outputs.version }} -d -F release-notes.md
+        
+    build-backend:
+        defaults:
+            run:
+                shell: bash -ieo pipefail {0}
+        name: Construction du backend
+        runs-on: ubuntu-latest
+        steps:
+            - name: Récupérer le code
+              uses: actions/checkout@v4
+
+            - name: Installer sdkman
+              run: |
+                curl -s "https://get.sdkman.io" | bash
+                source "/home/runner/.sdkman/bin/sdkman-init.sh"
+
+            - name: Installer java 
+              run: sdk install java 17.0.10-tem
+
+            - name: Installer sbt
+              run: sdk install sbt
+
+            - name: Compiler le jar
+              working-directory: ./backend
+              run: sbt assembly
+
+            - name: Artéfacter le jar
+              uses: actions/upload-artifact@v4
+              with:
+                name: backend-build
+                path: ./backend/target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar
+
+    build-frontend:
+      name: Construction du frontend
+      runs-on: ubuntu-latest
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder les modules node
+          id: npm-cache
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+        - name: Installer les dépendances node
+          working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
+          run: npm ci
+        
+        - name: Compiler le build du frontend
+          working-directory: ./frontend
+          run: npm run build:electron
+        
+        - name: Transférer le build
+          uses: actions/upload-artifact@v4
+          with:
+            name: frontend-build
+            path: ./frontend/build
+
+    package-mac:
+      name: Emballage de l'application pour mac
+      runs-on: macos-latest
+      needs: [build-frontend, build-backend, create-release]
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+        
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder les modules node
+          id: npm-cache
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+        - name: Installer les modules node
+          working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
+          run: npm ci
+
+        - name: Obtenir le build du frontend
+          uses: actions/download-artifact@v4
+          with:
+            name: frontend-build
+            path: frontend/build
+
+        - name: Obtenir le build du backend
+          uses: actions/download-artifact@v4
+          with:
+            name: backend-build
+            path: frontend/module-electron
+
+        - name: Package l'application pour mac
+          working-directory: ./frontend
+          run: npm run package -- --universal
+
+        - name: Uploader le build
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-mac-universal.dmg
+
+    package-linux-windows:
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest]
+          arch: [x64, arm64]
+      runs-on: ${{ matrix.os }}
+      needs: [build-frontend, build-backend, create-release]
+      name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Installer node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        
+        - name: Sauvegarder ou récupérer les node_modules
+          id: npm-cache
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+        
+        - name: Installer les dépendances
+          working-directory: ./frontend
+          if: steps.npm-cache.outputs.cache-hit != 'true'
+          run: npm ci
+
+        - name: Récupérer le build du frontend
+          uses: actions/download-artifact@v4
+          with:
+            name: frontend-build
+            path: frontend/build
+
+        - name: Récupérer le build du backend
+          uses: actions/download-artifact@v4
+          with:
+            name: backend-build
+            path: frontend/module-electron
+        
+        - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
+          working-directory: ./frontend
+          run: npm run package:${{ matrix.arch }}
+        
+        - name: Uploader les distributions
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          if: runner.os == 'Windows'
+          run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-${{ matrix.arch }}.msi"
+
+        - name: Uploader les distributions
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          if: runner.os == 'Linux' && matrix.arch == 'x64'
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-x86_64.AppImage
+
+        - name: Uploader les distributions
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          if: runner.os == 'Linux' && matrix.arch == 'arm64'
+          run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-${{ matrix.arch }}.AppImage
+
+    save-release:
+      name: Sauvegarder la distribution
+      runs-on: ubuntu-latest
+      needs: [create-release, package-linux-windows, package-mac]
+      steps:
+        - name: Récupérer le code
+          uses: actions/checkout@v4
+
+        - name: Sauvegarder la release
+          env:
+            GH_TOKEN: ${{ github.token }}
+            tag: ${{ needs.create-release.outputs.version }}
+          run: gh release edit $tag --draft=false
