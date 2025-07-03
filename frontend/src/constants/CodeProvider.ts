@@ -24,7 +24,7 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
 export const DEFAULT_SOURCE_CODE = {
     code: "",
     lines: [""],
-    processorId: ProcessorId.ACCUMULATOR,
+    processorId: ProcessorId.ERROR,
     steps: DEFAULT_EXECUTION_STATE,
     count: 0,
     isPlaying: false,

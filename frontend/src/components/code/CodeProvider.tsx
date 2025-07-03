@@ -96,7 +96,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function changeProcessor(state: Processor, action: CodePayload): Processor {
-    if (action.newProcessor) {
+    if ( action.newProcessor && action.newProcessor.processorId != state.processorId ) {
         return action.newProcessor.clone();
     }
     return state.clone();
