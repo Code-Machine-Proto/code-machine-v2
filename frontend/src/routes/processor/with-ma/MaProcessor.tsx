@@ -1,5 +1,5 @@
 import MaAccumulator from "@src/class/MaAccumulator";
-import { CodeContext, DispatchCodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import VisualWithMa from "@src/components/processor/with-ma/VisualWithMa";
 import HexBox from "@src/components/utils-hex/HexBox";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -11,8 +11,8 @@ import { useOutletContext } from "react-router";
  * @returns Le composant React a affiché
  */
 export default function MaProcessor() {
-    const dispatch = useContext(DispatchCodeContext);
-    const currentStep = useContext(CodeContext).currentStep;
+    const dispatch = useContext(DispatchProcessorContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
     const isProgrammerMode = useOutletContext();
 
     useEffect(() => {

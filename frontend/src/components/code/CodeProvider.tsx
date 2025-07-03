@@ -8,12 +8,12 @@ import { PlayerMode } from "@src/interface/StepControl";
 /**
  * Contexte pour accéder au valeur du code et son état
  */
-export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
+export const ProcessorContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
 
 /**
  * Permets d'obtenir le dispatch pour effectuer des actions
  */
-export const DispatchCodeContext = createContext<DispatchCode>(()=>{});
+export const DispatchProcessorContext = createContext<DispatchCode>(()=>{});
 
 /**
  * Permets au enfant d'utiliser les deux contextes ainsi que de créer le reducer
@@ -40,11 +40,11 @@ export function CodeProvider({ children }: { children: ReactNode }) {
     }, [state.isPlaying, dispatch]);
 
     return(
-        <CodeContext.Provider value={ state } >
-                    <DispatchCodeContext.Provider value={ dispatch } >
+        <ProcessorContext.Provider value={ state } >
+                    <DispatchProcessorContext.Provider value={ dispatch } >
                         { children }
-                    </DispatchCodeContext.Provider>
-        </CodeContext.Provider>
+                    </DispatchProcessorContext.Provider>
+        </ProcessorContext.Provider>
     );
 }
 

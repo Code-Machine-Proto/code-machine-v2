@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { CodeContext, DispatchCodeContext } from "./CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
@@ -11,8 +11,8 @@ import type { ProcessorStep } from "@src/interface/ProcessorStep";
  * @returns L'éditeur de code pour écrire de l'assembleur
  */
 export default function CodeEditor() {
-    const processor = useContext(CodeContext);
-    const dispatch = useContext(DispatchCodeContext);
+    const processor = useContext(ProcessorContext);
+    const dispatch = useContext(DispatchProcessorContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);

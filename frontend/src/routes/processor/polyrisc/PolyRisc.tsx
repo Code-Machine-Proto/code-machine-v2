@@ -1,5 +1,5 @@
 import PolyRisc from "@src/class/PolyRisc";
-import { CodeContext, DispatchCodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import Memory from "@src/components/Memory";
 import VisualPolyRisc from "@src/components/processor/polyrisc/VisualPolyRisc";
 import HexBox from "@src/components/utils-hex/HexBox";
@@ -12,8 +12,8 @@ import { useOutletContext } from "react-router";
  * @returns le composant React a affiché
  */
 export default function PolyRiscProcessor() {
-    const dispatch = useContext(DispatchCodeContext);
-    const currentStep = useContext(CodeContext).currentStep
+    const dispatch = useContext(DispatchProcessorContext);
+    const currentStep = useContext(ProcessorContext).currentStep
     const isProgrammerMode = useOutletContext<boolean>();
 
     const [enableRegister, setEnableRegister] = useState<boolean>(false);

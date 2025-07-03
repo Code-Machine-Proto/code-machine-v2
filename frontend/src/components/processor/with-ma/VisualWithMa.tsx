@@ -1,4 +1,4 @@
-import { CodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import ALU from "@src/components/processor/parts/ALU";
 import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
@@ -12,7 +12,7 @@ import { useContext } from "react";
  * @returns le composant react
  */
 export default function VisualWithMa() {
-    const currentStep = useContext(CodeContext).currentStep;
+    const currentStep = useContext(ProcessorContext).currentStep;
 
     const lineState = currentStep.stimulatedLineState;
 

@@ -1,5 +1,5 @@
 import Accumulator from "@src/class/Accumulator";
-import { CodeContext, DispatchCodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import VisualAccumulator from "@src/components/processor/accumulator/VisualAccumulator";
 import HexBox from "@src/components/utils-hex/HexBox";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -11,8 +11,8 @@ import { useOutletContext } from "react-router";
  * @returns Le composant React du processeur à accumulateur
  */
 export default function AccumulatorProcessor() {
-    const dispatch = useContext(DispatchCodeContext);
-    const currentStep = useContext(CodeContext).currentStep;
+    const dispatch = useContext(DispatchProcessorContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
     const isProgrammerMode = useOutletContext<boolean>();
 
     useEffect(() => { 

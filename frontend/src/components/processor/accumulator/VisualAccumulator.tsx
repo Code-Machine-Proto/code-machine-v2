@@ -3,7 +3,7 @@ import ALU from "@src/components/processor/parts/ALU";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { useContext } from "react";
-import { CodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import Bus from "@src/components/processor/parts/Bus";
 import { LineStateAccumulator } from "@src/interface/Line";
 
@@ -12,7 +12,7 @@ import { LineStateAccumulator } from "@src/interface/Line";
  * @returns le composant react
  */
 export default function VisualAccumulator() {
-    const currentStep = useContext(CodeContext).currentStep;
+    const currentStep = useContext(ProcessorContext).currentStep;
 
     const lineState = currentStep.stimulatedLineState;
 

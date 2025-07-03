@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
-import { CodeContext, DispatchCodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
 import type { ExecutionControlProps } from "@src/interface/props/ExecutionControl";
@@ -12,8 +12,8 @@ import type { ExecutionControlProps } from "@src/interface/props/ExecutionContro
  * @returns le composant React qui affiche la barre de contrôle 
  */
 export default function ExecutionControl({ memoryState :[enableMemory, setEnableMemory], visualSetting: [isVisualMode, setVisualMode] }: ExecutionControlProps) {
-    const dispatch = useContext(DispatchCodeContext);
-    const processor = useContext(CodeContext);
+    const dispatch = useContext(DispatchProcessorContext);
+    const processor = useContext(ProcessorContext);
     const maxStep = processor.steps.length - 1;
 
     return (

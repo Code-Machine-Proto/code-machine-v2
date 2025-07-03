@@ -1,5 +1,5 @@
 import CodeEditor from "@src/components/code/CodeEditor";
-import { CodeContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import ExecutionControl from "@src/components/execution/ExecutionControl";
 import Memory from "@src/components/Memory";
 import { PROCESSOR_ACTIONS } from "@src/constants/Memory";
@@ -11,7 +11,7 @@ import { Outlet } from "react-router";
  * @returns Le composant de la page des processeur
  */
 export default function Processor() {
-    const currentStep = useContext(CodeContext).currentStep;
+    const currentStep = useContext(ProcessorContext).currentStep;
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
     const [isVisualMode, setVisualMode] = useState<boolean>(false);
