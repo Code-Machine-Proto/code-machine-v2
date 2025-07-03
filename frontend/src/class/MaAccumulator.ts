@@ -11,12 +11,6 @@ export default class MaAccumulator extends Processor {
 
     clone(): Processor {
         const processor = new MaAccumulator();
-        processor.code = this.code;
-        processor.lines = this.lines;
-        processor.steps = this.steps;
-        processor.count = this.count;
-        processor.isPlaying = this.isPlaying;
-        processor.mode = this.mode;
-        return processor;
+        return super.clone(processor);
     }
 }

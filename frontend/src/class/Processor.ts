@@ -42,5 +42,13 @@ export default abstract class Processor {
         return this.steps[this.count];
     }
 
-    abstract clone(): Processor;
+    clone(processor: Processor): Processor {
+        processor.code = this.code;
+        processor.lines = this.lines;
+        processor.steps = this.steps;
+        processor.count = this.count;
+        processor.isPlaying = this.isPlaying;
+        processor.mode = this.mode;
+        return processor;
+    }
 }
