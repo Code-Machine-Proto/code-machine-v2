@@ -1,15 +1,3 @@
-import type Processor from "@src/class/Processor";
-import type { ProcessorStep } from "./ProcessorStep";
-import type { StepControl } from "./StepControl";
-
-/**
- * État de la simulation
- */
-export interface SimulationState {
-    codeState: Processor,
-    currentStep: StepControl,
-}
-
 /**
  * Les identifiants de tous le processeurs
  */

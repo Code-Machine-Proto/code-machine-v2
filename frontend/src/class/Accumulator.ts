@@ -13,7 +13,10 @@ export default class Accumulator extends Processor {
         const processor = new Accumulator();
         processor.code = this.code;
         processor.lines = this.lines;
-        processor.executedCode = this.executedCode;
+        processor.steps = this.steps;
+        processor.count = this.count;
+        processor.isPlaying = this.isPlaying;
+        processor.mode = this.mode;
         return processor;
     }
 }

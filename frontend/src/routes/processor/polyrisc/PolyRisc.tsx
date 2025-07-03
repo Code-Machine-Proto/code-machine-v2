@@ -1,5 +1,5 @@
 import PolyRisc from "@src/class/PolyRisc";
-import { CodeContext, DispatchCodeContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, DispatchCodeContext } from "@src/components/code/CodeProvider";
 import Memory from "@src/components/Memory";
 import VisualPolyRisc from "@src/components/processor/polyrisc/VisualPolyRisc";
 import HexBox from "@src/components/utils-hex/HexBox";
@@ -13,8 +13,7 @@ import { useOutletContext } from "react-router";
  */
 export default function PolyRiscProcessor() {
     const dispatch = useContext(DispatchCodeContext);
-    const steps = useContext(CodeContext).steps;
-    const { count } = useContext(StepContext);
+    const currentStep = useContext(CodeContext).currentStep
     const isProgrammerMode = useOutletContext<boolean>();
 
     const [enableRegister, setEnableRegister] = useState<boolean>(false);
@@ -30,10 +29,10 @@ export default function PolyRiscProcessor() {
             <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
                     <div className="bg-[#97fcff] size-min rounded-md">
-                        <HexBox name="IR" number={steps[count].irState} />
+                        <HexBox name="IR" number={currentStep.irState} />
                     </div>
                     <div className="bg-[#abbde5] size-min rounded-md">
-                        <HexBox name="PC" number={steps[count].pcState} />
+                        <HexBox name="PC" number={currentStep.pcState} />
                     </div>
                 </div>
             
@@ -48,13 +47,13 @@ export default function PolyRiscProcessor() {
                 </div>
             </div>
             {
-                enableRegister && steps[count].regState &&
-                <Memory className="bg-yellow-300" memoryContent={ steps[count].regState } nom="Registres" />
+                enableRegister && currentStep.regState &&
+                <Memory className="bg-yellow-300" memoryContent={ currentStep.regState } nom="Registres" />
             }
 
             {
-                enableInstructionMemory && steps[count].imState &&
-                <Memory className="bg-green-700" memoryContent={ steps[count].imState } nom="Mémoire d'instruction" />
+                enableInstructionMemory && currentStep.imState &&
+                <Memory className="bg-green-700" memoryContent={ currentStep.imState } nom="Mémoire d'instruction" />
             }
         </div>
         : <VisualPolyRisc />

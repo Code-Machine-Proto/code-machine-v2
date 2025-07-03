@@ -1,6 +1,7 @@
 import { DEFAULT_EXECUTION_STATE } from "@src/constants/CodeProvider";
 import type { ProcessorId } from "@src/interface/CodeInterface";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
+import { PlayerMode } from "@src/interface/StepControl";
 import { getCode } from "@src/module-store/CodeStore";
 
 /**
@@ -10,13 +11,19 @@ export default abstract class Processor {
     code: string;
     lines: Array<string>;
     processorId: number;
-    executedCode?: Array<ProcessorStep>;
+    steps: Array<ProcessorStep>;
+    count: number;
+    isPlaying: boolean;
+    mode: PlayerMode;
 
     constructor(id: ProcessorId) {
         this.processorId = id;
         this.code = this.getSavedCode();
         this.lines = this.splitLines();
-        this.executedCode = DEFAULT_EXECUTION_STATE;
+        this.steps = DEFAULT_EXECUTION_STATE;
+        this.count = 0;
+        this.isPlaying = false;
+        this.mode = PlayerMode.regular;
     }
 
     splitLines(): Array<string> {
@@ -31,9 +38,9 @@ export default abstract class Processor {
         return code;
     }
 
-    abstract clone(): Processor;
-
-    get steps(): Array<ProcessorStep> {
-        return this.executedCode ? this.executedCode : DEFAULT_EXECUTION_STATE;
+    get currentStep(): ProcessorStep {
+        return this.steps[this.count];
     }
+
+    abstract clone(): Processor;
 }
