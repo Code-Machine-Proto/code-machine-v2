@@ -2,9 +2,8 @@ import Processor from "@src/class/Processor";
 import type { SimulationState } from "@src/interface/CodeInterface";
 import { storeCode } from "@src/module-store/CodeStore";
 import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
+import { DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
-import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import { PlayerMode, type StepControl } from "@src/interface/StepControl";
 
 /**
@@ -18,11 +17,6 @@ export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
 export const DispatchCodeContext = createContext<DispatchCode>(()=>{});
 
 /**
- * Contexte de l'exécution du code en cours
- */
-export const ExecutionContext = createContext<Array<ProcessorStep>>(DEFAULT_EXECUTION_STATE);
-
-/**
  * Étape courante de l'exécution
  */
 export const StepContext = createContext<StepControl>(DEFAULT_STEP_CONTROL);
@@ -33,7 +27,7 @@ export const StepContext = createContext<StepControl>(DEFAULT_STEP_CONTROL);
  * @returns l'élément qui distribue les deux contextes
  */
 export function CodeProvider({ children }: { children: ReactNode }) {
-    const [ state, dispatch ] = useReducer(codeReducer, { codeState: DEFAULT_SOURCE_CODE, executionState: DEFAULT_EXECUTION_STATE, currentStep: DEFAULT_STEP_CONTROL });
+    const [ state, dispatch ] = useReducer(codeReducer, { codeState: DEFAULT_SOURCE_CODE, currentStep: DEFAULT_STEP_CONTROL });
 
     const playingRef = useRef<boolean>(state.currentStep.isPlaying);
 
@@ -54,11 +48,9 @@ export function CodeProvider({ children }: { children: ReactNode }) {
     return(
         <CodeContext.Provider value={ state.codeState } >
             <StepContext value={ state.currentStep } >
-                <ExecutionContext.Provider value={ state.executionState } >
                     <DispatchCodeContext.Provider value={ dispatch } >
                         { children }
                     </DispatchCodeContext.Provider>
-                </ExecutionContext.Provider>
             </StepContext>
         </CodeContext.Provider>
     );
@@ -99,7 +91,9 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
 function changeCode(state: SimulationState, action: CodePayload): SimulationState {
     if (action.code === "" || action.code) {
         storeCode(state.codeState.processorId, action.code);
-        return { ...state, codeState: { ...state.codeState, code: action.code, lines: action.code.split("\n") } as Processor };
+        state.codeState.code = action.code;
+        state.codeState.lines = state.codeState.splitLines();
+        return { ...state, codeState: state.codeState.clone() };
     }
     return { ...state };
 }
@@ -124,7 +118,7 @@ function changeProcessor(state: SimulationState, action: CodePayload): Simulatio
  */
 function forward(state: SimulationState): SimulationState {
     const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
-    if ( state.currentStep.count + inc < state.executionState.length ) {
+    if ( state.codeState.executedCode &&  state.currentStep.count + inc < state.codeState.executedCode.length  ) {
         return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count + inc } };
     }
     return { ... state };
@@ -160,7 +154,9 @@ function toStart(state: SimulationState): SimulationState {
  */
 function toEnd(state: SimulationState): SimulationState {
     const end = state.currentStep.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
-    return { ...state, currentStep: { ...state.currentStep, count: state.executionState.length - end } };
+    const length = state.codeState.executedCode?.length;
+
+    return { ...state, currentStep: { ...state.currentStep, count: ( length ? length : 0 ) - end } };
 }
 
 /**
@@ -170,10 +166,8 @@ function toEnd(state: SimulationState): SimulationState {
  * @returns le prochain état
  */
 function changeExecutedCode(state: SimulationState, action: CodePayload): SimulationState {
-    if ( action.executedCode ) {
-        return { ...state, executionState: action.executedCode };
-    }
-    return { ...state };
+    state.codeState.executedCode = action.executedCode;
+    return { ...state, codeState: state.codeState.clone() };
 }
 
 /**

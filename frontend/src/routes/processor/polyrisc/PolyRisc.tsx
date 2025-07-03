@@ -1,5 +1,5 @@
 import PolyRisc from "@src/class/PolyRisc";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, DispatchCodeContext, StepContext } from "@src/components/code/CodeProvider";
 import Memory from "@src/components/Memory";
 import VisualPolyRisc from "@src/components/processor/polyrisc/VisualPolyRisc";
 import HexBox from "@src/components/utils-hex/HexBox";
@@ -13,7 +13,7 @@ import { useOutletContext } from "react-router";
  */
 export default function PolyRiscProcessor() {
     const dispatch = useContext(DispatchCodeContext);
-    const steps = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 

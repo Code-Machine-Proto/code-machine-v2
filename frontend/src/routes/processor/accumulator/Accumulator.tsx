@@ -1,5 +1,5 @@
 import Accumulator from "@src/class/Accumulator";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, DispatchCodeContext, StepContext } from "@src/components/code/CodeProvider";
 import VisualAccumulator from "@src/components/processor/accumulator/VisualAccumulator";
 import HexBox from "@src/components/utils-hex/HexBox";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -12,7 +12,7 @@ import { useOutletContext } from "react-router";
  */
 export default function AccumulatorProcessor() {
     const dispatch = useContext(DispatchCodeContext);
-    const steps = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext<boolean>();
 

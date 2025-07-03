@@ -5,9 +5,15 @@ import Processor from "./Processor";
  * La classe représentant l'état courant de l'accumulateur
  */
 export default class Accumulator extends Processor {
-    defaultCode = "";
-
     constructor() {
         super(ProcessorId.ACCUMULATOR);
+    }
+
+    clone(): Processor {
+        const processor = new Accumulator();
+        processor.code = this.code;
+        processor.lines = this.lines;
+        processor.executedCode = this.executedCode;
+        return processor;
     }
 }

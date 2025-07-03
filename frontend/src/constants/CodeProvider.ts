@@ -12,6 +12,8 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     stimulatedMemory: 0,
     instructionState: 0,
     memoryState: [0],
+    regState: [0],
+    imState: [0],
     stimulatedLineState: -1,
 }];
 
@@ -22,6 +24,10 @@ export const DEFAULT_SOURCE_CODE = {
     code: "",
     lines: [""],
     processorId: ProcessorId.ACCUMULATOR,
+    executedCode: DEFAULT_EXECUTION_STATE,
+    get steps(): Array<ProcessorStep> {
+        return this.executedCode ? this.executedCode : DEFAULT_EXECUTION_STATE;
+    },
  } as Processor;
 
 /**

@@ -1,4 +1,4 @@
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, StepContext } from "@src/components/code/CodeProvider";
 import ALU from "@src/components/processor/parts/ALU";
 import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
@@ -12,7 +12,7 @@ import { useContext } from "react";
  * @returns le composant react
  */
 export default function VisualWithMa() {
-    const steps = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
 
     const lineState = steps[count].stimulatedLineState;

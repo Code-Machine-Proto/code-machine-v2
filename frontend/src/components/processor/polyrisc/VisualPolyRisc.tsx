@@ -4,7 +4,7 @@ import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import Bus from "@src/components/processor/parts/Bus";
 import { useContext } from "react";
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, StepContext } from "@src/components/code/CodeProvider";
 import { LineStatePolyRisc } from "@src/interface/Line";
 
 /**
@@ -12,7 +12,7 @@ import { LineStatePolyRisc } from "@src/interface/Line";
  * @returns le composant react
  */
 export default function VisualPolyRisc() {
-    const steps = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
 
     const lineState = steps[count].stimulatedLineState;

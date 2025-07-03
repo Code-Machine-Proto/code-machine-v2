@@ -7,7 +7,6 @@ import type { StepControl } from "./StepControl";
  */
 export interface SimulationState {
     codeState: Processor,
-    executionState: Array<ProcessorStep>,
     currentStep: StepControl,
 }
 

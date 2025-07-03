@@ -1,5 +1,5 @@
 import MaAccumulator from "@src/class/MaAccumulator";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, DispatchCodeContext, StepContext } from "@src/components/code/CodeProvider";
 import VisualWithMa from "@src/components/processor/with-ma/VisualWithMa";
 import HexBox from "@src/components/utils-hex/HexBox";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -12,7 +12,7 @@ import { useOutletContext } from "react-router";
  */
 export default function MaProcessor() {
     const dispatch = useContext(DispatchCodeContext);
-    const steps = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
     const isProgrammerMode = useOutletContext();
 

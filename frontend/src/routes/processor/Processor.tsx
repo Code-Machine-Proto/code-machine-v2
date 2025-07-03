@@ -1,5 +1,5 @@
 import CodeEditor from "@src/components/code/CodeEditor";
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, StepContext } from "@src/components/code/CodeProvider";
 import ExecutionControl from "@src/components/execution/ExecutionControl";
 import Memory from "@src/components/Memory";
 import { PROCESSOR_ACTIONS } from "@src/constants/Memory";
@@ -11,7 +11,7 @@ import { Outlet } from "react-router";
  * @returns Le composant de la page des processeur
  */
 export default function Processor() {
-    const execution = useContext(ExecutionContext);
+    const steps = useContext(CodeContext).steps;
     const { count } = useContext(StepContext);
 
     const [enableMemory, setEnableMemory] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export default function Processor() {
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
                         <ExecutionControl memoryState={[ enableMemory, setEnableMemory]} visualSetting={[isVisualMode, setVisualMode]} />
                         <p className="bg-white w-fit p-3 rounded-md">
-                                { PROCESSOR_ACTIONS[execution[count].instructionState] }
+                                { PROCESSOR_ACTIONS[steps[count].instructionState] }
                         </p>
                         <div className=" flex grow gap-5">
                             <Outlet context={isVisualMode} />
@@ -31,8 +31,8 @@ export default function Processor() {
                             enableMemory &&
                             <Memory 
                                 className="bg-green-500"
-                                memoryContent={execution[count].memoryState}
-                                stimulatedCell={execution[count].stimulatedMemory}
+                                memoryContent={steps[count].memoryState}
+                                stimulatedCell={steps[count].stimulatedMemory}
                                 nom="Mémoire principale"
                             />
                             }

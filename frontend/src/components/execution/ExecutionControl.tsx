@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { CodeContext, DispatchCodeContext, StepContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
 import type { ExecutionControlProps } from "@src/interface/props/ExecutionControl";
@@ -14,7 +14,7 @@ import type { ExecutionControlProps } from "@src/interface/props/ExecutionContro
 export default function ExecutionControl({ memoryState :[enableMemory, setEnableMemory], visualSetting: [isVisualMode, setVisualMode] }: ExecutionControlProps) {
     const dispatch = useContext(DispatchCodeContext);
     const { count, isPlaying } = useContext(StepContext);
-    const maxStep = useContext(ExecutionContext).length - 1;
+    const maxStep = useContext(CodeContext).steps.length - 1;
 
     return (
         <div className="flex h-[4rem] items-center gap-5"> 
