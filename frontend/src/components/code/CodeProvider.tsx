@@ -198,7 +198,7 @@ function changeMode(state: Processor, action: CodePayload): Processor {
     return state.clone();
 }
 
-function resetExecutionState(state: Processor, action: CodePayload): Processor {
+function resetExecutionState(state: Processor): Processor {
     state.mode = PlayerMode.regular;
     state.count = 0;
     state.isPlaying = false;
