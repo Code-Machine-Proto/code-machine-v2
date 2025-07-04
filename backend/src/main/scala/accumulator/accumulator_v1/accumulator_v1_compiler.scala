@@ -9,12 +9,12 @@ import scala.reflect.ClassTag
 object accumulator_v1_compiler {
   object opcode {
     val add = 0
-    val stop= 1
+    val sub = 1
     val mul = 2
     val st  = 3
     val ld  = 4
-    val nop = 5
-    val startup = 6
+    val stop= 5
+    val nop = 6
     val br  = 7
     val brz = 8
     val brnz= 9
@@ -42,7 +42,7 @@ object accumulator_v1_compiler {
   var values = Map[String, Array[Int]]()
   var labelsValuesLengths = Map[String, Int]()
 
-  val opcodeMap = Map("add" -> 0, "mul" -> 1, "st" -> 2, "ld" -> 3, "stop" -> 4, "nop" -> 5, "br" -> 6, "brz" -> 7, "brnz"-> 8)
+  val opcodeMap = Map("add" -> 0,"sub" -> 1, "mul" -> 2, "st" -> 3, "ld" -> 4, "stop" -> 5, "nop" -> 6, "br" -> 7, "brz" -> 8, "brnz"-> 9)
 
 
   val add :: mul :: st :: ld :: stop :: nop :: br :: brz :: brnz :: Nil = Enum(9)
@@ -474,15 +474,11 @@ object accumulator_v1_compiler {
     } else if(state == instructionState.decode) {
       lineState = lineStates.dec
     } else if(state == instructionState.execute){
-      if (instruction == opcode.nop) {lineState = lineStates.nop_ex}
-        else if(instruction == opcode.add || instruction == opcode.mul) {lineState = lineStates.add_mul_ex}
+      if (instruction == opcode.nop || (instruction == opcode.brz && accValue != 0) || (instruction == opcode.brnz && accValue == 0)) {lineState = lineStates.nop_ex}
+        else if(instruction == opcode.add || instruction == opcode.mul || instruction == opcode.sub) {lineState = lineStates.add_mul_ex}
         else if(instruction == opcode.ld) {lineState = lineStates.ld_ex}
         else if (instruction == opcode.st) {lineState = lineStates.st_ex}
-        else if((instruction == opcode.br 
-          || (instruction == opcode.brz && accValue == 0 ) 
-          || instruction == opcode.brnz && accValue != 0 )) 
-          
-        {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
+        else if(instruction == opcode.br || instruction == opcode.brz  || instruction == opcode.brnz ) {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
     }
     lineState
   }
