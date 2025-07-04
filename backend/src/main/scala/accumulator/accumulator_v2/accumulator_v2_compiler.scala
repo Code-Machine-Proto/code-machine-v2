@@ -389,7 +389,7 @@ object accumulator_v2_compiler {
     } else if(state == instructionState.decode) {
       lineState = lineStates.dec
     } else if(state == instructionState.execute){
-        if (instruction == opcode.nop) {lineState = lineStates.nop}
+        if (instruction == opcode.nop || (instruction == opcode.brz && accValue != 0) || (instruction == opcode.brnz && accValue == 0)) {lineState = lineStates.nop}
         else if(instruction == opcode.add || instruction == opcode.sub || instruction == opcode.mul) {lineState = lineStates.add_sub_mul_ex}
         else if (instruction == opcode.adda || instruction == opcode.suba) {lineState = lineStates.adda_suba_ex}
         else if (instruction == opcode.addx || instruction == opcode.subx) {lineState = lineStates.addx_subx_ex}
@@ -400,9 +400,9 @@ object accumulator_v2_compiler {
         else if(instruction == opcode.sta) {lineState = lineStates.sta_ex}
         else if(instruction == opcode.sti) {lineState = lineStates.sti_ex}
         else if(instruction == opcode.shl || instruction == opcode.shr) {lineState = lineStates.sh_ex}
-        else if((instruction == opcode.br 
-          || (instruction == opcode.brz && accValue == 0 ) 
-          || instruction == opcode.brnz && accValue != 0 )) 
+        else if(instruction == opcode.br 
+          || instruction == opcode.brz
+          || instruction == opcode.brnz) 
         {lineState = lineStates.branching_ex} // Verifier si y'a vraiment un branchement
     }
     lineState

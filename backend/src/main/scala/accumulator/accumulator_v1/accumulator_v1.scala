@@ -64,7 +64,7 @@ class accumulator_v1(internalMemoryContent:Array[UInt]) extends Module {
       State := execute
 
       // Could be refactored but the when condition would be too complicated for maintenance purpose...
-      when(IR.op === add || IR.op === mul || IR.op === st || IR.op === ld){
+      when(IR.op === add || IR.op === mul || IR.op === sub || IR.op === st || IR.op === ld){
         StimulatedMemoryCell := IR.addr
       }
       when(IR.op === br || IR.op === brz || IR.op === brnz){
@@ -73,24 +73,6 @@ class accumulator_v1(internalMemoryContent:Array[UInt]) extends Module {
       // stop and nop OP wont imply any memory access
       when(IR.op === stop || IR.op === nop){
         StimulatedMemoryCell := 0.U
-      }
-
-      when(IR.op === add){
-        ACC := ACC + InternalMemory(IR.addr).asSInt()
-      }
-      when(IR.op === mul){
-        ACC := ACC * InternalMemory(IR.addr).asSInt()
-      }
-      when(IR.op === sub){
-        ACC := ACC - InternalMemory(IR.addr).asSInt()
-      }
-
-      when(IR.op === st){
-        InternalMemory(IR.addr) := ACC.asUInt()
-      }
-
-      when(IR.op === ld){
-        ACC := InternalMemory(IR.addr).asSInt()
       }
     }
 
@@ -116,6 +98,24 @@ class accumulator_v1(internalMemoryContent:Array[UInt]) extends Module {
         PC := IR.addr
 //        IR.addr := getAddress(InternalMemory(IR.addr))
 //        IR.op := getOpcode(InternalMemory(IR.addr))
+      }
+
+      when(IR.op === add){
+        ACC := ACC + InternalMemory(IR.addr).asSInt()
+      }
+      when(IR.op === mul){
+        ACC := ACC * InternalMemory(IR.addr).asSInt()
+      }
+      when(IR.op === sub){
+        ACC := ACC - InternalMemory(IR.addr).asSInt()
+      }
+
+      when(IR.op === st){
+        InternalMemory(IR.addr) := ACC.asUInt()
+      }
+
+      when(IR.op === ld){
+        ACC := InternalMemory(IR.addr).asSInt()
       }
 
       StimulatedMemoryCell := 0.U
