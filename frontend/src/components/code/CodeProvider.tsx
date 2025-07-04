@@ -1,7 +1,17 @@
 import Processor from "@src/class/Processor";
 import { storeCode } from "@src/module-store/CodeStore";
 import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
-import { DEFAULT_SOURCE_CODE, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
+import { 
+    DEFAULT_SOURCE_CODE,
+    EXECUTION_END,
+    EXECUTION_START,
+    INCREMENT_SIZE_EXECUTION,
+    INCREMENT_SIZE_REGULAR,
+    PLAY_INTERVALL,
+    REGULAR_END,
+    REGULAR_START,
+    DEFAULT_EXECUTION_STATE,
+} from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
 
@@ -58,6 +68,7 @@ actionMap.set(CodeAction.TO_END, toEnd);
 actionMap.set(CodeAction.CHANGE_EXECUTED_CODE, changeExecutedCode);
 actionMap.set(CodeAction.PLAY_AND_PAUSE, playAndPause);
 actionMap.set(CodeAction.CHANGE_MODE, changeMode);
+actionMap.set(CodeAction.RESET_CODE, resetExecutionState);
 
 /**
  * Associe le type d'action avec la bonne fonction pour mettre à jour l'état
@@ -184,5 +195,13 @@ function changeMode(state: Processor, action: CodePayload): Processor {
         state.mode = action.mode;
         state.count = action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
     }
+    return state.clone();
+}
+
+function resetExecutionState(state: Processor, action: CodePayload): Processor {
+    state.mode = PlayerMode.regular;
+    state.count = 0;
+    state.isPlaying = false;
+    state.steps = DEFAULT_EXECUTION_STATE;
     return state.clone();
 }

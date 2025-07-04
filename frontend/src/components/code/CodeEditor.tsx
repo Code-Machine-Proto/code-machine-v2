@@ -56,7 +56,8 @@ export default function CodeEditor() {
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
                 onClick={() => {
-                    fetcher.submit({ processor: JSON.stringify(processor)   }, { method: "POST", action: "/processor"})
+		    dispatch({ type: CodeAction.RESET_CODE });
+                    fetcher.submit({ processor: JSON.stringify(processor)   }, { method: "POST", action: "/processor"});
                 }}
             >
                 Compiler

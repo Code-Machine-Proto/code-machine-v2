@@ -22,6 +22,7 @@ export enum CodeAction {
     CHANGE_EXECUTED_CODE,
     PLAY_AND_PAUSE,
     CHANGE_MODE,
+    RESET_CODE,
 };
 
 /**
