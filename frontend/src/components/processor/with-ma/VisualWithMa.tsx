@@ -1,4 +1,4 @@
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import ALU from "@src/components/processor/parts/ALU";
 import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
@@ -12,10 +12,9 @@ import { useContext } from "react";
  * @returns le composant react
  */
 export default function VisualWithMa() {
-    const steps = useContext(ExecutionContext);
-    const { count } = useContext(StepContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
 
-    const lineState = steps[count].stimulatedLineState;
+    const lineState = currentStep.stimulatedLineState;
 
     const fetch = lineState == LineStateMa.fetch;
     const decode = lineState == LineStateMa.decode;
@@ -306,18 +305,18 @@ export default function VisualWithMa() {
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>            
 
-            <RegisterBox name="PC" number={steps[count].pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
-            <RegisterBox name="IR" number={steps[count].irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
+            <RegisterBox name="PC" number={currentStep.pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
+            <RegisterBox name="IR" number={currentStep.irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
             <RegisterBox 
                 name="ACC"
-                number={steps[count].accState ? steps[count].accState : 0}
+                number={currentStep.accState ? currentStep.accState : 0}
                 x={1005}
                 y={87}
                 className="bg-acc" defaultIsBase10={true} isActivated={ addSubMul || load || loadI || addSubX || sh }
             />
             <RegisterBox
                 name="MA"
-                number={steps[count].ma ? steps[count].ma : 0}
+                number={currentStep.ma ? currentStep.ma : 0}
                 x={1005}
                 y={225}
                 className="bg-ma"

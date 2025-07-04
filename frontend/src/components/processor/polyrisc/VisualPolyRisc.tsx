@@ -4,7 +4,7 @@ import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import Bus from "@src/components/processor/parts/Bus";
 import { useContext } from "react";
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import { LineStatePolyRisc } from "@src/interface/Line";
 
 /**
@@ -12,10 +12,9 @@ import { LineStatePolyRisc } from "@src/interface/Line";
  * @returns le composant react
  */
 export default function VisualPolyRisc() {
-    const steps = useContext(ExecutionContext);
-    const { count } = useContext(StepContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
 
-    const lineState = steps[count].stimulatedLineState;
+    const lineState = currentStep.stimulatedLineState;
 
     const fetch = lineState == LineStatePolyRisc.fetch;
     const decode = lineState == LineStatePolyRisc.decode;
@@ -285,8 +284,8 @@ export default function VisualPolyRisc() {
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" className="bg-pc" number={steps[count].pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
-            <RegisterBox name="IR" className="bg-ir" number={steps[count].irState} x={467.5} y={137.5} isActivated={ fetch } />
+            <RegisterBox name="PC" className="bg-pc" number={currentStep.pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
+            <RegisterBox name="IR" className="bg-ir" number={currentStep.irState} x={467.5} y={137.5} isActivated={ fetch } />
 
             <circle cx="282" cy="170" r="5" className={ fetch || nop ? "fill-red-500" : "fill-white" } />
             <circle cx="616" cy="170" r="5" className={ opTwoReg || opThreeReg || branching || load || store || loadI ? "fill-red-500" : "fill-white" } />

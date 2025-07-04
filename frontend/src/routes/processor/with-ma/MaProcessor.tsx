@@ -1,5 +1,5 @@
 import MaAccumulator from "@src/class/MaAccumulator";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import VisualWithMa from "@src/components/processor/with-ma/VisualWithMa";
 import HexBox from "@src/components/utils-hex/HexBox";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -11,9 +11,8 @@ import { useOutletContext } from "react-router";
  * @returns Le composant React a affiché
  */
 export default function MaProcessor() {
-    const dispatch = useContext(DispatchCodeContext);
-    const steps = useContext(ExecutionContext);
-    const { count } = useContext(StepContext);
+    const dispatch = useContext(DispatchProcessorContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
     const isProgrammerMode = useOutletContext();
 
     useEffect(() => {
@@ -24,16 +23,16 @@ export default function MaProcessor() {
         isProgrammerMode ?
         <div className="flex gap-3">
             <div className="bg-ir size-min rounded-md">
-                <HexBox name="IR" number={steps[count].irState} />
+                <HexBox name="IR" number={currentStep.irState} />
             </div>
             <div className="bg-pc size-min rounded-md">
-                <HexBox name="PC" number={steps[count].pcState} />
+                <HexBox name="PC" number={currentStep.pcState} />
             </div>
             <div className="bg-ma size-min rounded-md">
-                <HexBox name="MA" number={steps[count].ma ? steps[count].ma : 0} />
+                <HexBox name="MA" number={currentStep.ma ? currentStep.ma : 0} />
             </div>
             <div className="bg-acc size-min rounded-md">
-                <HexBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} defaultIsBase10={true} />
+                <HexBox name="ACC" number={currentStep.accState ? currentStep.accState : 0} defaultIsBase10={true} />
             </div>
         </div>
         :
