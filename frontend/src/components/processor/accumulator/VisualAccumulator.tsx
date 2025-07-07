@@ -3,7 +3,7 @@ import ALU from "@src/components/processor/parts/ALU";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
 import { useContext } from "react";
-import { ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext } from "@src/components/code/CodeProvider";
 import Bus from "@src/components/processor/parts/Bus";
 import { LineStateAccumulator } from "@src/interface/Line";
 
@@ -12,10 +12,9 @@ import { LineStateAccumulator } from "@src/interface/Line";
  * @returns le composant react
  */
 export default function VisualAccumulator() {
-    const steps = useContext(ExecutionContext);
-    const { count } = useContext(StepContext);
+    const currentStep = useContext(ProcessorContext).currentStep;
 
-    const lineState = steps[count].stimulatedLineState;
+    const lineState = currentStep.stimulatedLineState;
 
     const fetch = lineState == LineStateAccumulator.fetch;
     const decode = lineState == LineStateAccumulator.decode;
@@ -180,9 +179,9 @@ export default function VisualAccumulator() {
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" number={steps[count].pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
-            <RegisterBox name="IR" number={steps[count].irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
-            <RegisterBox name="ACC" number={steps[count].accState ? steps[count].accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
+            <RegisterBox name="PC" number={currentStep.pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
+            <RegisterBox name="IR" number={currentStep.irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
+            <RegisterBox name="ACC" number={currentStep.accState ? currentStep.accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
 
             <circle cx="277" cy="137" r="5" className={ fetch || inc ? "fill-red-500" : "fill-white" } />
             <circle cx="270" cy="370" r="5" className={ branching || decode ? "fill-red-500" : "fill-white" } />

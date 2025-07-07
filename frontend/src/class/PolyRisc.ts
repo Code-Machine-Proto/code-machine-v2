@@ -5,9 +5,12 @@ import Processor from "./Processor";
  * Classe représentant l'état du processeur PolyRisc
  */
 export default class PolyRisc extends Processor {
-    defaultCode = "";
-
     constructor() {
         super(ProcessorId.RISC);
+    }
+
+    clone(): Processor {
+        const processor = new PolyRisc();
+        return super.clone(processor);
     }
 }

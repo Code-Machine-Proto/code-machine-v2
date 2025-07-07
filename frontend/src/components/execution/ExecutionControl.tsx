@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ExecutionButton from "./ExecutionButton";
-import { DispatchCodeContext, ExecutionContext, StepContext } from "@src/components/code/CodeProvider";
+import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
 import type { ExecutionControlProps } from "@src/interface/props/ExecutionControl";
@@ -12,9 +12,9 @@ import type { ExecutionControlProps } from "@src/interface/props/ExecutionContro
  * @returns le composant React qui affiche la barre de contrôle 
  */
 export default function ExecutionControl({ memoryState :[enableMemory, setEnableMemory], visualSetting: [isVisualMode, setVisualMode] }: ExecutionControlProps) {
-    const dispatch = useContext(DispatchCodeContext);
-    const { count, isPlaying } = useContext(StepContext);
-    const maxStep = useContext(ExecutionContext).length - 1;
+    const dispatch = useContext(DispatchProcessorContext);
+    const processor = useContext(ProcessorContext);
+    const maxStep = processor.steps.length - 1;
 
     return (
         <div className="flex h-[4rem] items-center gap-5"> 
@@ -34,7 +34,7 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
                 </ExecutionButton>
                 <ExecutionButton onClick={() => dispatch({ type: CodeAction.PLAY_AND_PAUSE })}>
                     {
-                    isPlaying ?
+                    processor.isPlaying ?
                     <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /> :
                     <path d="M8 5v14l11-7z" />
                     }
@@ -48,7 +48,7 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
             </div>
             
             <div className="flex text-white items-center">
-                <input type="number" disabled className="outline-none bg-slate-800 rounded-md p-2 w-[4rem] text-right" value={count} min={0} max={maxStep}/>
+                <input type="number" disabled className="outline-none bg-slate-800 rounded-md p-2 w-[4rem] text-right" value={processor.count} min={0} max={maxStep}/>
                 <p>/{ maxStep }</p>
             </div>
             <div className="flex items-center gap-1">

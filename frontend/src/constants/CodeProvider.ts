@@ -1,7 +1,7 @@
 import type Processor from "@src/class/Processor";
 import { ProcessorId } from "@src/interface/CodeInterface";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
-import { PlayerMode, type StepControl } from "@src/interface/StepControl";
+import { PlayerMode } from "@src/interface/StepControl";
 
 /**
  * État d'exécution par défaut
@@ -17,23 +17,25 @@ export const DEFAULT_EXECUTION_STATE: Array<ProcessorStep> = [{
     stimulatedLineState: -1,
 }];
 
+
 /**
  * Code source par défaut pour l'initialisation
  */
 export const DEFAULT_SOURCE_CODE = {
     code: "",
     lines: [""],
-    processorId: ProcessorId.ACCUMULATOR,
- } as Processor;
-
-/**
- * État courant d'exécution par défaut
- */
-export const DEFAULT_STEP_CONTROL: StepControl = {
+    processorId: ProcessorId.ERROR,
+    steps: DEFAULT_EXECUTION_STATE,
     count: 0,
     isPlaying: false,
     mode: PlayerMode.regular,
-};
+    currentStep: DEFAULT_EXECUTION_STATE[0],
+    splitLines: () =>  [""],
+    getSavedCode: () => "",
+    clone() {
+        return this;
+    },
+} as Processor;
 
 /**
  * Intervalle entre chaque incrément

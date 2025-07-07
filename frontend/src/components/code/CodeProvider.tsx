@@ -1,31 +1,29 @@
 import Processor from "@src/class/Processor";
-import type { SimulationState } from "@src/interface/CodeInterface";
 import { storeCode } from "@src/module-store/CodeStore";
 import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
-import { DEFAULT_EXECUTION_STATE, DEFAULT_SOURCE_CODE, DEFAULT_STEP_CONTROL, EXECUTION_END, EXECUTION_START, INCREMENT_SIZE_EXECUTION, INCREMENT_SIZE_REGULAR, PLAY_INTERVALL, REGULAR_END, REGULAR_START } from "@src/constants/CodeProvider";
+import { 
+    DEFAULT_SOURCE_CODE,
+    EXECUTION_END,
+    EXECUTION_START,
+    INCREMENT_SIZE_EXECUTION,
+    INCREMENT_SIZE_REGULAR,
+    PLAY_INTERVALL,
+    REGULAR_END,
+    REGULAR_START,
+    DEFAULT_EXECUTION_STATE,
+} from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
-import type { ProcessorStep } from "@src/interface/ProcessorStep";
-import { PlayerMode, type StepControl } from "@src/interface/StepControl";
+import { PlayerMode } from "@src/interface/StepControl";
 
 /**
  * Contexte pour accéder au valeur du code et son état
  */
-export const CodeContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
+export const ProcessorContext = createContext<Processor>(DEFAULT_SOURCE_CODE);
 
 /**
  * Permets d'obtenir le dispatch pour effectuer des actions
  */
-export const DispatchCodeContext = createContext<DispatchCode>(()=>{});
-
-/**
- * Contexte de l'exécution du code en cours
- */
-export const ExecutionContext = createContext<Array<ProcessorStep>>(DEFAULT_EXECUTION_STATE);
-
-/**
- * Étape courante de l'exécution
- */
-export const StepContext = createContext<StepControl>(DEFAULT_STEP_CONTROL);
+export const DispatchProcessorContext = createContext<DispatchCode>(()=>{});
 
 /**
  * Permets au enfant d'utiliser les deux contextes ainsi que de créer le reducer
@@ -33,9 +31,9 @@ export const StepContext = createContext<StepControl>(DEFAULT_STEP_CONTROL);
  * @returns l'élément qui distribue les deux contextes
  */
 export function CodeProvider({ children }: { children: ReactNode }) {
-    const [ state, dispatch ] = useReducer(codeReducer, { codeState: DEFAULT_SOURCE_CODE, executionState: DEFAULT_EXECUTION_STATE, currentStep: DEFAULT_STEP_CONTROL });
+    const [ state, dispatch ] = useReducer(codeReducer, DEFAULT_SOURCE_CODE);
 
-    const playingRef = useRef<boolean>(state.currentStep.isPlaying);
+    const playingRef = useRef<boolean>(state.isPlaying);
 
     function callNext() {
         if( playingRef.current ) {
@@ -45,22 +43,18 @@ export function CodeProvider({ children }: { children: ReactNode }) {
     }
 
     useEffect(() => {
-        playingRef.current = state.currentStep.isPlaying;
-        if ( state.currentStep.isPlaying ) {
+        playingRef.current = state.isPlaying;
+        if ( state.isPlaying ) {
             setTimeout(callNext, PLAY_INTERVALL);
         }
-    }, [state.currentStep.isPlaying, dispatch]);
+    }, [state.isPlaying, dispatch]);
 
     return(
-        <CodeContext.Provider value={ state.codeState } >
-            <StepContext value={ state.currentStep } >
-                <ExecutionContext.Provider value={ state.executionState } >
-                    <DispatchCodeContext.Provider value={ dispatch } >
+        <ProcessorContext.Provider value={ state } >
+                    <DispatchProcessorContext.Provider value={ dispatch } >
                         { children }
-                    </DispatchCodeContext.Provider>
-                </ExecutionContext.Provider>
-            </StepContext>
-        </CodeContext.Provider>
+                    </DispatchProcessorContext.Provider>
+        </ProcessorContext.Provider>
     );
 }
 
@@ -74,6 +68,7 @@ actionMap.set(CodeAction.TO_END, toEnd);
 actionMap.set(CodeAction.CHANGE_EXECUTED_CODE, changeExecutedCode);
 actionMap.set(CodeAction.PLAY_AND_PAUSE, playAndPause);
 actionMap.set(CodeAction.CHANGE_MODE, changeMode);
+actionMap.set(CodeAction.RESET_CODE, resetExecutionState);
 
 /**
  * Associe le type d'action avec la bonne fonction pour mettre à jour l'état
@@ -82,7 +77,7 @@ actionMap.set(CodeAction.CHANGE_MODE, changeMode);
  * @param action - Action à prendre par la logique de code
  * @returns Le prochain état
  */
-function codeReducer(state: SimulationState, action: CodePayload): SimulationState {
+function codeReducer(state: Processor, action: CodePayload): Processor {
     const actionFunction = actionMap.get(action.type);
     if (actionFunction) {
         return actionFunction(state, action);
@@ -96,12 +91,13 @@ function codeReducer(state: SimulationState, action: CodePayload): SimulationSta
  * @param action Entrée pour permettre de changer le code
  * @returns le prochain état
  */
-function changeCode(state: SimulationState, action: CodePayload): SimulationState {
+function changeCode(state: Processor, action: CodePayload): Processor {
     if (action.code === "" || action.code) {
-        storeCode(state.codeState.processorId, action.code);
-        return { ...state, codeState: { ...state.codeState, code: action.code, lines: action.code.split("\n") } as Processor };
+        storeCode(state.processorId, action.code);
+        state.code = action.code;
+        state.lines = state.splitLines();
     }
-    return { ...state };
+    return state.clone();
 }
 
 /**
@@ -110,11 +106,11 @@ function changeCode(state: SimulationState, action: CodePayload): SimulationStat
  * @param action Entrée permettant de changer vers le bon processeur
  * @returns le prochain état
  */
-function changeProcessor(state: SimulationState, action: CodePayload): SimulationState {
-    if (action.newProcessor) {
-        return { ...state, codeState: action.newProcessor };
+function changeProcessor(state: Processor, action: CodePayload): Processor {
+    if ( action.newProcessor && action.newProcessor.processorId != state.processorId ) {
+        return action.newProcessor.clone();
     }
-    return { ...state };
+    return state.clone();
 }
 
 /**
@@ -122,12 +118,12 @@ function changeProcessor(state: SimulationState, action: CodePayload): Simulatio
  * @param state État courant
  * @returns le prochain état 
  */
-function forward(state: SimulationState): SimulationState {
-    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
-    if ( state.currentStep.count + inc < state.executionState.length ) {
-        return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count + inc } };
+function forward(state: Processor): Processor {
+    const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
+    if ( state.steps &&  state.count + inc < state.steps.length  ) {
+        state.count += inc;
     }
-    return { ... state };
+    return state.clone();
 }
 
 /**
@@ -135,12 +131,12 @@ function forward(state: SimulationState): SimulationState {
  * @param state état courant
  * @returns le prochain état
  */
-function backward(state: SimulationState): SimulationState {
-    const inc = state.currentStep.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
-    if ( state.currentStep.count - inc >= 0 ) {
-        return { ...state, currentStep: { ...state.currentStep, count: state.currentStep.count - inc } };
+function backward(state: Processor): Processor {
+    const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
+    if ( state.count - inc >= 0 ) {
+        state.count -= inc;
     }
-    return { ...state };
+    return state.clone();
 }
 
 /**
@@ -148,9 +144,10 @@ function backward(state: SimulationState): SimulationState {
  * @param state l'état courant
  * @returns le prochain état
  */
-function toStart(state: SimulationState): SimulationState {
-    const start = state.currentStep.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
-    return { ...state, currentStep: { ...state.currentStep, count: start } };
+function toStart(state: Processor): Processor {
+    const start = state.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
+    state.count = start;
+    return state.clone();
 }
 
 /**
@@ -158,9 +155,10 @@ function toStart(state: SimulationState): SimulationState {
  * @param state l'état courant
  * @returns le prochain état 
  */
-function toEnd(state: SimulationState): SimulationState {
-    const end = state.currentStep.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
-    return { ...state, currentStep: { ...state.currentStep, count: state.executionState.length - end } };
+function toEnd(state: Processor): Processor {
+    const end = state.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
+    state.count = state.steps.length - end;
+    return state.clone();
 }
 
 /**
@@ -169,11 +167,11 @@ function toEnd(state: SimulationState): SimulationState {
  * @param action contient le code compilé
  * @returns le prochain état
  */
-function changeExecutedCode(state: SimulationState, action: CodePayload): SimulationState {
+function changeExecutedCode(state: Processor, action: CodePayload): Processor {
     if ( action.executedCode ) {
-        return { ...state, executionState: action.executedCode };
+        state.steps = action.executedCode;
     }
-    return { ...state };
+    return state.clone();
 }
 
 /**
@@ -181,8 +179,9 @@ function changeExecutedCode(state: SimulationState, action: CodePayload): Simula
  * @param state - l'état courant
  * @returns le prochain état
  */
-function playAndPause(state: SimulationState): SimulationState {
-    return { ...state, currentStep: { ...state.currentStep, isPlaying: !state.currentStep.isPlaying } };
+function playAndPause(state: Processor): Processor {
+    state.isPlaying = !state.isPlaying;
+    return state.clone();
 }
 
 /**
@@ -191,9 +190,18 @@ function playAndPause(state: SimulationState): SimulationState {
  * @param action - contient le prochain mode
  * @returns le prochain état
  */
-function changeMode(state: SimulationState, action: CodePayload): SimulationState {
+function changeMode(state: Processor, action: CodePayload): Processor {
     if( action.mode ) {
-        return { ...state, currentStep: { ...state.currentStep, mode: action.mode, count: action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START } };
+        state.mode = action.mode;
+        state.count = action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
     }
-    return { ...state };
+    return state.clone();
+}
+
+function resetExecutionState(state: Processor): Processor {
+    state.mode = PlayerMode.regular;
+    state.count = 0;
+    state.isPlaying = false;
+    state.steps = DEFAULT_EXECUTION_STATE;
+    return state.clone();
 }
