@@ -25,33 +25,47 @@ export default function CodeEditor() {
         }
     }, [fetcher.data, dispatch]);
     
-    useEffect(() => {
-        if (numberContainer.current) {
-            const height = numberContainer.current.offsetHeight;
-            numberContainer.current.style.maxHeight = `${height}px`;
-        }
-    }, []);
-
     return(
         <div 
             className="flex flex-col p-5 bg-main-950 rounded-xl w-[20rem] gap-2"
         >
-            <div className="flex grow gap-2">
+            <div className="flex grow gap-2 overflow-hidden">
                 <div 
-                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md no-scrollbar overflow-scroll"
+                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md overflow-hidden"
                     ref={numberContainer}
                     onScroll={() => handleScroll(numberContainer, textArea)}
                 >
                     { processor.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
-                <textarea 
-                    className="text-white resize-none border-none outline-none w-4/5" 
-                    value={ processor.code } 
-                    onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
-                    wrap="off"
-                    ref={textArea}
-                    onScroll={() => handleScroll(textArea, numberContainer)}
-                />
+                <div className="relative">
+                    <div className="absolute pointer-events-none">
+                        {
+                            processor.highlightedText.map((line, iindex) => {
+                                console.log(processor.highlightedText);
+                                return (
+                                    <p key={iindex} className="h-6">
+                                        {
+                                            line.map((element, jindex) => {
+                                                return (
+                                                    <span key={`${iindex}-${jindex}`} className={element.color} >{ element.text }</span>
+                                                );
+                                            })
+                                        }
+                                    </p>
+                                );
+                            })
+                        }
+                    </div>
+                    <textarea 
+                        spellCheck="false"
+                        className="resize-none border-none outline-none size-full text-transparent caret-white" 
+                        value={ processor.code } 
+                        onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
+                        wrap="off"
+                        ref={textArea}
+                        onScroll={() => handleScroll(textArea, numberContainer)}
+                    />
+                </div>
             </div>
             <button 
                 className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"

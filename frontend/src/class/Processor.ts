@@ -1,7 +1,9 @@
 import { DEFAULT_EXECUTION_STATE } from "@src/constants/CodeProvider";
 import type { ProcessorId } from "@src/interface/CodeInterface";
+import type { HighlightedLine } from "@src/interface/HighlightedLines";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import { PlayerMode } from "@src/interface/StepControl";
+import type { Visitor } from "@src/interface/VisitorInterface";
 import { getCode } from "@src/module-store/CodeStore";
 
 /**
@@ -15,6 +17,7 @@ export default abstract class Processor {
     count: number;
     isPlaying: boolean;
     mode: PlayerMode;
+    highlightedText: Array<HighlightedLine>;
 
     constructor(id: ProcessorId) {
         this.processorId = id;
@@ -24,6 +27,7 @@ export default abstract class Processor {
         this.count = 0;
         this.isPlaying = false;
         this.mode = PlayerMode.regular;
+        this.highlightedText = [];
     }
 
     splitLines(): Array<string> {
@@ -42,13 +46,18 @@ export default abstract class Processor {
         return this.steps[this.count];
     }
 
-    clone(processor: Processor): Processor {
+    internalClone(processor: Processor): Processor {
         processor.code = this.code;
         processor.lines = this.lines;
         processor.steps = this.steps;
         processor.count = this.count;
         processor.isPlaying = this.isPlaying;
         processor.mode = this.mode;
+        processor.highlightedText = this.highlightedText;
         return processor;
     }
+
+    abstract clone(): Processor;
+
+    abstract accept(visitor: Visitor): void;
 }

@@ -14,6 +14,7 @@ import {
 } from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
+import { HighlightSyntaxVisitor } from "@src/class/visitor/HighligthSyntax";
 
 /**
  * Contexte pour accéder au valeur du code et son état
@@ -96,6 +97,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
         storeCode(state.processorId, action.code);
         state.code = action.code;
         state.lines = state.splitLines();
+        state.accept(new HighlightSyntaxVisitor());
     }
     return state.clone();
 }

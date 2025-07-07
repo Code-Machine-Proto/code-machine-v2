@@ -17,7 +17,7 @@ export default function Processor() {
     const [isVisualMode, setVisualMode] = useState<boolean>(false);
 
     return (
-                <div className="flex grow p-5 bg-back gap-5">
+                <div className="flex p-5 bg-back gap-5 h-full overflow-hidden">
                     <CodeEditor />
                     <div className="flex flex-col grow bg-main-950 rounded-xl p-5 gap-5">
                         <ExecutionControl memoryState={[ enableMemory, setEnableMemory]} visualSetting={[isVisualMode, setVisualMode]} />
