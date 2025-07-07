@@ -30,15 +30,17 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                         }
                     </select>
                 </div> 
-                <HexSwitcher isBase10={adresseFormat} setIsBase10={setAdressFormat} name="Adresse: " />
-                <HexSwitcher isBase10={memoryCellFormat} setIsBase10={setMemoryCellFormat} name="Donnée: " />
+                <div className="flex flex-col gap-1">
+                    <HexSwitcher isBase10={adresseFormat} setIsBase10={setAdressFormat} name="Adresse: " />
+                    <HexSwitcher isBase10={memoryCellFormat} setIsBase10={setMemoryCellFormat} name="Donnée: " />
+                </div>
             </div>
 
             <div className="flex gap-1">
                 <div className={"flex flex-col size-[4rem] justify-center p-2 rounded-sm " + className} />
                 <HexNumberLine 
                     max={columnCount} 
-                    divClassName={"flex flex-col size-[4rem] justify-center p-2 rounded-sm " + className}
+                    divClassName={"flex flex-col h-[4rem] w-[7rem] justify-center p-2 rounded-sm " + className}
                     isBase10={adresseFormat}
                 />
             </div>
@@ -58,7 +60,7 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                         return (
                         <div 
                             key={index}
-                            className={`flex flex-col size-[4rem] justify-center p-2 rounded-sm ${stimulatedCell === index ? "bg-green-700" : "bg-slate-700"}`}
+                            className={`flex flex-col h-[4rem] w-[7rem] justify-center p-2 rounded-sm ${stimulatedCell === index ? "bg-green-700" : "bg-slate-700"}`}
                         >
                             <HexNumber 
                                 keygen={index} 

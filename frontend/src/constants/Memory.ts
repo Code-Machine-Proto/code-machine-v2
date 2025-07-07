@@ -15,4 +15,4 @@ export const PROCESSOR_ACTIONS = ["Fetch", "Decode", "Execute"];
 /**
  * Nombre de colonne par défaut pour les mémoires
  */
-export const DEFAULT_COLUMN_NUMBER = 4;
+export const DEFAULT_COLUMN_NUMBER = 2;
