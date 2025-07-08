@@ -1,5 +1,4 @@
 import type { ActionDispatch } from "react";
-import type { SimulationState } from "./CodeInterface";
 import type { ProcessorStep } from "./ProcessorStep";
 import type Processor from "@src/class/Processor";
 import type { PlayerMode } from "./StepControl";
