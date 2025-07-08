@@ -13,7 +13,7 @@ export default class MaAccumulator extends Processor {
     }
 
     accept(visitor: Visitor) {
-        visitor.visit(this);
+        visitor.visitMaAccumulator(this);
     }
 
     clone(): Processor {

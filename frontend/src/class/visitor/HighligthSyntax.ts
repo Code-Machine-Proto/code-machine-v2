@@ -4,24 +4,24 @@ import type MaAccumulator from "../MaAccumulator";
 import type PolyRisc from "../PolyRisc";
 
 export class HighlightSyntaxVisitor implements Visitor {
-    visit(processor: Accumulator): void{
+    visitAccumulator(processor: Accumulator): void{
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
             return [{ text: line, color: "text-white"}];
         });
     }
 
-    visit(processor: MaAccumulator): void {
+    visitMaAccumulator(processor: MaAccumulator): void {
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
-            return [{ text: line, color: "text-white"}];
+            return [{ text: line, color: "text-red-500"}];
         });
     }
 
-    visit(processor: PolyRisc): void {
+    visitPolyRisc(processor: PolyRisc): void {
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
-            return [{ text: line, color: "text-white"}];
+            return [{ text: line, color: "text-blue-500"}];
         });
 
     }

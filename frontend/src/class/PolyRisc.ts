@@ -13,7 +13,7 @@ export default class PolyRisc extends Processor {
     }
 
     accept(visitor: Visitor) {
-        visitor.visit(this);
+        visitor.visitPolyRisc(this);
     }
 
     clone(): Processor {

@@ -13,7 +13,7 @@ export default class Accumulator extends Processor {
     }
 
     accept(visitor: Visitor): void {
-        visitor.visit(this);
+        visitor.visitAccumulator(this);
     }
 
     clone(): Processor {
