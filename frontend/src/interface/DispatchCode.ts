@@ -39,4 +39,4 @@ export interface CodePayload {
 /**
  * Le type de fonction pour gérer les différentes actions
  */
-export type ActionFunction = (state: SimulationState, action: CodePayload) => SimulationState;
+export type ActionFunction = (state: Processor, action: CodePayload) => Processor;
