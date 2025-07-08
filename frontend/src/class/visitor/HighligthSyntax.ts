@@ -14,14 +14,14 @@ export class HighlightSyntaxVisitor implements Visitor {
     visitMaAccumulator(processor: MaAccumulator): void {
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
-            return [{ text: line, color: "text-red-500"}];
+            return [{ text: line, color: "text-white"}];
         });
     }
 
     visitPolyRisc(processor: PolyRisc): void {
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
-            return [{ text: line, color: "text-blue-500"}];
+            return [{ text: line, color: "text-white"}];
         });
 
     }

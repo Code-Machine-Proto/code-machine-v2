@@ -16,8 +16,14 @@ export default function CodeEditor() {
 
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
+    const textVisual = useRef<HTMLDivElement>(null);
 
     const fetcher = useFetcher();
+    useEffect(() => {
+        console.log(`numberContainer=${numberContainer.current?.scrollTop}`);
+        console.log(`textArea=${textArea.current?.scrollTop}`);
+        console.log(`textVisual=${textVisual.current?.scrollTop}`);
+    });
 
     useEffect(() => {
         if( fetcher.data ) {
@@ -31,17 +37,19 @@ export default function CodeEditor() {
         >
             <div className="flex grow gap-2 overflow-hidden">
                 <div 
-                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md overflow-hidden"
+                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md no-scrollbar overflow-scroll"
                     ref={numberContainer}
-                    onScroll={() => handleScroll(numberContainer, textArea)}
+                    onScroll={() => {
+                        handleVerticalScroll(numberContainer, textArea);
+                        handleVerticalScroll(numberContainer, textVisual);
+                    }}
                 >
                     { processor.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
                 </div>
                 <div className="relative">
-                    <div className="absolute pointer-events-none">
+                    <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll" ref={textVisual}>
                         {
                             processor.highlightedText.map((line, iindex) => {
-                                console.log(processor.highlightedText);
                                 return (
                                     <p key={iindex} className="h-6">
                                         {
@@ -58,12 +66,16 @@ export default function CodeEditor() {
                     </div>
                     <textarea 
                         spellCheck="false"
-                        className="resize-none border-none outline-none size-full text-transparent caret-white" 
+                        className="resize-none border-none outline-none size-full text-transparent caret-white no-scrollbar" 
                         value={ processor.code } 
                         onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
                         wrap="off"
                         ref={textArea}
-                        onScroll={() => handleScroll(textArea, numberContainer)}
+                        onScroll={() => {
+                            handleVerticalScroll(textArea, numberContainer);
+                            handleVerticalScroll(textArea, textVisual);
+                            handleHorizontalScroll(textArea, textVisual);
+                        }}
                     />
                 </div>
             </div>
@@ -86,8 +98,14 @@ export default function CodeEditor() {
  * @param scroller - l'élément qu'on défile
  * @param scrolled - l'élément qu'on veut synchronisé
  */
-function handleScroll(scroller: ScrollRef ,scrolled: ScrollRef): void {
+function handleVerticalScroll(scroller: ScrollRef ,scrolled: ScrollRef): void {
     if( scroller.current && scrolled.current ) {
         scrolled.current.scrollTop = scroller.current.scrollTop;
+    }
+}
+
+function handleHorizontalScroll(scroller: ScrollRef, scrolled: ScrollRef): void {
+    if ( scroller.current && scrolled.current ) {
+        scrolled.current.scrollLeft = scroller.current.scrollLeft;
     }
 }
