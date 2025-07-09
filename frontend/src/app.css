@@ -17,6 +17,8 @@
     --color-ir: #97fcff;
     --color-ma: #c2ff97;
     --color-acc: #97ffc8;
+    --color-inst: #f92672;
+    --color-label: #a178ec;
 }
 
 @layer utilities {
