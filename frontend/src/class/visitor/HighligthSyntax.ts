@@ -1,16 +1,13 @@
 import type { Visitor } from "@src/interface/VisitorInterface";
-import type Accumulator from "../Accumulator";
-import type MaAccumulator from "../MaAccumulator";
-import type PolyRisc from "../PolyRisc";
-import type { HighlightedLine } from "@src/interface/HighlightedLines";
+import type Accumulator from "@src/class/Accumulator";
+import type MaAccumulator from "@src/class/MaAccumulator";
+import type PolyRisc from "@src/class/PolyRisc";
 
 export class HighlightSyntaxVisitor implements Visitor {
     visitAccumulator(processor: Accumulator): void{
-        const LABEL_REGEX = "[a-zA-Z][a-zA-Z0-9_-]+:";
         const lines = processor.lines;
         processor.highlightedText = lines.map((line) => {
-            const highlightedLine: HighlightedLine = [];
-            return highlightedLine;
+            return [{ text: line, color: "text-white"}];
         });
     }
 
