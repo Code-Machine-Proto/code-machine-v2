@@ -19,11 +19,6 @@ export default function CodeEditor() {
     const textVisual = useRef<HTMLDivElement>(null);
 
     const fetcher = useFetcher();
-    useEffect(() => {
-        console.log(`numberContainer=${numberContainer.current?.scrollTop}`);
-        console.log(`textArea=${textArea.current?.scrollTop}`);
-        console.log(`textVisual=${textVisual.current?.scrollTop}`);
-    });
 
     useEffect(() => {
         if( fetcher.data ) {
@@ -55,7 +50,7 @@ export default function CodeEditor() {
                                         {
                                             line.map((element, jindex) => {
                                                 return (
-                                                    <span key={`${iindex}-${jindex}`} className={element.color} >{ element.text }</span>
+                                                    <span key={`${iindex}-${jindex}`} className={`whitespace-pre ${element.color}`} >{ element.text }</span>
                                                 );
                                             })
                                         }

@@ -31,11 +31,14 @@ export const DEFAULT_SOURCE_CODE = {
     mode: PlayerMode.regular,
     currentStep: DEFAULT_EXECUTION_STATE[0],
     highlightedText: [],
-    splitLines: () =>  [""],
     getSavedCode: () => "",
+    internalClone() {
+        return this;
+    },
     clone() {
         return this;
     },
+    accept() {},
 } as Processor;
 
 /**

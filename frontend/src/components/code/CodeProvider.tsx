@@ -96,7 +96,6 @@ function changeCode(state: Processor, action: CodePayload): Processor {
     if (action.code === "" || action.code) {
         storeCode(state.processorId, action.code);
         state.code = action.code;
-        state.lines = state.splitLines();
         state.accept(new HighlightSyntaxVisitor());
     }
     return state.clone();

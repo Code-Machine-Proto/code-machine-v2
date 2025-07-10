@@ -1,6 +1,6 @@
 import { ProcessorId } from "@src/interface/CodeInterface";
 import Processor from "./Processor";
-import type { Visitor } from "@src/interface/VisitorInterface";
+import type { Visitor } from "@src/interface/visitor/VisitorInterface";
 import { HighlightSyntaxVisitor } from "./visitor/HighligthSyntax";
 
 /**

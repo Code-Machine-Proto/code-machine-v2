@@ -3,7 +3,8 @@ import type { ProcessorId } from "@src/interface/CodeInterface";
 import type { HighlightedLine } from "@src/interface/HighlightedLines";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import { PlayerMode } from "@src/interface/StepControl";
-import type { Visitor } from "@src/interface/VisitorInterface";
+import type { Token } from "@src/interface/visitor/Token";
+import type { Visitor } from "@src/interface/visitor/VisitorInterface";
 import { getCode } from "@src/module-store/CodeStore";
 
 /**
@@ -11,26 +12,26 @@ import { getCode } from "@src/module-store/CodeStore";
  */
 export default abstract class Processor {
     code: string;
-    lines: Array<string>;
     processorId: number;
     steps: Array<ProcessorStep>;
     count: number;
     isPlaying: boolean;
     mode: PlayerMode;
     highlightedText: Array<HighlightedLine>;
+    tokenizedLines: Array<Array<Token>>;
 
     constructor(id: ProcessorId) {
         this.processorId = id;
         this.code = this.getSavedCode();
-        this.lines = this.splitLines();
         this.steps = DEFAULT_EXECUTION_STATE;
         this.count = 0;
         this.isPlaying = false;
         this.mode = PlayerMode.regular;
         this.highlightedText = [];
+        this.tokenizedLines = [];
     }
 
-    splitLines(): Array<string> {
+    get lines(): Array<string> {
         return this.code.split("\n");
     }
 
@@ -48,12 +49,12 @@ export default abstract class Processor {
 
     internalClone(processor: Processor): Processor {
         processor.code = this.code;
-        processor.lines = this.lines;
         processor.steps = this.steps;
         processor.count = this.count;
         processor.isPlaying = this.isPlaying;
         processor.mode = this.mode;
         processor.highlightedText = this.highlightedText;
+        processor.tokenizedLines = this.tokenizedLines;
         return processor;
     }
 
