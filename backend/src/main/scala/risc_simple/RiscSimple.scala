@@ -65,11 +65,13 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
   // Pipeline state transitions
   switch(StateReg) {
     is(start)   {StateReg := fetch}
-    is(fetch)   {StateReg := decode}
+    is(fetch)   {
+      when (IM.io.inst(27, 24) === 0xf.U) {StateReg := end}
+      .otherwise {StateReg := decode}
+    }
     is(decode)  {
-      when (DEC.io.decode_out.op_type === stope) {StateReg := end}
-      .otherwise {StateReg := execute}
-    }  
+      StateReg := execute
+    }
     is(execute) {StateReg := fetch}
     is(end)  {StateReg := end}
   }
@@ -78,7 +80,8 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
   switch(StateReg) {    
     is(start) {PCReg := 0.U}
     is(fetch) {
-      IRReg := IM.io.inst}
+      IRReg := IM.io.inst
+    }
     is(decode){  
       when (DEC.io.decode_out.op_type === branch) {
         when ((IRReg(19,16) === 0.U) |
