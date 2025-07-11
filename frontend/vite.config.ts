@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => {
     const base = mode === "electron" ? "./" : "/";
     return {
         plugins: [tailwindcss(), !process.env.VITEST && reactRouter(), tsconfigPaths()],
+	define: {
+            '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+	},
         envDir: "./environment",
         appType: "spa",
         resolve: {
