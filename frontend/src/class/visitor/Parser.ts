@@ -10,6 +10,8 @@ import {
     NUMBER_REGEX,
     OPERATION_REGEX_ACC,
     OPERATION_REGEX_MA,
+    OPERATION_REGEX_POLYRISC,
+    REGISTER_POLYRISC,
     WHITESPACE_REGEX,
     WORD_REGEX
 } from "@src/constants/Regex";
@@ -56,9 +58,28 @@ export class ParserVisitor implements Visitor {
 
     visitPolyRisc(processor: PolyRisc): void {
         const untypedTokenizedLines = this.untypedTokenization(processor);
+        processor.tokenizedLines = untypedTokenizedLines.map((line) => {
+            let commentedLine = false;
+            return line.map((token) => {
+                if ( commentedLine || COMMENT_REGEX.test(token.value) ) {
+                    commentedLine = true;
+                    return { type: TokenType.COMMENT, value: token.value };
+                }
+
+                if ( OPERATION_REGEX_POLYRISC.test(token.value) ) {
+                    return { type: TokenType.OPERATION, value: token.value };
+                }
+
+                if( REGISTER_POLYRISC.test(token.value) ) {
+                    return { type: TokenType.REGISTER, value: token.value };
+                }
+
+                return this.regularSymbolChecker(token);
+            });
+        });
     }
 
-    untypedTokenization(processor: Processor): Array<Array<Token>>{
+    untypedTokenization(processor: Processor): Array<Array<Token>> {
         const lines = processor.lines;
         return lines.map((line) => {
             const tokenizedLine = new Array<Token>();

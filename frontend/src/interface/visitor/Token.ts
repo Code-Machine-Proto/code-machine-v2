@@ -6,6 +6,7 @@ export enum TokenType {
     COMMENT,
     MAIN_LABEL,
     BLANK,
+    REGISTER,
 }
 
 export interface Token {

@@ -8,5 +8,6 @@ export const SYNTAX_COLOR: Record<TokenType, string> = {
     [Token.LABEL]: "text-label",
     [Token.MAIN_LABEL]: "text-white",
     [Token.OPERATION]: "text-inst",
-    [Token.WORD]: "text-white"
+    [Token.WORD]: "text-white",
+    [Token.REGISTER]: "text-register",
 };
