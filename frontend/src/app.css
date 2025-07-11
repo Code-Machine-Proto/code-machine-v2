@@ -19,6 +19,7 @@
     --color-acc: #97ffc8;
     --color-inst: #f92672;
     --color-label: #a178ec;
+    --color-comment: #75715e;
 }
 
 @layer utilities {

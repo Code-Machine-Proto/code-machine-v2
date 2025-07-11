@@ -15,6 +15,7 @@ import {
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
 import { HighlightSyntaxVisitor } from "@src/class/visitor/HighligthSyntax";
+import { ParserVisitor } from "@src/class/visitor/Parser";
 
 /**
  * Contexte pour accéder au valeur du code et son état
@@ -96,6 +97,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
     if (action.code === "" || action.code) {
         storeCode(state.processorId, action.code);
         state.code = action.code;
+        state.accept(new ParserVisitor());
         state.accept(new HighlightSyntaxVisitor());
     }
     return state.clone();
@@ -109,6 +111,8 @@ function changeCode(state: Processor, action: CodePayload): Processor {
  */
 function changeProcessor(state: Processor, action: CodePayload): Processor {
     if ( action.newProcessor && action.newProcessor.processorId != state.processorId ) {
+        action.newProcessor.accept(new ParserVisitor());
+        action.newProcessor.accept(new HighlightSyntaxVisitor());
         return action.newProcessor.clone();
     }
     return state.clone();

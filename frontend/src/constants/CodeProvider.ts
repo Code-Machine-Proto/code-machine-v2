@@ -31,6 +31,7 @@ export const DEFAULT_SOURCE_CODE = {
     mode: PlayerMode.regular,
     currentStep: DEFAULT_EXECUTION_STATE[0],
     highlightedText: [],
+    tokenizedLines: [],
     getSavedCode: () => "",
     internalClone() {
         return this;

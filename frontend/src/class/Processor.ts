@@ -27,8 +27,8 @@ export default abstract class Processor {
         this.count = 0;
         this.isPlaying = false;
         this.mode = PlayerMode.regular;
-        this.highlightedText = [];
         this.tokenizedLines = [];
+        this.highlightedText = [];
     }
 
     get lines(): Array<string> {
