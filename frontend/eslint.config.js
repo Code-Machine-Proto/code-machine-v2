@@ -22,7 +22,8 @@ export default defineConfig([
             "array-callback-return": ["error", { allowImplicit: true, checkForEach: true, allowVoid: true }],
             "no-duplicate-imports": "error",
             "camelcase": ["error", { ignoreGlobals: true, }],
-            "class-methods-use-this": "warn",
+            // Enlever, car juger inutile
+            "class-methods-use-this": "off",
             "curly": "error",
             "dot-notation": "error",
             "max-classes-per-file": "error",
