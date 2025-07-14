@@ -2,7 +2,7 @@
 
     Cette interface pour le projet est utilisé par une appplication electron et un site web statique classique. Pour pouvoir déveloper le projet, vous devez avoir node au moins à 22 avec npm d'installer sur votre machine.
 
-## Technologie utilisé
+## Technologies utilisées
 
 - [node/npm](#nodenpm)
 - [React](#react)
