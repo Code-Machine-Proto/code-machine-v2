@@ -12,7 +12,7 @@ Simulation des processeurs écrit en Chisel compilé vers un exécutable Java. L
 
 ## Contribuez
 
-Pour contribuez aux projets vous devez respecter la nomenclature git.
+Pour contribuer au projet vous devez respecter la nomenclature git.
 
 Les commits sont sous cette forme:
 
