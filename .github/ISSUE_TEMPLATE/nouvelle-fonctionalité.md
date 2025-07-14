@@ -7,14 +7,14 @@ assignees: ''
 
 ---
 
-**Est-ce que la fonctionalité est lié à un problème existant?**
+**Est-ce que la fonctionalité est liée à un problème existant?**
 Décrire de manière claire et concise le problème
 
-**Décrire la solution voulu**
+**Décrire la solution voulue**
 Une description claire et concise de la solution
 
-**Décrire d'autre alternative possible**
+**Décrire d'autres alternatives possibles**
 Une description claire et concise des alternatives si applicables
 
-**Contexte additionnelle**
-Autre ou capture d'écran pour aider à décrire la fonctionalité
+**Contexte additionnel**
+Contexte supplémentaire ou des captures d'écran pour aider à décrire la fonctionalité
