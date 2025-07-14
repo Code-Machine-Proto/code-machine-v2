@@ -1,3 +1,6 @@
+/**
+ * Type que peut prendre un jeton
+ */
 export enum TokenType {
     NUMBER,
     WORD,
@@ -9,6 +12,9 @@ export enum TokenType {
     REGISTER,
 }
 
+/**
+ * Interface d'un jeton simple
+ */
 export interface Token {
     value: string,
     type: TokenType,

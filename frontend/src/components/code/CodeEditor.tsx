@@ -99,8 +99,16 @@ function handleVerticalScroll(scroller: ScrollRef ,scrolled: ScrollRef): void {
     }
 }
 
+/**
+ * Associe le défilement horizontal de deux éléments html ensembles
+ * Le lien ce fait d'une seule direction pour bien synchronisé deux éléments
+ * il faut le faire avec les paramètres inversés
+ * @param scroller - l'élément qu'on défile
+ * @param scrolled - l'élément qu'on veut synchronisé
+ */
 function handleHorizontalScroll(scroller: ScrollRef, scrolled: ScrollRef): void {
     if ( scroller.current && scrolled.current ) {
         scrolled.current.scrollLeft = scroller.current.scrollLeft;
     }
 }
+

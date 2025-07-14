@@ -203,6 +203,11 @@ function changeMode(state: Processor, action: CodePayload): Processor {
     return state.clone();
 }
 
+/**
+ * Remets l'état du code compilé à zéro
+ * @param state - l'état courant
+ * @returns le prochain état
+ */
 function resetExecutionState(state: Processor): Processor {
     state.mode = PlayerMode.regular;
     state.count = 0;
@@ -210,3 +215,4 @@ function resetExecutionState(state: Processor): Processor {
     state.steps = DEFAULT_EXECUTION_STATE;
     return state.clone();
 }
+

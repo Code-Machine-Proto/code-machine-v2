@@ -17,7 +17,14 @@ import {
 } from "@src/constants/Regex";
 import type Processor from "@src/class/Processor";
 
+/**
+ * Classe pour permettre l'implémentation de la syntaxe de chaque processeur
+ * Visite et parcourt le code source pour avoir les jetons correspondant
+ */
 export class ParserVisitor implements Visitor {
+    /**
+     * Permets de générer les jetons pour le processeur à accumulateur
+     */
     visitAccumulator(processor: Accumulator): void {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
@@ -37,6 +44,9 @@ export class ParserVisitor implements Visitor {
         });
     }
 
+    /**
+     * Permets de générer les jetons pour le processeur à accumulateur avec MA
+     */
     visitMaAccumulator(processor: MaAccumulator): void {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
@@ -56,6 +66,9 @@ export class ParserVisitor implements Visitor {
         });
     }
 
+    /**
+     * Permets de générer les jetons pour le processeur PolyRisc
+     */
     visitPolyRisc(processor: PolyRisc): void {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
@@ -79,7 +92,10 @@ export class ParserVisitor implements Visitor {
         });
     }
 
-    untypedTokenization(processor: Processor): Array<Array<Token>> {
+    /**
+     * Permets de séparer le code source par ces "whitespaces"
+     */
+    private untypedTokenization(processor: Processor): Array<Array<Token>> {
         const lines = processor.lines;
         return lines.map((line) => {
             const tokenizedLine = new Array<Token>();
@@ -98,7 +114,10 @@ export class ParserVisitor implements Visitor {
         });
     }
 
-    regularSymbolChecker(token: Token): Token {
+    /**
+     * Permets de générer les jetons communs
+     */
+    private regularSymbolChecker(token: Token): Token {
         if ( MAIN_LABEL_REGEX.test(token.value) ) {
             return { type: TokenType.MAIN_LABEL, value: token.value };
         }

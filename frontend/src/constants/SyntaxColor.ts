@@ -1,5 +1,8 @@
 import { TokenType } from "@src/interface/visitor/Token";
 
+/**
+ * Record de toutes les différentes couleurs que prenne les jetons
+ */
 export const SYNTAX_COLOR: Record<TokenType, string> = {
     [TokenType.NUMBER]: "text-white",
     [TokenType.BLANK]: "text-white",
