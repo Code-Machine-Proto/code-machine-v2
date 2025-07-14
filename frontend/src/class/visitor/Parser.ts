@@ -29,13 +29,15 @@ export class ParserVisitor implements Visitor {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
             let commentedLine = false;
+            let operationEncountered = false;
             return line.map((token) => {
                 if ( commentedLine || COMMENT_REGEX.test(token.value) ) {
                     commentedLine = true;
                     return { type: TokenType.COMMENT, value: token.value };
                 }
 
-                if ( OPERATION_REGEX_ACC.test(token.value) ) {
+                if ( !operationEncountered && OPERATION_REGEX_ACC.test(token.value) ) {
+                    operationEncountered = true;
                     return { type: TokenType.OPERATION, value: token.value };
                 }
 
@@ -51,13 +53,15 @@ export class ParserVisitor implements Visitor {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
             let commentedLine = false;
+            let operationEncountered = false;
             return line.map((token) => {
                 if ( commentedLine || COMMENT_REGEX.test(token.value) ) {
                     commentedLine = true;
                     return { type: TokenType.COMMENT, value: token.value };
                 }
 
-                if ( OPERATION_REGEX_MA.test(token.value) ) {
+                if ( !operationEncountered && OPERATION_REGEX_MA.test(token.value) ) {
+                    operationEncountered = true;
                     return { type: TokenType.OPERATION, value: token.value };
                 }
 
@@ -73,13 +77,15 @@ export class ParserVisitor implements Visitor {
         const untypedTokenizedLines = this.untypedTokenization(processor);
         processor.tokenizedLines = untypedTokenizedLines.map((line) => {
             let commentedLine = false;
+            let operationEncountered = false;
             return line.map((token) => {
                 if ( commentedLine || COMMENT_REGEX.test(token.value) ) {
                     commentedLine = true;
                     return { type: TokenType.COMMENT, value: token.value };
                 }
 
-                if ( OPERATION_REGEX_POLYRISC.test(token.value) ) {
+                if ( !operationEncountered && OPERATION_REGEX_POLYRISC.test(token.value) ) {
+                    operationEncountered = true;
                     return { type: TokenType.OPERATION, value: token.value };
                 }
 
