@@ -45,4 +45,5 @@ export const OPERATION_REGEX_POLYRISC = /^(add|sub|sh(r|l)|not|and|or|mv|br(z|nz
 
 /**
  * Regex pour identifier les registres utilisé dans les opérations du PolyRisc
+ */
 export const REGISTER_POLYRISC = /^\(?r([0-9]|[1-2][0-9]|3[1-2])\)?,?$/;
