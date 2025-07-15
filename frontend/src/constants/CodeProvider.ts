@@ -30,11 +30,16 @@ export const DEFAULT_SOURCE_CODE = {
     isPlaying: false,
     mode: PlayerMode.regular,
     currentStep: DEFAULT_EXECUTION_STATE[0],
-    splitLines: () =>  [""],
+    highlightedText: [],
+    tokenizedLines: [],
     getSavedCode: () => "",
+    internalClone() {
+        return this;
+    },
     clone() {
         return this;
     },
+    accept() {},
 } as Processor;
 
 /**
