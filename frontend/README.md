@@ -193,4 +193,4 @@ Le mode website est utilisé pour représenter l'exécution dans un browser rég
 
 ### Mode electron
 
-Comme son nom l'indique, le mode d'exécution electron sert à compiler l'application dans le contexte d'une application electron. Il permets au client d'utiliser la communication IPC pour contacter le serveur.
+Comme son nom l'indique, le mode d'exécution electron sert à compiler l'application dans le contexte d'une application electron. Il permet au client d'utiliser la communication IPC pour contacter le serveur.
