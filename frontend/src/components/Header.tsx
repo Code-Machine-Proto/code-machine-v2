@@ -20,9 +20,9 @@ export default function Header() {
             <img src={ logo } alt="Logo" className="h-[3rem]" />
             <p className="text-white text-xl">Code Machine</p>
         </Link>
-	    <p className="text-white text-sm" >
-	        v{__APP_VERSION__}
-            </p>
+        <p className="text-white text-sm" >
+            v{__APP_VERSION__}
+        </p>
     </header>
     );
 }
