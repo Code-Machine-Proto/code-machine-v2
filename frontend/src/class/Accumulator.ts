@@ -20,9 +20,4 @@ export default class Accumulator extends Processor {
         const processor = new Accumulator();
         return super.internalClone(processor);
     }
-
-    clone(): Processor {
-        const processor = new Accumulator();
-        return super.clone(processor);
-    }
 }
