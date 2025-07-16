@@ -20,9 +20,4 @@ export default class PolyRisc extends Processor {
         const processor = new PolyRisc();
         return super.internalClone(processor);
     }
-
-    clone(): Processor {
-        const processor = new PolyRisc();
-        return super.clone(processor);
-    }
 }

@@ -20,9 +20,4 @@ export default class MaAccumulator extends Processor {
         const processor = new MaAccumulator();
         return super.internalClone(processor);
     }
-
-    clone(): Processor {
-        const processor = new MaAccumulator();
-        return super.clone(processor);
-    }
 }
