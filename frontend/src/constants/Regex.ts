@@ -36,7 +36,9 @@ export const NUMBER_REGEX = /^-?([1-9][0-9]+|[0-9])$/;
 /**
  * Regex pour identifier le .text ou le .data
  */
-export const MAIN_LABEL_REGEX = /^\.(text|data)$/;
+export const TEXT_LABEL_REGEX = /^\.text$/;
+
+export const DATA_LABEL_REGEX = /^\.data$/;
 
 /**
  * Regex pour identifier les opérations du processeur PolyRisc

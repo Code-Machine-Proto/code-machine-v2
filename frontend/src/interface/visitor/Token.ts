@@ -2,14 +2,15 @@
  * Type que peut prendre un jeton
  */
 export enum TokenType {
-    NUMBER,
-    WORD,
-    LABEL,
-    OPERATION,
-    COMMENT,
-    MAIN_LABEL,
-    BLANK,
-    REGISTER,
+    NUMBER = "number",
+    WORD = "word",
+    LABEL = "label",
+    OPERATION = "operation",
+    COMMENT = "comment",
+    TEXT_LABEL = "text-label",
+    DATA_LABEL = "data-label",
+    BLANK = "blank",
+    REGISTER = "register",
 }
 
 /**
@@ -18,4 +19,22 @@ export enum TokenType {
 export interface Token {
     value: string,
     type: TokenType,
+    error?: string,
+    warning?: string,
+}
+
+export interface ComposedToken {
+    type: ComposedTokenType,
+}
+
+export enum ComposedTokenType {
+    PROGRAM = "program",
+    PROGRAM_DATA = "program-data",
+    INSTRUCTION = "instruction",
+    TEXT = "text",
+    STATEMENT = "statement",
+    TEXT_BLOCK = "text-block",
+    DATA = "data",
+    DATA_BLOCK = "data-block",
+    END_OF_CODE = "end-of-code",
 }
