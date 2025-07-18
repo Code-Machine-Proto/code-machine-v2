@@ -14,7 +14,9 @@ import {
     OPERATION_REGEX_POLYRISC,
     REGISTER_POLYRISC,
     WHITESPACE_REGEX,
-    WORD_REGEX
+    WORD_REGEX,
+    NO_ARGS_OPERATION_REGEX_ACC,
+    NO_ARGS_OPERATION_REGEX_MA
 } from "@src/constants/Regex";
 import type Processor from "@src/class/Processor";
 
@@ -42,6 +44,11 @@ export class ParserVisitor implements Visitor {
                     return { type: TokenType.OPERATION, value: token.value };
                 }
 
+                if ( !operationEncountered && NO_ARGS_OPERATION_REGEX_ACC.test(token.value) ) {
+                    operationEncountered = true;
+                    return { type: TokenType.NO_ARGS_OPERATION, value: token.value };
+                }
+
                 return this.regularSymbolChecker(token);
             });
         });
@@ -64,6 +71,11 @@ export class ParserVisitor implements Visitor {
                 if ( !operationEncountered && OPERATION_REGEX_MA.test(token.value) ) {
                     operationEncountered = true;
                     return { type: TokenType.OPERATION, value: token.value };
+                }
+
+                if ( !operationEncountered && NO_ARGS_OPERATION_REGEX_MA.test(token.value) ) {
+                    operationEncountered = true;
+                    return { type: TokenType.NO_ARGS_OPERATION, value: token.value };
                 }
 
                 return this.regularSymbolChecker(token);

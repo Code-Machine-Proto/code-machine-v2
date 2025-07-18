@@ -13,4 +13,5 @@ export const SYNTAX_COLOR: Record<TokenType, string> = {
     [TokenType.OPERATION]: "text-inst",
     [TokenType.WORD]: "text-white",
     [TokenType.REGISTER]: "text-register",
+    [TokenType.NO_ARGS_OPERATION]: "text-inst"
 };

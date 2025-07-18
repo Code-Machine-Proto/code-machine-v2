@@ -6,6 +6,7 @@ export enum TokenType {
     WORD = "word",
     LABEL = "label",
     OPERATION = "operation",
+    NO_ARGS_OPERATION = "no-args-operation",
     COMMENT = "comment",
     TEXT_LABEL = "text-label",
     DATA_LABEL = "data-label",
@@ -24,7 +25,10 @@ export interface Token {
 }
 
 export interface ComposedToken {
+    value: string,
     type: ComposedTokenType,
+    error?: string,
+    warning?: string,
 }
 
 export enum ComposedTokenType {

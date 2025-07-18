@@ -52,6 +52,8 @@ export default abstract class Processor {
      */
     tokenizedLines: Array<Array<Token>>;
 
+    isCompilable: boolean;
+
     constructor(id: ProcessorId) {
         this.processorId = id;
         this.code = this.getSavedCode();
@@ -61,6 +63,7 @@ export default abstract class Processor {
         this.mode = PlayerMode.regular;
         this.tokenizedLines = [];
         this.highlightedText = [];
+        this.isCompilable = false;
     }
 
     /**
@@ -99,6 +102,7 @@ export default abstract class Processor {
         processor.mode = this.mode;
         processor.highlightedText = this.highlightedText;
         processor.tokenizedLines = this.tokenizedLines;
+        processor.isCompilable = this.isCompilable;
         return processor;
     }
 
