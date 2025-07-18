@@ -1,7 +1,7 @@
 import { CheckerAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import { ComposedTokenType, TokenType } from "@src/interface/visitor/Token";
 import { AccumulatorSyntaxState } from "./SyntaxCheckerState";
-import { ADDITIONAL_TOKEN, LOGIC_ERROR, NO_TEXT_LABEL } from "./ErrorAndWarning";
+import { ADDITIONAL_TOKEN, DATA_DECLARATION, INSTRUCTION_ADRESS, LOGIC_ERROR, NO_TEXT_LABEL } from "./ErrorAndWarning";
 
 export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, SyntaxTableEntry>> = [
     {
@@ -133,13 +133,13 @@ export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, Synta
     {
         [TokenType.BLANK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [TokenType.COMMENT]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.LABEL]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.TEXT_LABEL]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.DATA_LABEL]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [TokenType.LABEL]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
+        [TokenType.TEXT_LABEL]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
+        [TokenType.DATA_LABEL]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
         [TokenType.NUMBER]: { type: CheckerAction.SHIFT, number: AccumulatorSyntaxState.DATA_NUMBER },
-        [TokenType.OPERATION]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [TokenType.OPERATION]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
         [TokenType.REGISTER]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.WORD]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [TokenType.WORD]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
         [ComposedTokenType.DATA]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.DATA_BLOCK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.INSTRUCTION]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
@@ -149,7 +149,7 @@ export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, Synta
         [ComposedTokenType.TEXT]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.TEXT_BLOCK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.END_OF_CODE]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.NO_ARGS_OPERATION]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [TokenType.NO_ARGS_OPERATION]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
     },
     {
         [TokenType.BLANK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
@@ -301,11 +301,11 @@ export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, Synta
     {
         [TokenType.BLANK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [TokenType.COMMENT]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.LABEL]: { type: CheckerAction.ERROR },
-        [TokenType.TEXT_LABEL]: { type: CheckerAction.ERROR },
-        [TokenType.DATA_LABEL]: { type: CheckerAction.ERROR },
-        [TokenType.NUMBER]: { type: CheckerAction.ERROR },
-        [TokenType.OPERATION]: { type: CheckerAction.ERROR },
+        [TokenType.LABEL]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
+        [TokenType.TEXT_LABEL]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
+        [TokenType.DATA_LABEL]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
+        [TokenType.NUMBER]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
+        [TokenType.OPERATION]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
         [TokenType.REGISTER]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [TokenType.WORD]: { type: CheckerAction.SHIFT, number: AccumulatorSyntaxState.OPERATION_ADDRESS },
         [ComposedTokenType.DATA]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
@@ -317,7 +317,7 @@ export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, Synta
         [ComposedTokenType.TEXT]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.TEXT_BLOCK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.END_OF_CODE]: { type: CheckerAction.ERROR },
-        [TokenType.NO_ARGS_OPERATION]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [TokenType.NO_ARGS_OPERATION]: { type: CheckerAction.ERROR, message: INSTRUCTION_ADRESS },
     },
     {
         [TokenType.BLANK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
