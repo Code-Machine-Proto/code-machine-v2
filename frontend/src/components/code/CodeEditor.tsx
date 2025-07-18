@@ -44,13 +44,13 @@ export default function CodeEditor() {
                 <div className="relative">
                     <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll" ref={textVisual}>
                         {
-                            processor.highlightedText.map((line, iindex) => {
+                            processor.highlightedText.map((line, iIndex) => {
                                 return (
-                                    <p key={iindex} className="h-6">
+                                    <p key={iIndex} className="h-6">
                                         {
-                                            line.map((element, jindex) => {
+                                            line.map((element, jIndex) => {
                                                 return (
-                                                    <span key={`${iindex}-${jindex}`} className={`whitespace-pre ${element.color}`} >{ element.text }</span>
+                                                    <span key={`${iIndex}-${jIndex}`} className={`whitespace-pre ${element.color}`} >{ element.text }</span>
                                                 );
                                             })
                                         }

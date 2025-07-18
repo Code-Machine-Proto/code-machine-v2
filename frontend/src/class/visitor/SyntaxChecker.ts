@@ -36,7 +36,10 @@ export class SyntaxCheckerVisitor implements Visitor {
 
                 case CheckerAction.ERROR: {
                     hasError = true;
-                    input.shift();
+                    const token = input.shift();
+                    if ( token ) {
+                        token.error = action.message;
+                    }
                     break;
                 }
 
@@ -63,10 +66,14 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
 
                 case CheckerAction.WARNING: {
+                    if ( input.at(0) ) {
+                        input[0].warning = action.message;
+                    }
                     break;
                 }
             }
         }
+
     }
     visitMaAccumulator(processor: MaAccumulator) : void{}
     visitPolyRisc(processor: PolyRisc) : void{}

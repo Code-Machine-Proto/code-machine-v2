@@ -38,7 +38,9 @@ export class HighlightSyntaxVisitor implements Visitor {
     applicateColor(processor: Processor): HighlightedLine[] {
         return processor.tokenizedLines.map((tokenizedLine) => {
             return tokenizedLine.map((token) => {
-                return { text: token.value, color: SYNTAX_COLOR[token.type] };
+                const error: boolean = !!token.error;
+                const warning: boolean = !!token.warning;
+                return { text: token.value, color: `${SYNTAX_COLOR[token.type]} ${error || warning ? "underline decoration-wavy" : ""} ${ error ? "decoration-red-500" : "decoration-yellow-500"}` };
             });
         });
     }
