@@ -139,7 +139,7 @@ export const SYNTAX_TABLE_ACC: Array<Record<TokenType | ComposedTokenType, Synta
         [TokenType.NUMBER]: { type: CheckerAction.SHIFT, number: AccumulatorSyntaxState.DATA_NUMBER },
         [TokenType.OPERATION]: { type: CheckerAction.ERROR, message: DATA_DECLARATION },
         [TokenType.REGISTER]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [TokenType.WORD]: { type: CheckerAction.SHIFT, message: WARNING_LABEL, number: AccumulatorSyntaxState.DATA_BLOCK },
+        [TokenType.WORD]: { type: CheckerAction.SHIFT, message: WARNING_LABEL, number: AccumulatorSyntaxState.DATA_NUMBER },
         [ComposedTokenType.DATA]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.DATA_BLOCK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.INSTRUCTION]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },

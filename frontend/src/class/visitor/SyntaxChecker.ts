@@ -12,13 +12,13 @@ export class SyntaxCheckerVisitor implements Visitor {
     visitAccumulator(processor: Accumulator): void {
         const input: Array<Token | ComposedToken> = this.filterTokens( processor );
         input.push({ type: ComposedTokenType.END_OF_CODE } as ComposedToken);
-        processor.isCompilable = !this.checkerExecution(input);
+        this.checkerExecution(input, processor);
     }
 
     visitMaAccumulator(processor: MaAccumulator) : void {
         const input: Array<Token | ComposedToken> = this.filterTokens( processor );
         input.push({ type: ComposedTokenType.END_OF_CODE } as ComposedToken);
-        processor.isCompilable = !this.checkerExecution(input);
+        this.checkerExecution(input, processor);
     }
 
     visitPolyRisc(processor: PolyRisc) : void {}
@@ -46,7 +46,7 @@ export class SyntaxCheckerVisitor implements Visitor {
         let value = "";
         if (action.number !== undefined && action.reducedAddition) {
             for (let i = 0; i < action.number; i++) {
-                value = checkerStack.pop()?.value + value;
+                value = checkerStack.pop()?.value + " " + value;
                 stateStack.pop();
             }
             value = "\n" + value;
@@ -68,7 +68,7 @@ export class SyntaxCheckerVisitor implements Visitor {
         });
     }
 
-    checkerExecution( input: Array<Token | ComposedToken> ): boolean {
+    checkerExecution( input: Array<Token | ComposedToken>, processor: Processor ): void {
         let isFinished = false;
         let hasError = false;
         const checkerStack: Array<Token | ComposedToken> = [];
@@ -105,6 +105,9 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
             }
         }
-        return hasError;
+        processor.isCompilable = !hasError;
+        if ( !hasError ) {
+            processor.cleanCode = checkerStack[0].value.split(/\n+/g).map(line => line.trim()).filter(line => line);
+        }
     }
 }

@@ -41,6 +41,7 @@ export const DEFAULT_SOURCE_CODE = {
     },
     accept() {},
     isCompilable: false,
+    cleanCode: [],
 } as Processor;
 
 /**
