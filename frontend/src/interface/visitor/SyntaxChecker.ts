@@ -4,7 +4,6 @@ export enum CheckerAction {
     SHIFT,
     REDUCE,
     ERROR,
-    WARNING,
     ACCEPT,
 }
 
