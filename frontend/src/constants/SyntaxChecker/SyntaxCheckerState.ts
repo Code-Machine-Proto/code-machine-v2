@@ -1,4 +1,4 @@
-export enum AccumulatorSyntaxState {
+export enum SyntaxState {
     INITIAL,
     COMPLETE_PROGRAM,
     DATA_INITIAL,
@@ -14,8 +14,6 @@ export enum AccumulatorSyntaxState {
     REDUCE_INST,
     REDUCE_LABEL,
     DETECT_OPERATION,
-    OPERATION_ADDRESS,
     TEXT_BLOCK,
     STATEMENT_REDUCTION,
-    DETECT_SIMPLE_OPERATION,
 }

@@ -3,9 +3,9 @@ import type { Visitor } from "@src/interface/visitor/VisitorInterface";
 import type MaAccumulator from "@src/class/MaAccumulator";
 import type PolyRisc from "@src/class/PolyRisc";
 import { ComposedTokenType, TokenType, type ComposedToken, type Token } from "@src/interface/visitor/Token";
-import { SYNTAX_TABLE_ACC } from "@src/constants/SyntaxChecker/SyntaxTableAcc";
-import { AccumulatorSyntaxState } from "@src/constants/SyntaxChecker/SyntaxCheckerState";
-import { CheckerAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
+import { SYNTAX_TABLE } from "@src/constants/SyntaxChecker/SyntaxTableAcc";
+import { SyntaxState } from "@src/constants/SyntaxChecker/SyntaxCheckerState";
+import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import type Processor from "@src/class/Processor";
 
 export class SyntaxCheckerVisitor implements Visitor {
@@ -26,13 +26,13 @@ export class SyntaxCheckerVisitor implements Visitor {
     shiftStack(
         input: Array<Token | ComposedToken>,
         checkerStack: Array<Token | ComposedToken>,
-        stateStack: Array<AccumulatorSyntaxState>,
+        stateStack: Array<SyntaxState>,
         action: SyntaxTableEntry
     ): Token | ComposedToken | undefined {
         const token = input.shift();
         if (token) {
             checkerStack.push(token);
-            stateStack.push(action.number as AccumulatorSyntaxState);
+            stateStack.push(action.number as SyntaxState);
             return token;
         }
     }
@@ -40,7 +40,7 @@ export class SyntaxCheckerVisitor implements Visitor {
     reduceStack(
         input: Array<Token | ComposedToken>,
         checkerStack: Array<Token | ComposedToken>,
-        stateStack: Array<AccumulatorSyntaxState>,
+        stateStack: Array<SyntaxState>,
         action: SyntaxTableEntry
     ): void {
         let value = "";
@@ -60,22 +60,18 @@ export class SyntaxCheckerVisitor implements Visitor {
                 token.error = "Certains caractères sont invalides";
             }
 
-            if ( token.type === TokenType.REGISTER ) {
-                token.error = "Le processeur à accumulateur ne contient pas de registres";
-            }
-
-            return token.type !== TokenType.BLANK && token.type !== TokenType.COMMENT && token.type !== TokenType.REGISTER;
+            return token.type !== TokenType.BLANK && token.type !== TokenType.COMMENT;
         });
     }
 
-    checkerExecution( input: Array<Token | ComposedToken>, processor: Processor ): void {
+    checkerExecution( input: Array<Token | ComposedToken>, processor: Processor, reduceOpCallback: SyntaxStackAction ): void {
         let isFinished = false;
         let hasError = false;
         const checkerStack: Array<Token | ComposedToken> = [];
-        const stateStack: Array<AccumulatorSyntaxState> = [AccumulatorSyntaxState.INITIAL];
+        const stateStack: Array<SyntaxState> = [SyntaxState.INITIAL];
         while (!isFinished && input.length > 0) {
             const index = stateStack.at(-1);
-            const action = SYNTAX_TABLE_ACC[index !== undefined ? index : 1][input[0].type];
+            const action = SYNTAX_TABLE[index !== undefined ? index : SyntaxState.COMPLETE_PROGRAM][input[0].type];
             switch (action.type) {
                 case CheckerAction.ACCEPT: {
                     isFinished = true;
@@ -101,6 +97,11 @@ export class SyntaxCheckerVisitor implements Visitor {
                     if (token) {
                         token.warning = action.message;
                     }
+                    break;
+                }
+
+                case CheckerAction.OP_REDUCE: {
+                    reduceOpCallback(input, checkerStack, stateStack);
                     break;
                 }
             }
