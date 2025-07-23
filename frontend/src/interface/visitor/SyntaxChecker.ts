@@ -20,4 +20,4 @@ export type SyntaxStackAction = (
     input: Array<Token | ComposedToken>,
     checkerStack: Array<Token | ComposedToken>,
     stateStack: Array<SyntaxState>,
-) => void;
+) => boolean;
