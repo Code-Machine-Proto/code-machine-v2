@@ -53,7 +53,7 @@ export const NO_ARGS_REGEX_POLYRISC = /^(stop|nop)$/;
 
 export const JUMP_POLYRISC = /^(br(z|nz|lz|gez)?)$/;
 
-export const TWO_REG_POLYRISC = /^(sh(l|r)?|not|mv|ld|st|ldi)$/;
+export const TWO_REG_POLYRISC = /^(sh(l|r)?|not|mv)$/;
 
 export const LOAD_REGEX = /^ld$/;
 

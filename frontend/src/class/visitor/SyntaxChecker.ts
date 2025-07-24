@@ -2,7 +2,7 @@ import type Accumulator from "@src/class/Accumulator";
 import type { Visitor } from "@src/interface/visitor/VisitorInterface";
 import type MaAccumulator from "@src/class/MaAccumulator";
 import type PolyRisc from "@src/class/PolyRisc";
-import { ComposedTokenType, TokenType, type ComposedToken, type Token } from "@src/interface/visitor/Token";
+import { ComposedTokenType, RiscTokenType, TokenType, type ComposedToken, type RiscToken, type Token } from "@src/interface/visitor/Token";
 import { SYNTAX_TABLE } from "@src/constants/SyntaxChecker/SyntaxTableAcc";
 import { SyntaxState } from "@src/constants/SyntaxChecker/SyntaxCheckerState";
 import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
@@ -184,49 +184,103 @@ export class SyntaxCheckerVisitor implements Visitor {
     }
 
     opReducePolyRisc(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
-        const lastOp = checkerStack.at(-1);
-        if (!lastOp) return false;
-        let number = 1;
-        if ( this.hasArgs(lastOp.value) ) {
-            number++;
-            if ( this.isJump(lastOp.value) && input[0].type !== TokenType.LABEL ) {
-                input[0].error = JUMP_LABEL;
-                input.shift();
-                return true;
-            } else if ( input[0].type !== TokenType.REGISTER || this.isStore(lastOp.value) && !/(.+),/.test(input[0].value) ) {
-                input[0].error = OPERATION_REGISTER;
-                input.shift();
-                return true;
-            }
-
-            if ( !this.isJump(lastOp.value) ) {
-                number++;
-
-                if ( this.isImmLoad(lastOp.value) && input[1].type !== TokenType.NUMBER ) {
-                    input[1].error = LDI_IMMEDIATE;
-                    input.shift();
-                    return true;
-                } else if ( input[1].type !== TokenType.REGISTER || this.isLoad(lastOp.value) && !/(.+)/.test(input[1].value) ) {
-                    input[1].error = OPERATION_REGISTER;
-                    input.shift();
-                    return true;
+        let hasError = false;
+        let isFinished = false;
+        while (!isFinished && input.length > 0) {
+            const index = stateStack.at(-1);
+            const action = SYNTAX_TABLE[index !== undefined ? index : SyntaxState.COMPLETE_PROGRAM][input[0].type];
+            switch (action.type) {
+                case CheckerAction.ACCEPT: {
+                    isFinished = true;
+                    break;
                 }
 
-                if ( !TWO_REG_POLYRISC.test(lastOp.value) || /(.+),?/.test(input[2].value) ) {
-                    number++;
-                    if ( input[2].type !== TokenType.REGISTER ) {
-                        input[2].error = OPERATION_REGISTER;
+                case CheckerAction.ERROR: {
+                    hasError = true;
+                    const token = input.shift();
+                    if (token) {
+                        token.error = action.message;
                     }
+                    break;
+                }
+
+                case CheckerAction.REDUCE: {
+                    this.reduceStack(input, checkerStack, stateStack, action);
+                    break;
+                }
+
+                case CheckerAction.SHIFT: {
+                    const token = this.shiftStack(input, checkerStack, stateStack, action);
+                    if (token) {
+                        token.warning = action.message;
+                    }
+                    break;
                 }
             }
         }
 
-        for (let i = 0; i < number - 1; i++) {
-            this.shiftStack(input, checkerStack, stateStack, { type: CheckerAction.SHIFT, number: SyntaxState.DETECT_OPERATION } as SyntaxTableEntry);
-        }
+        return hasError;
+    }
 
-        this.reduceStack(input, checkerStack, stateStack, { type: CheckerAction.REDUCE, number: number, reducedAddition: ComposedTokenType.INSTRUCTION } as SyntaxTableEntry)
-        return false;
+    changeTokenType(token: Token | ComposedToken): RiscToken {
+        let type;
+        switch ( token.type ) {
+            case TokenType.OPERATION: {
+                type = RiscTokenType.THREE_REG;
+
+                if ( !this.hasArgs(token.value) ) {
+                    type = RiscTokenType.NO_ARGS;
+                }
+
+                if ( this.isJump(token.value) ) {
+                    type = RiscTokenType.JUMP;
+                }
+
+                if ( this.isImmLoad(token.value) ) {
+                    type = RiscTokenType.IMM_LOAD;
+                }
+
+                if ( this.isLoad(token.value) ) {
+                    type = RiscTokenType.LOAD;
+                }
+
+                if ( this.isStore(token.value) ) {
+                    type = RiscTokenType.STORE;
+                }
+
+                if ( this.hasTwoReg(token.value) ) {
+                    type = RiscTokenType.TWO_REG;
+                }
+
+                break;
+            }
+
+            case TokenType.NUMBER: {
+                type = RiscTokenType.NUMBER;
+                break;
+            }
+
+            case TokenType.LABEL: {
+                type = RiscTokenType.LABEL;
+                break;
+            }
+
+            case TokenType.REGISTER: {
+                type = RiscTokenType.REGISTER;
+                break;
+            }
+
+            case ComposedTokenType.INSTRUCTION: {
+                type = RiscTokenType.INSTRUCTION;
+                break;
+            }
+
+            default: {
+                type = RiscTokenType.OTHER;
+                break;
+            }
+        }
+        return { type: type, value: token.value };
     }
 
     hasArgs(value: string): boolean {
@@ -247,5 +301,9 @@ export class SyntaxCheckerVisitor implements Visitor {
 
     isImmLoad(value: string): boolean {
         return IMM_LOAD_REGEX.test(value);
+    }
+
+    hasTwoReg(value: string): boolean {
+        return TWO_REG_POLYRISC.test(value);
     }
 }

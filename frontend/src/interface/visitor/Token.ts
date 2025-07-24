@@ -13,6 +13,27 @@ export enum TokenType {
     REGISTER = "register",
 }
 
+export interface RiscToken {
+    value: string,
+    type: RiscTokenType
+}
+
+export enum RiscTokenType {
+    NO_ARGS,
+    TWO_REG,
+    THREE_REG,
+    JUMP,
+    IMM_LOAD,
+    STORE,
+    LOAD,
+    NUMBER,
+    REGISTER,
+    LABEL,
+    INSTRUCTION,
+    ARGUMENTS,
+    OTHER,
+}
+
 /**
  * Interface d'un jeton simple
  */
