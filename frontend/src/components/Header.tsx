@@ -1,6 +1,5 @@
 import logo from "@src/assets/code-machine-logo.png";
 import arrow from "@src/assets/arrow.svg";
-
 import { Link, useLocation } from "react-router";
 
 /**
@@ -12,7 +11,7 @@ import { Link, useLocation } from "react-router";
 export default function Header() {
     const pathName = useLocation().pathname;
     return (
-    <header className="flex h-[5rem] bg-main-950 justify-center items-center">
+    <header className="flex h-[5rem] bg-main-950 justify-center items-center gap-3" >
         <Link to="/" className="flex bg-main-950 justify-center items-center gap-5" >
             {
                 pathName !== '/' &&
@@ -21,6 +20,9 @@ export default function Header() {
             <img src={ logo } alt="Logo" className="h-[3rem]" />
             <p className="text-white text-xl">Code Machine</p>
         </Link>
+        <p className="text-white text-sm" >
+            v{__APP_VERSION__}
+        </p>
     </header>
     );
 }
