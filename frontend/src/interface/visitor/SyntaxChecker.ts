@@ -1,5 +1,5 @@
 import type { SyntaxState } from "@src/constants/SyntaxChecker/SyntaxCheckerState";
-import type { ComposedToken, ComposedTokenType, Token } from "./Token";
+import type { ComposedToken, ComposedTokenType, Token, TokenType } from "./Token";
 
 export enum CheckerAction {
     SHIFT,
@@ -13,7 +13,7 @@ export interface SyntaxTableEntry {
     type: CheckerAction,
     number?: number,
     message?: string,
-    reducedAddition?: ComposedTokenType,
+    reducedAddition?: ComposedTokenType | TokenType.BLANK,
 }
 
 export type SyntaxStackAction = (
