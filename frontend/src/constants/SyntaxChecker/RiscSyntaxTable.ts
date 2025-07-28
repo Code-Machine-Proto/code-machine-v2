@@ -1,9 +1,7 @@
-import { RiscTokenType, TokenType } from "@src/interface/visitor/Token";
+import { RiscTokenType, TokenType, ComposedTokenType } from "@src/interface/visitor/Token";
 import { RiscSyntaxState } from "./SyntaxCheckerState";
-import type { SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
-import { CheckerAction } from "@src/interface/visitor/SyntaxChecker";
+import { type SyntaxTableEntry, CheckerAction } from "@src/interface/visitor/SyntaxChecker";
 import { JUMP_LABEL, LDI_IMMEDIATE, LOGIC_ERROR, OPERATION_REGISTER } from "./ErrorAndWarning";
-import { ComposedTokenType } from "@src/interface/visitor/Token";
 
 export const RISC_SYNTAX_TABLE: Record<RiscSyntaxState, Record<RiscTokenType, SyntaxTableEntry>> = {
     [RiscSyntaxState.INITIAL]: {

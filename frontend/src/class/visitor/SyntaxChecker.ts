@@ -164,7 +164,7 @@ export class SyntaxCheckerVisitor implements Visitor {
 
     opReduceAcc(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
         const lastOp = checkerStack.at(-1);
-        if ( !lastOp ) return false;
+        if ( !lastOp ) { return false; }
         let number = 1;
         if ( !NO_ARGS_OPERATION_REGEX_ACC.test(lastOp.value) ) {
             number++;
@@ -184,7 +184,7 @@ export class SyntaxCheckerVisitor implements Visitor {
 
     opReduceMa(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
         const lastOp = checkerStack.at(-1);
-        if (!lastOp) return false;
+        if (!lastOp) { return false; }
         let number = 1;
         if (!NO_ARGS_OPERATION_REGEX_MA.test(lastOp.value)) {
             number++;
@@ -358,7 +358,7 @@ export class SyntaxCheckerVisitor implements Visitor {
     }
 
     formatArguments(checkerStack: Array<RiscToken>, state: RiscSyntaxState, action: SyntaxTableEntry): void {
-        if ( !action.number ) return;
+        if ( !action.number ) { return; }
         switch ( state ) {
             case RiscSyntaxState.IMM_LOAD_NUM: {
                 const token = checkerStack.at(-action.number);
@@ -396,9 +396,9 @@ export class SyntaxCheckerVisitor implements Visitor {
     }
 
     formatRegister(token: RiscToken, format: Array<RegisterFormat>): void {
-        if ( token.type !== RiscTokenType.REGISTER ) return;
+        if ( token.type !== RiscTokenType.REGISTER ) { return; }
         const regexMatch = token.value.match(SIMPLE_REGISTER_POLYRISC);
-        if ( !regexMatch ) return;
+        if ( !regexMatch ) { return; }
         let value = regexMatch[0];
         format.forEach(e => {
             if ( e === RegisterFormat.PARANTHESE ) {

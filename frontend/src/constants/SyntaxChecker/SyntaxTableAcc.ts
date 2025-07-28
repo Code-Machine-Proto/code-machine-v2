@@ -1,7 +1,7 @@
 import { CheckerAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import { ComposedTokenType, TokenType } from "@src/interface/visitor/Token";
 import { SyntaxState } from "./SyntaxCheckerState";
-import { ADDITIONAL_TOKEN, DATA_DECLARATION, INSTRUCTION_ADRESS, LOGIC_ERROR, NO_TEXT_LABEL, WARNING_LABEL, WARNING_OPERATION } from "./ErrorAndWarning";
+import { ADDITIONAL_TOKEN, DATA_DECLARATION, LOGIC_ERROR, NO_TEXT_LABEL, WARNING_LABEL } from "./ErrorAndWarning";
 
 export const SYNTAX_TABLE: Record<SyntaxState, Record<TokenType | ComposedTokenType, SyntaxTableEntry>> = {
     [SyntaxState.INITIAL]: {
