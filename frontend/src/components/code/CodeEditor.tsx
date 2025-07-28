@@ -4,6 +4,7 @@ import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
+import GearSvg from "@src/assets/gear.svg";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -75,13 +76,14 @@ export default function CodeEditor() {
                 </div>
             </div>
             <button 
-                className="text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900"
+                className="flex text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900 p-2 gap-5 justify-center items-center"
                 onClick={() => {
                     dispatch({ type: CodeAction.RESET_CODE });
                     fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });
                 }}
             >
-                Compiler
+                <img src={ GearSvg } alt="gear" className="size-[2rem]"/>
+                <span className="inline-block align-middle" >Compiler</span>
             </button>
         </div>
     );
