@@ -11,7 +11,7 @@ import type { ClientActionFunctionArgs } from "react-router";
 export async function clientAction({ request }: ClientActionFunctionArgs): Promise<Array<ProcessorStep>> {
     const data = await request.formData();
     const processor: Processor = JSON.parse(data.get("processor") as string);
-    let { output } = await compileAndRun({ processorId: processor.processorId, program: processor.code.split("\n") }) as { hex: Array<string>, output: string };
+    let { output } = await compileAndRun({ processorId: processor.processorId, program: processor.cleanCode }) as { hex: Array<string>, output: string };
     /* eslint-disable no-magic-numbers */
     output = output.slice(0, -2) + output.slice(-1);
     /* eslint-enable no-magic-numbers */
