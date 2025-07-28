@@ -6,6 +6,7 @@ import { PlayerMode } from "@src/interface/StepControl";
 import type { Token } from "@src/interface/visitor/Token";
 import type { Visitor } from "@src/interface/visitor/VisitorInterface";
 import { getCode } from "@src/module-store/CodeStore";
+import type { W } from "vitest/dist/chunks/worker.d.tQu2eJQy.js";
 
 /**
  * Classe représentant l'état d'un processeur quelquonque

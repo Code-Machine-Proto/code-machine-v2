@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -15,6 +15,7 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
     const dispatch = useContext(DispatchProcessorContext);
     const processor = useContext(ProcessorContext);
     const maxStep = processor.steps.length - 1;
+    const [shownStep, setShownStep] = useState<number | undefined>(processor.count);
 
     return (
         <div className="flex h-[4rem] items-center gap-5"> 
@@ -48,7 +49,21 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
             </div>
             
             <div className="flex text-white items-center">
-                <input type="number" disabled className="outline-none bg-slate-800 rounded-md p-2 w-[4rem] text-right" value={processor.count} min={0} max={maxStep}/>
+                <input
+                    type="number"
+                    className="outline-none bg-slate-800 rounded-md p-2 w-[4rem] text-right"
+                    value={shownStep}
+                    min={0}
+                    max={maxStep}
+                    onChange={(e) => {
+                        dispatch({ type: CodeAction.CHANGE_STEP, newStep: e.target.valueAsNumber })
+                        if ( e.target.valueAsNumber > maxStep) {
+                            setShownStep(maxStep);
+                        } else {
+                            setShownStep(e.target.valueAsNumber);
+                        }
+                    }}
+                />
                 <p>/{ maxStep }</p>
             </div>
             <div className="flex items-center gap-1">
