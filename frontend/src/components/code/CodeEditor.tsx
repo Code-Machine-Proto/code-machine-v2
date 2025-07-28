@@ -4,7 +4,7 @@ import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
-import GearSvg from "@src/assets/gear.svg";
+import loader from "@src/assets/loader.svg";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -26,6 +26,10 @@ export default function CodeEditor() {
             dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data as Array<ProcessorStep> })
         }
     }, [fetcher.data, dispatch]);
+
+    useEffect(() => {
+        console.log(fetcher.state);
+    }, [fetcher.state]);
     
     return(
         <div 
@@ -76,14 +80,15 @@ export default function CodeEditor() {
                 </div>
             </div>
             <button 
-                className="flex text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900 p-2 gap-5 justify-center items-center"
+                className="flex text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900 p-2 gap-2 justify-around items-center"
                 onClick={() => {
                     dispatch({ type: CodeAction.RESET_CODE });
                     fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });
                 }}
             >
-                <img src={ GearSvg } alt="gear" className="size-[2rem]"/>
+                <div className="size-[2rem]"/>
                 <span className="inline-block align-middle" >Compiler</span>
+                <img src={ loader } alt="loader" className={ `animate-spin size-[2rem] ${ fetcher.state === "submitting" ? "visible" : "invisible" }` } />
             </button>
         </div>
     );
