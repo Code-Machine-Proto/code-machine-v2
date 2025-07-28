@@ -56,12 +56,8 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
                     min={0}
                     max={maxStep}
                     onChange={(e) => {
-                        dispatch({ type: CodeAction.CHANGE_STEP, newStep: e.target.valueAsNumber })
-                        if ( e.target.valueAsNumber > maxStep) {
-                            setShownStep(maxStep);
-                        } else {
-                            setShownStep(e.target.valueAsNumber);
-                        }
+                        dispatch({ type: CodeAction.CHANGE_STEP, newStep: e.target.valueAsNumber });
+                        setShownStep(e.target.valueAsNumber > maxStep ? maxStep : e.target.valueAsNumber);
                     }}
                 />
                 <p>/{ maxStep }</p>
