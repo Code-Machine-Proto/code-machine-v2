@@ -49,13 +49,13 @@ export default function CodeEditor() {
                 <div className="relative">
                     <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll" ref={textVisual}>
                         {
-                            processor.highlightedText.map((line, iindex) => {
+                            processor.highlightedText.map((line, iIndex) => {
                                 return (
-                                    <p key={iindex} className="h-6">
+                                    <p key={iIndex} className="h-6">
                                         {
-                                            line.map((element, jindex) => {
+                                            line.map((element, jIndex) => {
                                                 return (
-                                                    <span key={`${iindex}-${jindex}`} className={`whitespace-pre ${element.color}`} >{ element.text }</span>
+                                                    <span key={`${iIndex}-${jIndex}`} className={`whitespace-pre ${element.color}`} >{ element.text }</span>
                                                 );
                                             })
                                         }
@@ -79,8 +79,13 @@ export default function CodeEditor() {
                     />
                 </div>
             </div>
-            <button 
-                className="flex text-main-400 border-main-400 border-2 rounded-md cursor-pointer bg-transparent hover:bg-main-900 p-2 gap-2 justify-around items-center"
+            <button
+                className={
+                    `bg-transparent ${ 
+                        processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-400 border-red-500" 
+                    } border-2 rounded-md p-2 gap-2 justify-around items-center`
+                }
+                disabled={ !processor.isCompilable }
                 onClick={() => {
                     dispatch({ type: CodeAction.RESET_CODE });
                     fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });

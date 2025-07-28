@@ -6,14 +6,15 @@ import type PolyRisc from "@src/class/PolyRisc";
 import { 
     COMMENT_REGEX,
     LABEL_REGEX,
-    MAIN_LABEL_REGEX,
+    TEXT_LABEL_REGEX,
+    DATA_LABEL_REGEX,
     NUMBER_REGEX,
     OPERATION_REGEX_ACC,
     OPERATION_REGEX_MA,
     OPERATION_REGEX_POLYRISC,
     REGISTER_POLYRISC,
     WHITESPACE_REGEX,
-    WORD_REGEX
+    WORD_REGEX,
 } from "@src/constants/Regex";
 import type Processor from "@src/class/Processor";
 
@@ -124,8 +125,12 @@ export class ParserVisitor implements Visitor {
      * Permets de générer les jetons communs
      */
     private regularSymbolChecker(token: Token): Token {
-        if ( MAIN_LABEL_REGEX.test(token.value) ) {
-            return { type: TokenType.MAIN_LABEL, value: token.value };
+        if ( TEXT_LABEL_REGEX.test(token.value) ) {
+            return { type: TokenType.TEXT_LABEL, value: token.value };
+        }
+
+        if ( DATA_LABEL_REGEX.test(token.value) ) {
+            return { type: TokenType.DATA_LABEL, value: token.value };
         }
 
         if ( LABEL_REGEX.test(token.value) ) {
