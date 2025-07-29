@@ -4,6 +4,7 @@ import HexNumber from "./utils-hex/HexNumber";
 import HexNumberLine from "./utils-hex/HexNumberLine";
 import HexSwitcher from "./utils-hex/HexSwitcher";
 import type { MemoryProps } from "@src/interface/props/Memory";
+import { REGISTER_16_BIT } from "@src/constants/HexUtils";
 
 /**
  * Affiche une mémoire à partir d'un tableau 1d
@@ -13,7 +14,7 @@ import type { MemoryProps } from "@src/interface/props/Memory";
  * @prop nom - Nom de la mémoire à afficher
  * @returns le composant react à afficher
  */
-export default function Memory({ memoryContent, className, stimulatedCell, nom }: MemoryProps) {
+export default function Memory({ memoryContent, className, stimulatedCell, nom, registerSize = REGISTER_16_BIT }: MemoryProps) {
     const [columnCount, setColumnCount] = useState<number>(DEFAULT_COLUMN_NUMBER);
     const [adresseFormat, setAdressFormat] = useState<boolean>(false);
     const [memoryCellFormat, setMemoryCellFormat] = useState<boolean>(true);
@@ -62,11 +63,12 @@ export default function Memory({ memoryContent, className, stimulatedCell, nom }
                             key={index}
                             className={`flex flex-col h-[4rem] w-[7rem] justify-center p-2 rounded-sm ${stimulatedCell === index ? "bg-green-700" : "bg-slate-700"}`}
                         >
-                            <HexNumber 
+                            <HexNumber
                                 keygen={index} 
                                 className={"text-white"}
                                 number={value}
                                 isBase10={memoryCellFormat}
+                                registerSize={registerSize}
                             />
                         </div>
                         );

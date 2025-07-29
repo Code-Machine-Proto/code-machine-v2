@@ -6,6 +6,7 @@ import Bus from "@src/components/processor/parts/Bus";
 import { useContext } from "react";
 import { ProcessorContext } from "@src/components/code/CodeProvider";
 import { LineStatePolyRisc } from "@src/interface/Line";
+import { REGISTER_12_BIT, REGISTER_28_BIT } from "@src/constants/HexUtils";
 
 /**
  * Affiche le chemin de donnée du processeur PolyRisc
@@ -284,8 +285,8 @@ export default function VisualPolyRisc() {
                 <text x={165} y={190} dominantBaseline="middle" textAnchor="end" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" className="bg-pc" number={currentStep.pcState} x={134.5} y={137.5} isActivated={ nop || branching } />
-            <RegisterBox name="IR" className="bg-ir" number={currentStep.irState} x={467.5} y={137.5} isActivated={ fetch } />
+            <RegisterBox name="PC" className="bg-pc" number={currentStep.pcState} x={134.5} y={137.5} isActivated={nop || branching} registerSize={REGISTER_12_BIT} />
+            <RegisterBox name="IR" className="bg-ir" number={currentStep.irState} x={467.5} y={137.5} isActivated={fetch} registerSize={REGISTER_28_BIT} />
 
             <circle cx="282" cy="170" r="5" className={ fetch || nop ? "fill-red-500" : "fill-white" } />
             <circle cx="616" cy="170" r="5" className={ opTwoReg || opThreeReg || branching || load || store || loadI ? "fill-red-500" : "fill-white" } />

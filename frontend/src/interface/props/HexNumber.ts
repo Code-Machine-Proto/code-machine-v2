@@ -6,4 +6,5 @@ export interface HexNumberProps {
     isBase10?: boolean,
     className?: string,
     keygen?: number,
+    registerSize: number,
 }

@@ -1,5 +1,6 @@
 import type { HexNumberLineProps } from "@src/interface/props/HexNumberLine";
 import HexNumber from "./HexNumber";
+import { REGISTER_16_BIT } from "@src/constants/HexUtils";
 
 /**
  * Permets de générer une ligne de nombre avec un intervalle régulier ainsi qu'un maximum défini
@@ -20,7 +21,7 @@ export default function HexNumberLine({ max, jump = 1, className = "", isBase10 
         <>{
         numbers.map((value, index) => 
         <div key={index} className={divClassName}>
-            <HexNumber keygen={index} number={value} className={ className } isBase10={ isBase10 } />
+            <HexNumber keygen={index} number={value} className={ className } isBase10={ isBase10 } registerSize={REGISTER_16_BIT} />
         </div>
         )
         }</>

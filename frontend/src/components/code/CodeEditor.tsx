@@ -27,10 +27,6 @@ export default function CodeEditor() {
         }
     }, [fetcher.data, dispatch]);
 
-    useEffect(() => {
-        console.log(fetcher.state);
-    }, [fetcher.state]);
-    
     return(
         <div 
             className="flex flex-col p-5 bg-main-950 rounded-xl w-[20rem] gap-2"
@@ -81,7 +77,7 @@ export default function CodeEditor() {
             </div>
             <button
                 className={
-                    `bg-transparent ${ 
+                    `bg-transparent flex ${ 
                         processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-400 border-red-500" 
                     } border-2 rounded-md p-2 gap-2 justify-around items-center`
                 }

@@ -5,4 +5,5 @@ export interface HexBoxProps {
     name: string,
     number: number,
     defaultIsBase10?: boolean,
+    registerSize?: number,
 }
