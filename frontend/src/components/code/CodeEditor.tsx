@@ -19,11 +19,12 @@ export default function CodeEditor() {
     const textArea = useRef<HTMLTextAreaElement>(null);
     const textVisual = useRef<HTMLDivElement>(null);
 
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<{ result: Array<ProcessorStep>, error?: string }>();
 
     useEffect(() => {
-        if( fetcher.data ) {
-            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data as Array<ProcessorStep> })
+        console.log(fetcher.data?.error);
+        if (fetcher.data && !fetcher.data.error ) {
+            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data.result });
         }
     }, [fetcher.data, dispatch]);
 
@@ -79,7 +80,7 @@ export default function CodeEditor() {
                 className={
                     `bg-transparent flex ${ 
                         processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-400 border-red-500" 
-                    } border-2 rounded-md p-2 gap-2 justify-around items-center`
+                    } border-2 rounded-md p-2 gap-2 justify-around items-center h-[4rem]`
                 }
                 disabled={ !processor.isCompilable }
                 onClick={() => {

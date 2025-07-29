@@ -65,7 +65,7 @@ export default abstract class Processor {
         this.mode = PlayerMode.regular;
         this.tokenizedLines = [];
         this.highlightedText = [];
-        this.isCompilable = false;
+        this.isCompilable = true;
         this.cleanCode = [];
     }
 

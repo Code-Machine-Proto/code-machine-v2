@@ -98,7 +98,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
         storeCode(state.processorId, action.code);
         state.code = action.code;
         state.accept(new ParserVisitor());
-        state.accept(new SyntaxCheckerVisitor());
+        //state.accept(new SyntaxCheckerVisitor());
         state.accept(new HighlightSyntaxVisitor());
     }
     return state.clone();
@@ -113,7 +113,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
 function changeProcessor(state: Processor, action: CodePayload): Processor {
     if ( action.newProcessor && action.newProcessor.processorId != state.processorId ) {
         action.newProcessor.accept(new ParserVisitor());
-        action.newProcessor.accept(new SyntaxCheckerVisitor());
+        //action.newProcessor.accept(new SyntaxCheckerVisitor());
         action.newProcessor.accept(new HighlightSyntaxVisitor());
         return action.newProcessor.clone();
     }

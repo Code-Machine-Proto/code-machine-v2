@@ -49,3 +49,7 @@ export default function App() {
       </>
     );
 }
+
+export function ErrorBoundary() {
+  return <p>Erreur inconnu</p>;
+}
