@@ -6,4 +6,4 @@ export enum MessageType {
     VALID,
 }
 
-export const DEFAULT_SNACK_BAR: SnackBarInterface = { visible: false, message: "", type: MessageType.NEUTRAL };
+export const DEFAULT_SNACK_BAR: SnackBarInterface = { visible: false, message: "", type: MessageType.NEUTRAL, duration: Infinity };

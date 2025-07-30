@@ -5,6 +5,8 @@ import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import loader from "@src/assets/loader.svg";
+import { SnackBarContext } from "../SnackBarProvider";
+import { MessageType } from "@src/constants/SnackBar";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -14,6 +16,7 @@ import loader from "@src/assets/loader.svg";
 export default function CodeEditor() {
     const processor = useContext(ProcessorContext);
     const dispatch = useContext(DispatchProcessorContext);
+    const setSnackBar = useContext(SnackBarContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -22,11 +25,13 @@ export default function CodeEditor() {
     const fetcher = useFetcher<{ result: Array<ProcessorStep>, error?: string }>();
 
     useEffect(() => {
-        console.log(fetcher.data?.error);
         if (fetcher.data && !fetcher.data.error ) {
+            setSnackBar({ visible: true, message: "Compilation réussie", type: MessageType.VALID, duration: 3000 });
             dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data.result });
+        } else if ( fetcher.data?.error) {
+            setSnackBar({ visible: true, message: fetcher.data.error, type: MessageType.ERROR, duration: 3000 });
         }
-    }, [fetcher.data, dispatch]);
+    }, [fetcher.data, dispatch, setSnackBar]);
 
     return(
         <div 

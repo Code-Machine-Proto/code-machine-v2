@@ -26,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col h-dvh">
+      <body className="flex flex-col h-dvh overflow-hidden">
         { children }
         <ScrollRestoration />
         <Scripts />
