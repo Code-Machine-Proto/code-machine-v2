@@ -16,7 +16,6 @@ import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } 
 import { PlayerMode } from "@src/interface/StepControl";
 import { HighlightSyntaxVisitor } from "@src/class/visitor/HighligthSyntax";
 import { ParserVisitor } from "@src/class/visitor/Parser";
-import { SyntaxCheckerVisitor } from "@src/class/visitor/SyntaxChecker";
 
 /**
  * Contexte pour accéder au valeur du code et son état
