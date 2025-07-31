@@ -2,6 +2,10 @@
 
 Cette application de simulation de processeur simple est utilisé dans le cadre du cours INF1600 à Polytechnique Montréal. Elle permets l'exécution de code en pseudo-assembleur sur trois architectures: à accumulateur, à accumulateur avec MA et le PolyRisc.
 
+## Guide pour les étudiants
+
+Le [guide](GuideCodeMachine.md) contient les fonctionalités courantes de l'application et quelques astuces pour mieux utilisé CodeMachine
+
 ## Frontend
 
 Client web utilisé avec electron ou un browser régulier. Pour de plus amples détails, consultez la [documentation](frontend/README.md) du module.
