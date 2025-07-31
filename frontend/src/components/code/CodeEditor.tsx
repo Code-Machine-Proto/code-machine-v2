@@ -7,6 +7,8 @@ import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import loader from "@src/assets/loader.svg";
 import { SnackBarContext } from "../SnackBarProvider";
 import { MessageType } from "@src/constants/SnackBar";
+import type Processor from "@src/class/Processor";
+import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -32,6 +34,10 @@ export default function CodeEditor() {
             setSnackBar({ visible: true, message: fetcher.data.error, type: MessageType.ERROR, duration: 3000 });
         }
     }, [fetcher.data, dispatch, setSnackBar]);
+
+    useEffect(() => {
+        generateErrorMessage(processor, setSnackBar);
+    }, [processor, setSnackBar]);
 
     return(
         <div 
@@ -126,3 +132,18 @@ function handleHorizontalScroll(scroller: ScrollRef, scrolled: ScrollRef): void 
     }
 }
 
+function generateErrorMessage(processor: Processor, setSnackBar: SnackBarDispatch): void {
+    let message = "";
+    processor.tokenizedLines.forEach((tokenLine, i)=> {
+        tokenLine.forEach(token => {
+            if (token.error) {
+                message += `Erreur ligne ${i + 1} - ${token.error}\n`; 
+            }
+
+            if (token.warning) {
+                message += `Avertissement ligne ${i + 1} - ${token.warning}\n`;
+            }
+        });
+    });
+    setSnackBar({ visible: !!message, type: MessageType.ERROR, message: message, duration: Infinity });
+}

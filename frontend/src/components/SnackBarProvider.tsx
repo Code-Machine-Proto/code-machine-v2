@@ -29,7 +29,7 @@ export function SnackBarProvider({ children }: { children: ReactNode }) {
                         !isNeutral(snackBar.type) &&
                         <img src={isError(snackBar.type) ? notValid : valid} alt="check-logo" className="size-[3rem]" />
                     }
-                    <p className="text-white w-full">{snackBar.message}</p>
+                    <p className="text-white w-full whitespace-pre-line overflow-y-scroll overflow-x-hiden h-full">{snackBar.message}</p>
                 {
                     isDurationInfinite(snackBar.duration) &&
                     <button
