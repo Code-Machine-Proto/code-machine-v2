@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { ProcessorContext } from "@src/components/code/CodeProvider";
 import Bus from "@src/components/processor/parts/Bus";
 import { LineStateAccumulator } from "@src/interface/Line";
+import { REGISTER_8_BIT } from "@src/constants/HexUtils";
 
 /**
  * Affiche le chemin des données du processeur à accumulateur
@@ -179,7 +180,7 @@ export default function VisualAccumulator() {
                 <text x="165" y="243" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>
 
-            <RegisterBox name="PC" number={currentStep.pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } />
+            <RegisterBox name="PC" number={currentStep.pcState} className="bg-pc" x={120} y={100} isActivated={ inc || branching } registerSize={REGISTER_8_BIT} />
             <RegisterBox name="IR" number={currentStep.irState} className="bg-ir" x={120} y={220} isActivated={ fetch } />
             <RegisterBox name="ACC" number={currentStep.accState ? currentStep.accState : 0} className="bg-acc" x={940} y={160} defaultIsBase10={true} isActivated={ load || alu } />
 

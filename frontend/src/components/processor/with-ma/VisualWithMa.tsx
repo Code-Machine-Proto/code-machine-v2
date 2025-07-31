@@ -4,6 +4,7 @@ import Bus from "@src/components/processor/parts/Bus";
 import Multiplexer from "@src/components/processor/parts/Multiplexer";
 import ObscureMemory from "@src/components/processor/parts/ObscureMemory";
 import RegisterBox from "@src/components/processor/parts/RegisterBox";
+import { REGISTER_8_BIT } from "@src/constants/HexUtils";
 import { LineStateMa } from "@src/interface/Line";
 import { useContext } from "react";
 
@@ -305,7 +306,7 @@ export default function VisualWithMa() {
                 <text x="165" y="212" textAnchor="end" dominantBaseline="middle" fill="black">data_out</text>
             </ObscureMemory>            
 
-            <RegisterBox name="PC" number={currentStep.pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } />
+            <RegisterBox name="PC" number={currentStep.pcState} x={140} y={77} className="bg-pc" isActivated={ branching || nop } registerSize={REGISTER_8_BIT} />
             <RegisterBox name="IR" number={currentStep.irState} x={140} y={225} className="bg-ir" isActivated={ fetch } />
             <RegisterBox 
                 name="ACC"
