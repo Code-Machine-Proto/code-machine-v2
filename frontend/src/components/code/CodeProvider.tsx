@@ -126,7 +126,6 @@ function changeProcessor(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état 
  */
 function forward(state: Processor): Processor {
-    console.log("allo");
     const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
     if ( state.steps &&  state.count + inc < state.steps.length  ) {
         state.count += inc;
