@@ -8,12 +8,13 @@ import { RiscSyntaxState, SyntaxState } from "@src/constants/SyntaxChecker/Synta
 import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import type Processor from "@src/class/Processor";
 import { IMM_LOAD_REGEX, JUMP_POLYRISC, LOAD_REGEX, NO_ARGS_OPERATION_REGEX_ACC, NO_ARGS_OPERATION_REGEX_MA, NO_ARGS_REGEX_POLYRISC, SIMPLE_REGISTER_POLYRISC, STORE_REGEX, TWO_REG_POLYRISC } from "@src/constants/Regex";
-import { INSTRUCTION_ADRESS, WARNING_OPERATION } from "@src/constants/SyntaxChecker/ErrorAndWarning";
+import { INSTRUCTION_ADRESS, LABEL_INEXISTANT, WARNING_OPERATION } from "@src/constants/SyntaxChecker/ErrorAndWarning";
 import { RISC_SYNTAX_TABLE } from "@src/constants/SyntaxChecker/RiscSyntaxTable";
 import { RegisterFormat } from "@src/interface/visitor/RegisterFormat";
 import { BASE_RISC_TOKEN } from "@src/constants/SyntaxChecker/BaseToken";
 
 export class SyntaxCheckerVisitor implements Visitor {
+    private labelArray: Array<Token> = [];
     visitAccumulator(processor: Accumulator): void {
         const input: Array<Token | ComposedToken> = this.filterTokens( processor );
         input.push({ type: ComposedTokenType.END_OF_CODE } as ComposedToken);
@@ -109,6 +110,10 @@ export class SyntaxCheckerVisitor implements Visitor {
                 token.error = "Certains caractères sont invalides";
             }
 
+            if ( token.type === TokenType.LABEL ) {
+                this.labelArray.push(token);
+            }
+
             return token.type !== TokenType.BLANK && token.type !== TokenType.COMMENT;
         });
     }
@@ -174,6 +179,12 @@ export class SyntaxCheckerVisitor implements Visitor {
                 input[0].error = INSTRUCTION_ADRESS;
                 input.shift();
                 return true;
+            } else {
+                if (!this.labelArray.find(label => label.value === input[0].value + ":")) {
+                    input[0].error = LABEL_INEXISTANT;
+                    input.shift();
+                    return true;
+                }
             }
             this.shiftStack(input, checkerStack, stateStack, { type: CheckerAction.SHIFT, number: SyntaxState.DETECT_OPERATION } as SyntaxTableEntry );            
         }
@@ -194,6 +205,12 @@ export class SyntaxCheckerVisitor implements Visitor {
                 input[0].error = INSTRUCTION_ADRESS;
                 input.shift();
                 return true;
+            } else {
+                if (!this.labelArray.find(label => label.value === input[0].value + ":")) {
+                    input[0].error = LABEL_INEXISTANT;
+                    input.shift();
+                    return true;
+                }
             }
             this.shiftStack(input, checkerStack, stateStack, { type: CheckerAction.SHIFT, number: SyntaxState.DETECT_OPERATION } as SyntaxTableEntry);
         }
