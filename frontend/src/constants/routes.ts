@@ -1,4 +1,4 @@
-import App from "@src/root";
+import App, { ErrorBoundary } from "@src/root";
 import Home from "@src/routes/home";
 import AccumulatorProcessor from "@src/routes/processor/accumulator/Accumulator";
 import CompileAction, { clientAction } from "@src/routes/processor/CompileAction";
@@ -13,6 +13,7 @@ import type { ClientActionFunctionArgs, RouteObject } from "react-router";
 export const routes: RouteObject[] = [{
       path: "/",
       Component: App,
+      ErrorBoundary: ErrorBoundary,
       children: [
         { index: true, Component: Home },
         { 

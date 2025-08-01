@@ -8,6 +8,7 @@ import {
 import "./app.css";
 import Header from "@src/components/Header";
 import { CodeProvider } from "./components/code/CodeProvider";
+import { SnackBarProvider } from "./components/SnackBarProvider";
 
 /**
  * Disposition de base de l'application est affiché sur toutes les pages.
@@ -25,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col h-dvh">
+      <body className="flex flex-col h-dvh overflow-hidden">
         { children }
         <ScrollRestoration />
         <Scripts />
@@ -41,11 +42,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
  */
 export default function App() {
     return (
-      <>
-      <Header />
-      <CodeProvider>
-        <Outlet />
-      </CodeProvider>
-      </>
+      <SnackBarProvider>
+        <Header />
+        <CodeProvider>
+          <Outlet />
+        </CodeProvider>
+      </SnackBarProvider>
     );
+}
+
+export function ErrorBoundary() {
+  return <p>Erreur inconnu</p>;
 }

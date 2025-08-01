@@ -4,6 +4,11 @@ import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
+import loader from "@src/assets/loader.svg";
+import { SnackBarContext } from "../SnackBarProvider";
+import { MessageType } from "@src/constants/SnackBar";
+import type Processor from "@src/class/Processor";
+import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -13,19 +18,27 @@ import type { ProcessorStep } from "@src/interface/ProcessorStep";
 export default function CodeEditor() {
     const processor = useContext(ProcessorContext);
     const dispatch = useContext(DispatchProcessorContext);
+    const setSnackBar = useContext(SnackBarContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
     const textVisual = useRef<HTMLDivElement>(null);
 
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<{ result: Array<ProcessorStep>, error?: string }>();
 
     useEffect(() => {
-        if( fetcher.data ) {
-            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data as Array<ProcessorStep> })
+        if (fetcher.data && !fetcher.data.error ) {
+            setSnackBar({ visible: true, message: "Compilation réussie", type: MessageType.VALID, duration: 3000 });
+            dispatch({ type: CodeAction.CHANGE_EXECUTED_CODE, executedCode: fetcher.data.result });
+        } else if ( fetcher.data?.error) {
+            setSnackBar({ visible: true, message: fetcher.data.error, type: MessageType.ERROR, duration: 3000 });
         }
-    }, [fetcher.data, dispatch]);
-    
+    }, [fetcher.data, dispatch, setSnackBar]);
+
+    useEffect(() => {
+        generateErrorMessage(processor, setSnackBar);
+    }, [processor, setSnackBar]);
+
     return(
         <div 
             className="flex flex-col p-5 bg-main-950 rounded-xl w-[20rem] gap-2"
@@ -76,9 +89,9 @@ export default function CodeEditor() {
             </div>
             <button
                 className={
-                    `bg-transparent ${ 
+                    `bg-transparent flex ${ 
                         processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-400 border-red-500" 
-                    } border-2 rounded-md`
+                    } border-2 rounded-md p-2 gap-2 justify-around items-center h-[4rem]`
                 }
                 disabled={ !processor.isCompilable }
                 onClick={() => {
@@ -86,7 +99,9 @@ export default function CodeEditor() {
                     fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });
                 }}
             >
-                Compiler
+                <div className="size-[2rem]"/>
+                <span className="inline-block align-middle" >Compiler</span>
+                <img src={ loader } alt="loader" className={ `animate-spin size-[2rem] ${ fetcher.state === "submitting" ? "visible" : "invisible" }` } />
             </button>
         </div>
     );
@@ -117,3 +132,18 @@ function handleHorizontalScroll(scroller: ScrollRef, scrolled: ScrollRef): void 
     }
 }
 
+function generateErrorMessage(processor: Processor, setSnackBar: SnackBarDispatch): void {
+    let message = "";
+    processor.tokenizedLines.forEach((tokenLine, i)=> {
+        tokenLine.forEach(token => {
+            if (token.error) {
+                message += `Erreur ligne ${i + 1} - ${token.error}\n`; 
+            }
+
+            if (token.warning) {
+                message += `Avertissement ligne ${i + 1} - ${token.warning}\n`;
+            }
+        });
+    });
+    setSnackBar({ visible: !!message, type: MessageType.ERROR, message: message, duration: Infinity });
+}

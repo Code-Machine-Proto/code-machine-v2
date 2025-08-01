@@ -37,6 +37,7 @@ export interface RegisterBoxProps extends Coordinates {
     className: string,
     defaultIsBase10?: boolean,
     isActivated: boolean,
+    registerSize?: number,
 }
 
 /**

@@ -22,6 +22,7 @@ export enum CodeAction {
     PLAY_AND_PAUSE,
     CHANGE_MODE,
     RESET_CODE,
+    CHANGE_STEP,
 };
 
 /**
@@ -33,6 +34,7 @@ export interface CodePayload {
     newProcessor?: Processor,
     mode?: PlayerMode, 
     type: CodeAction,
+    newStep?: number,
 };
 
 /**

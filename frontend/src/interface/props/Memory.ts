@@ -6,4 +6,5 @@ export interface MemoryProps {
     className: string,
     stimulatedCell?: number,
     nom: string,
+    registerSize?: number,
 }

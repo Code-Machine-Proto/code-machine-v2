@@ -1,4 +1,4 @@
-import { BASE_10, BASE_16 } from "@src/constants/HexUtils";
+import { BASE_10, BASE_16, BASE_2 } from "@src/constants/HexUtils";
 import type { HexNumberProps } from "@src/interface/props/HexNumber";
 
 /**
@@ -9,11 +9,18 @@ import type { HexNumberProps } from "@src/interface/props/HexNumber";
  * @prop className - l'apparence du nombre remonté vers le haut
  * @returns le composant react qui devra s'afficher
  */
-export default function HexNumber({ keygen, number, isBase10 = false, className = "" }: HexNumberProps) {
+export default function HexNumber({ keygen, number, isBase10 = false, className = "", registerSize }: HexNumberProps) {
     return (
             <p key={keygen} className={ "text-right " + className }>
                 { isBase10 ? "" : "0x" }
-                { number.toString(isBase10 ? BASE_10 : BASE_16) }
+                { isBase10 ? number.toString(BASE_10) : hexadecimalConversion(number, registerSize) }
             </p>
     );
+}
+
+function hexadecimalConversion(number: number, registerSize: number): string {
+    if ( number < 0 ) {
+        number = BASE_2 ** registerSize + number;
+    }
+    return number.toString(BASE_16);
 }

@@ -61,17 +61,19 @@ export function CodeProvider({ children }: { children: ReactNode }) {
     );
 }
 
-const actionMap = new Map<CodeAction, ActionFunction>();
-actionMap.set(CodeAction.CHANGE_CODE, changeCode);
-actionMap.set(CodeAction.CHANGE_PROCESSOR, changeProcessor);
-actionMap.set(CodeAction.FORWARD, forward);
-actionMap.set(CodeAction.BACKWARD, backward);
-actionMap.set(CodeAction.TO_START, toStart);
-actionMap.set(CodeAction.TO_END, toEnd);
-actionMap.set(CodeAction.CHANGE_EXECUTED_CODE, changeExecutedCode);
-actionMap.set(CodeAction.PLAY_AND_PAUSE, playAndPause);
-actionMap.set(CodeAction.CHANGE_MODE, changeMode);
-actionMap.set(CodeAction.RESET_CODE, resetExecutionState);
+const actionMap: Record<CodeAction, ActionFunction> = {
+    [CodeAction.CHANGE_CODE]: changeCode,
+    [CodeAction.CHANGE_PROCESSOR]: changeProcessor,
+    [CodeAction.TO_START]: toStart,
+    [CodeAction.TO_END]: toEnd,
+    [CodeAction.FORWARD]: forward,
+    [CodeAction.BACKWARD]: backward,
+    [CodeAction.CHANGE_EXECUTED_CODE]: changeExecutedCode,
+    [CodeAction.PLAY_AND_PAUSE]: playAndPause,
+    [CodeAction.CHANGE_MODE]: changeMode,
+    [CodeAction.RESET_CODE]: resetExecutionState,
+    [CodeAction.CHANGE_STEP]: changeStep,
+};
 
 /**
  * Associe le type d'action avec la bonne fonction pour mettre à jour l'état
@@ -81,11 +83,8 @@ actionMap.set(CodeAction.RESET_CODE, resetExecutionState);
  * @returns Le prochain état
  */
 function codeReducer(state: Processor, action: CodePayload): Processor {
-    const actionFunction = actionMap.get(action.type);
-    if (actionFunction) {
-        return actionFunction(state, action);
-    }
-    throw new Error("L'action n'a pas été implémenté");
+    const actionFunction = actionMap[action.type];
+    return actionFunction(state, action);
 }
 
 /**
@@ -219,3 +218,10 @@ function resetExecutionState(state: Processor): Processor {
     return state.clone();
 }
 
+function changeStep(state: Processor, action: CodePayload): Processor {
+    const newState = state.clone();
+    if ( action.newStep !== undefined && action.newStep >= 0 && action.newStep < state.steps.length ) {
+        newState.count = action.newStep;
+    }
+    return newState;
+}
