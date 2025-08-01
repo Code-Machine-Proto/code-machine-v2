@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
@@ -16,6 +16,12 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
     const processor = useContext(ProcessorContext);
     const maxStep = processor.steps.length - 1;
     const [shownStep, setShownStep] = useState<number | undefined>(processor.count);
+
+    useEffect(() => {
+        if (shownStep !== undefined) {
+            setShownStep(processor.count);
+        }
+    },[setShownStep, processor.count])
 
     return (
         <div className="flex h-[4rem] items-center gap-5"> 
