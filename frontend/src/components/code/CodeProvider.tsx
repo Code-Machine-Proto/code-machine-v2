@@ -11,6 +11,7 @@ import {
     REGULAR_END,
     REGULAR_START,
     DEFAULT_EXECUTION_STATE,
+    MINIMUM_EXECUTION_SIZE,
 } from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
@@ -200,7 +201,7 @@ function playAndPause(state: Processor): Processor {
 function changeMode(state: Processor, action: CodePayload): Processor {
     if( action.mode ) {
         state.mode = action.mode;
-        state.count = action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
+        state.count = action.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE ? REGULAR_START : EXECUTION_START;
     }
     return state.clone();
 }
