@@ -8,13 +8,15 @@ import { RiscSyntaxState, SyntaxState } from "@src/constants/SyntaxChecker/Synta
 import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import type Processor from "@src/class/Processor";
 import { IMM_LOAD_REGEX, JUMP_POLYRISC, LOAD_REGEX, NO_ARGS_OPERATION_REGEX_ACC, NO_ARGS_OPERATION_REGEX_MA, NO_ARGS_REGEX_POLYRISC, SIMPLE_REGISTER_POLYRISC, STORE_REGEX, TWO_REG_POLYRISC } from "@src/constants/Regex";
-import { INSTRUCTION_ADRESS, LABEL_INEXISTANT, WARNING_OPERATION } from "@src/constants/SyntaxChecker/ErrorAndWarning";
+import { INSTRUCTION_ADRESS, INT_OVERFLOW, LABEL_INEXISTANT, WARNING_OPERATION } from "@src/constants/SyntaxChecker/ErrorAndWarning";
 import { RISC_SYNTAX_TABLE } from "@src/constants/SyntaxChecker/RiscSyntaxTable";
 import { RegisterFormat } from "@src/interface/visitor/RegisterFormat";
-import { BASE_RISC_TOKEN } from "@src/constants/SyntaxChecker/BaseToken";
+import { BASE_RISC_TOKEN, MAX_INT32, MIN_INT32 } from "@src/constants/SyntaxChecker/BaseToken";
 
 export class SyntaxCheckerVisitor implements Visitor {
     private labelArray: Array<Token> = [];
+    private hasNumberError = false;
+
     visitAccumulator(processor: Accumulator): void {
         const input: Array<Token | ComposedToken> = this.filterTokens( processor );
         input.push({ type: ComposedTokenType.END_OF_CODE } as ComposedToken);
@@ -110,6 +112,12 @@ export class SyntaxCheckerVisitor implements Visitor {
                 token.error = "Certains caractères sont invalides";
             }
 
+            const number = parseInt(token.value);
+            if (token.type === TokenType.NUMBER && (number > MAX_INT32 || number < MIN_INT32)) {
+                token.error = INT_OVERFLOW;
+                this.hasNumberError = true;
+            }
+
             if ( token.type === TokenType.LABEL ) {
                 this.labelArray.push(token);
             }
@@ -161,7 +169,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
             }
         }
-        processor.isCompilable = !hasError;
+        processor.isCompilable = !(hasError || this.hasNumberError);
         if ( !hasError ) {
             processor.cleanCode = checkerStack[0].value.split(/\n+/g).map(line => line.trim()).filter(line => line);
         }
@@ -169,6 +177,7 @@ export class SyntaxCheckerVisitor implements Visitor {
 
     opReduceAcc(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
         const lastOp = checkerStack.at(-1);
+        let hasLabelError = false;
         if ( !lastOp ) { return false; }
         let number = 1;
         if ( !NO_ARGS_OPERATION_REGEX_ACC.test(lastOp.value) ) {
@@ -182,18 +191,18 @@ export class SyntaxCheckerVisitor implements Visitor {
             } else {
                 if (!this.labelArray.find(label => label.value === input[0].value + ":")) {
                     input[0].error = LABEL_INEXISTANT;
-                    input.shift();
-                    return true;
+                    hasLabelError = true;
                 }
             }
             this.shiftStack(input, checkerStack, stateStack, { type: CheckerAction.SHIFT, number: SyntaxState.DETECT_OPERATION } as SyntaxTableEntry );            
         }
         this.reduceStack(input, checkerStack, stateStack, { type: CheckerAction.REDUCE, number: number, reducedAddition: ComposedTokenType.INSTRUCTION } as SyntaxTableEntry)
 
-        return false;
+        return hasLabelError;
     }
 
     opReduceMa(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
+        let hasLabelError = false;
         const lastOp = checkerStack.at(-1);
         if (!lastOp) { return false; }
         let number = 1;
@@ -208,15 +217,14 @@ export class SyntaxCheckerVisitor implements Visitor {
             } else {
                 if (!this.labelArray.find(label => label.value === input[0].value + ":")) {
                     input[0].error = LABEL_INEXISTANT;
-                    input.shift();
-                    return true;
+                    hasLabelError = true;
                 }
             }
             this.shiftStack(input, checkerStack, stateStack, { type: CheckerAction.SHIFT, number: SyntaxState.DETECT_OPERATION } as SyntaxTableEntry);
         }
         this.reduceStack(input, checkerStack, stateStack, { type: CheckerAction.REDUCE, number: number, reducedAddition: ComposedTokenType.INSTRUCTION } as SyntaxTableEntry)
 
-        return false;
+        return hasLabelError;
     }
 
     opReducePolyRisc(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
