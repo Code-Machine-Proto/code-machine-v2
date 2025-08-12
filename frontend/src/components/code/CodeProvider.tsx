@@ -178,6 +178,7 @@ function toEnd(state: Processor): Processor {
 function changeExecutedCode(state: Processor, action: CodePayload): Processor {
     if ( action.executedCode ) {
         state.steps = action.executedCode;
+        state.count = state.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE ? REGULAR_START : EXECUTION_START;
     }
     return state.clone();
 }
@@ -212,10 +213,9 @@ function changeMode(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function resetExecutionState(state: Processor): Processor {
-    state.mode = PlayerMode.regular;
-    state.count = 0;
     state.isPlaying = false;
     state.steps = DEFAULT_EXECUTION_STATE;
+    state.count = 0;
     return state.clone();
 }
 
@@ -223,6 +223,7 @@ function changeStep(state: Processor, action: CodePayload): Processor {
     const newState = state.clone();
     if ( action.newStep !== undefined && action.newStep >= 0 && action.newStep < state.steps.length ) {
         newState.count = action.newStep;
+        newState.mode = PlayerMode.regular;
     }
     return newState;
 }

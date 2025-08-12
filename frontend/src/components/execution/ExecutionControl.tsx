@@ -27,7 +27,7 @@ export default function ExecutionControl({ memoryState :[enableMemory, setEnable
         <div className="flex h-[4rem] items-center gap-5"> 
             <div className="flex flex-col text-white bg-slate-800 p-3 rounded-md">
                 <p className="text-xs text-main-400">Mode</p>
-                <select className="bg-slate-800 outline-none" onChange={(e) => dispatch({ type: CodeAction.CHANGE_MODE, mode: e.target.value as PlayerMode })}>
+                <select className="bg-slate-800 outline-none" value={processor.mode} onChange={(e) => dispatch({ type: CodeAction.CHANGE_MODE, mode: e.target.value as PlayerMode })}>
                     <option value={PlayerMode.regular}>Régulier</option>
                     <option value={PlayerMode.execution}>Exécution</option>
                 </select>
