@@ -257,6 +257,12 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
 
                 case CheckerAction.REDUCE: {
+                    if (index === RiscSyntaxState.LABEL_ARGS) {
+                        const token = checkerStack.at(-1);
+                        if (token && !this.labelArray.find(tk => tk.value === token.value + ":")) {
+                            token.error = LABEL_INEXISTANT;
+                        }
+                    }
                     this.formatArguments(riscCheckerStack, index ? index : RiscSyntaxState.EXIT, action);
                     this.reduceStack(input, checkerStack, stateStack, action);
                     lastReduceValue = this.reduceRiscStack(riscCheckerStack, riscStateStack, action);
