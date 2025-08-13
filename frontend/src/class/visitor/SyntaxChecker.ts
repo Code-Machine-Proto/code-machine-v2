@@ -282,7 +282,7 @@ export class SyntaxCheckerVisitor implements Visitor {
         }
         stateStack.pop();
         stateStack.push(SyntaxState.REDUCE_INST);
-        const cleanValue = riscCheckerStack.at(-1)?.value;
+        const cleanValue = riscCheckerStack.at(-1)?.value.replaceAll("\n", "");
         const realToken = checkerStack.at(-1);
         if ( realToken && cleanValue ) {
             realToken.value = cleanValue;
