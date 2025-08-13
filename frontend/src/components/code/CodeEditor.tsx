@@ -87,22 +87,24 @@ export default function CodeEditor() {
                     />
                 </div>
             </div>
-            <button
-                className={
-                    `bg-transparent flex ${ 
-                        processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-400 border-red-500" 
-                    } border-2 rounded-md p-2 gap-2 justify-around items-center h-[4rem]`
-                }
-                disabled={ !processor.isCompilable }
-                onClick={() => {
-                    dispatch({ type: CodeAction.RESET_CODE });
-                    fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });
-                }}
-            >
-                <div className="size-[2rem]"/>
-                <span className="inline-block align-middle" >Compiler</span>
-                <img src={ loader } alt="loader" className={ `animate-spin size-[2rem] ${ fetcher.state === "submitting" ? "visible" : "invisible" }` } />
-            </button>
+            <div className="flex gap-2">
+                <button
+                    className={
+                        `bg-transparent flex ${processor.isCompilable ? "text-main-400 border-main-400 hover:bg-main-900 cursor-pointer" : "text-red-500 border-red-500"
+                        } border-2 rounded-md p-2 gap-2 justify-around items-center h-[4rem] w-3/4`
+                    }
+                    disabled={!processor.isCompilable}
+                    onClick={() => {
+                        dispatch({ type: CodeAction.RESET_CODE });
+                        fetcher.submit({ processor: JSON.stringify(processor) }, { method: "POST", action: "/processor" });
+                    }}
+                >
+                    <div className="size-[2rem]" />
+                    <span className="inline-block align-middle" >Compiler</span>
+                    <img src={loader} alt="loader" className={`animate-spin size-[2rem] ${fetcher.state === "submitting" ? "visible" : "invisible"}`} />
+                </button>
+                <button className="border-2 rounded-md w-1/4 border-main-400" onClick={() => dispatch({ type: CodeAction.CHANGE_CODE, code: "" })} ></button>
+            </div>
         </div>
     );
 }
