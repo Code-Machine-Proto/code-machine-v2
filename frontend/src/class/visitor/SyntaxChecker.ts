@@ -322,7 +322,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                 break;
             }
 
-            case TokenType.LABEL: {
+            case TokenType.WORD: {
                 type = RiscTokenType.LABEL;
                 break;
             }
