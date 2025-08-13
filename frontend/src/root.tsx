@@ -9,6 +9,7 @@ import "./app.css";
 import Header from "@src/components/Header";
 import { CodeProvider } from "./components/code/CodeProvider";
 import { SnackBarProvider } from "./components/SnackBarProvider";
+import { ConfirmationModalProvider } from "./components/ConfirmationModal";
 
 /**
  * Disposition de base de l'application est affiché sur toutes les pages.
@@ -42,12 +43,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
  */
 export default function App() {
     return (
-      <SnackBarProvider>
-        <Header />
-        <CodeProvider>
-          <Outlet />
-        </CodeProvider>
-      </SnackBarProvider>
+      <ConfirmationModalProvider>
+        <SnackBarProvider>
+          <Header />
+          <CodeProvider>
+            <Outlet />
+          </CodeProvider>
+        </SnackBarProvider>
+      </ConfirmationModalProvider>
     );
 }
 
