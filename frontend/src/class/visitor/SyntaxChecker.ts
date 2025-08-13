@@ -260,6 +260,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                     if (index === RiscSyntaxState.LABEL_ARGS) {
                         const token = checkerStack.at(-1);
                         if (token && !this.labelArray.find(tk => tk.value === token.value + ":")) {
+                            hasError = true;
                             token.error = LABEL_INEXISTANT;
                         }
                     }
