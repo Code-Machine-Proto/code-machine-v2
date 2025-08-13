@@ -9,6 +9,7 @@ import { SnackBarContext } from "../SnackBarProvider";
 import { MessageType } from "@src/constants/SnackBar";
 import type Processor from "@src/class/Processor";
 import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
+import clearSign from "@src/assets/clear-code.svg";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -103,7 +104,12 @@ export default function CodeEditor() {
                     <span className="inline-block align-middle" >Compiler</span>
                     <img src={loader} alt="loader" className={`animate-spin size-[2rem] ${fetcher.state === "submitting" ? "visible" : "invisible"}`} />
                 </button>
-                <button className="border-2 rounded-md w-1/4 border-main-400" onClick={() => dispatch({ type: CodeAction.CHANGE_CODE, code: "" })} ></button>
+                <button
+                    className="border-2 rounded-md w-1/4 border-main-400 flex justify-center items-center cursor-pointer"
+                    onClick={() => dispatch({ type: CodeAction.CHANGE_CODE, code: "" })}
+                >
+                    <img src={clearSign} alt="x" className="size-1/2" />
+                </button>
             </div>
         </div>
     );
