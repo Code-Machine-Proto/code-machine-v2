@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ProcessorContext, DispatchProcessorContext } from "./CodeProvider";
 import { CodeAction } from "@src/interface/DispatchCode";
 import type { ScrollRef } from "@src/interface/ScrollInterfaces";
@@ -12,6 +12,7 @@ import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
 import clearSign from "@src/assets/clear-code.svg";
 import { ConfirmationModalContext } from "../ConfirmationModal";
 import { DELETE_CODE_MESSAGE } from "@src/constants/ConfirmationModal";
+import { TokenType } from "@src/interface/visitor/Token";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -30,6 +31,7 @@ export default function CodeEditor() {
 
     const fetcher = useFetcher<{ result: Array<ProcessorStep>, error?: string }>();
 
+    const [lineNumber, setLineNumber] = useState<number>(0);
     useEffect(() => {
         if (fetcher.data && !fetcher.data.error ) {
             setSnackBar({ visible: true, message: "Compilation réussie", type: MessageType.VALID, duration: 3000 });
@@ -42,6 +44,19 @@ export default function CodeEditor() {
     useEffect(() => {
         generateErrorMessage(processor, setSnackBar);
     }, [processor, setSnackBar]);
+
+    useEffect(() => {
+        let pcCounter = processor.currentStep.pcState + 1;
+        let lineNumber = -1;
+        processor.tokenizedLines.find((tokenLine) => {
+            if (tokenLine.find(token => token.type === TokenType.OPERATION)) {
+                pcCounter--;
+            }
+            lineNumber++;
+            return !pcCounter;
+        });
+        setLineNumber(lineNumber);
+    }, [processor.currentStep.pcState, processor.tokenizedLines]);
 
     return(
         <div 
@@ -56,14 +71,14 @@ export default function CodeEditor() {
                         handleVerticalScroll(numberContainer, textVisual);
                     }}
                 >
-                    { processor.lines.map((_, i) => ( <p key={i}>{i + 1}</p>))}
+                    {processor.lines.map((_, i) => (<p key={i}>{i + 1}</p>))}
                 </div>
                 <div className="relative">
                     <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll" ref={textVisual}>
                         {
                             processor.highlightedText.map((line, iIndex) => {
                                 return (
-                                    <p key={iIndex} className="h-6">
+                                    <p key={iIndex} className={`h-6 ${ iIndex === lineNumber ? "border-1 border-main-400 rounded-md bg-main-900/25" : ""}`}>
                                         {
                                             line.map((element, jIndex) => {
                                                 return (
