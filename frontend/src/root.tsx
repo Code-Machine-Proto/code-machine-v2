@@ -43,14 +43,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
  */
 export default function App() {
     return (
-      <ConfirmationModalProvider>
-        <SnackBarProvider>
-          <Header />
-          <CodeProvider>
+      <SnackBarProvider>
+        <Header />
+        <CodeProvider>
+          <ConfirmationModalProvider>
             <Outlet />
-          </CodeProvider>
-        </SnackBarProvider>
-      </ConfirmationModalProvider>
+          </ConfirmationModalProvider>
+        </CodeProvider>
+      </SnackBarProvider>
     );
 }
 

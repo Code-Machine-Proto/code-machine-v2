@@ -10,6 +10,7 @@ import { MessageType } from "@src/constants/SnackBar";
 import type Processor from "@src/class/Processor";
 import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
 import clearSign from "@src/assets/clear-code.svg";
+import { ConfirmationModalContext } from "../ConfirmationModal";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -20,6 +21,7 @@ export default function CodeEditor() {
     const processor = useContext(ProcessorContext);
     const dispatch = useContext(DispatchProcessorContext);
     const setSnackBar = useContext(SnackBarContext);
+    const setModal = useContext(ConfirmationModalContext);
 
     const numberContainer = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -105,8 +107,8 @@ export default function CodeEditor() {
                     <img src={loader} alt="loader" className={`animate-spin size-[2rem] ${fetcher.state === "submitting" ? "visible" : "invisible"}`} />
                 </button>
                 <button
-                    className="border-2 rounded-md w-1/4 border-main-400 flex justify-center items-center cursor-pointer"
-                    onClick={() => dispatch({ type: CodeAction.CHANGE_CODE, code: "" })}
+                    className="border-2 rounded-md w-1/4 border-main-400 flex justify-center items-center cursor-pointer hover:bg-main-900"
+                    onClick={() => setModal({ message: "Test", visible: true, payload: { type: CodeAction.CHANGE_CODE, code: "" }})}
                 >
                     <img src={clearSign} alt="x" className="size-1/2" />
                 </button>
@@ -121,7 +123,7 @@ export default function CodeEditor() {
  * @param scroller - l'élément qu'on défile
  * @param scrolled - l'élément qu'on veut synchronisé
  */
-function handleVerticalScroll(scroller: ScrollRef ,scrolled: ScrollRef): void {
+function handleVerticalScroll(scroller: ScrollRef, scrolled: ScrollRef): void {
     if( scroller.current && scrolled.current ) {
         scrolled.current.scrollTop = scroller.current.scrollTop;
     }
