@@ -11,6 +11,7 @@ import {
     REGULAR_END,
     REGULAR_START,
     DEFAULT_EXECUTION_STATE,
+    MINIMUM_EXECUTION_SIZE,
 } from "@src/constants/CodeProvider";
 import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
 import { PlayerMode } from "@src/interface/StepControl";
@@ -94,14 +95,15 @@ function codeReducer(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function changeCode(state: Processor, action: CodePayload): Processor {
+    const newState = state.clone();
     if (action.code === "" || action.code) {
         storeCode(state.processorId, action.code);
-        state.code = action.code;
-        state.accept(new ParserVisitor());
-        state.accept(new SyntaxCheckerVisitor());
-        state.accept(new HighlightSyntaxVisitor());
+        newState.code = action.code;
+        newState.accept(new ParserVisitor());
+        newState.accept(new SyntaxCheckerVisitor());
+        newState.accept(new HighlightSyntaxVisitor());
     }
-    return state.clone();
+    return newState;
 }
 
 /**
@@ -126,11 +128,12 @@ function changeProcessor(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état 
  */
 function forward(state: Processor): Processor {
+    const newState = state.clone();
     const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
     if ( state.steps &&  state.count + inc < state.steps.length  ) {
-        state.count += inc;
+        newState.count += inc;
     }
-    return state.clone();
+    return newState;
 }
 
 /**
@@ -139,11 +142,12 @@ function forward(state: Processor): Processor {
  * @returns le prochain état
  */
 function backward(state: Processor): Processor {
+    const newState = state.clone();
     const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
     if ( state.count - inc >= 0 ) {
-        state.count -= inc;
+        newState.count -= inc;
     }
-    return state.clone();
+    return newState;
 }
 
 /**
@@ -152,9 +156,10 @@ function backward(state: Processor): Processor {
  * @returns le prochain état
  */
 function toStart(state: Processor): Processor {
+    const newState = state.clone();
     const start = state.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
-    state.count = start;
-    return state.clone();
+    newState.count = start;
+    return newState;
 }
 
 /**
@@ -163,9 +168,10 @@ function toStart(state: Processor): Processor {
  * @returns le prochain état 
  */
 function toEnd(state: Processor): Processor {
+    const newState = state.clone();
     const end = state.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
-    state.count = state.steps.length - end;
-    return state.clone();
+    newState.count = state.steps.length - end;
+    return newState;
 }
 
 /**
@@ -175,10 +181,12 @@ function toEnd(state: Processor): Processor {
  * @returns le prochain état
  */
 function changeExecutedCode(state: Processor, action: CodePayload): Processor {
+    const newState = state.clone();
     if ( action.executedCode ) {
-        state.steps = action.executedCode;
+        newState.steps = action.executedCode;
+        newState.count = state.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE ? REGULAR_START : EXECUTION_START;
     }
-    return state.clone();
+    return newState;
 }
 
 /**
@@ -187,8 +195,9 @@ function changeExecutedCode(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function playAndPause(state: Processor): Processor {
-    state.isPlaying = !state.isPlaying;
-    return state.clone();
+    const newState = state.clone();
+    newState.isPlaying = !state.isPlaying;
+    return newState;
 }
 
 /**
@@ -198,11 +207,12 @@ function playAndPause(state: Processor): Processor {
  * @returns le prochain état
  */
 function changeMode(state: Processor, action: CodePayload): Processor {
+    const newState = state.clone();
     if( action.mode ) {
-        state.mode = action.mode;
-        state.count = action.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
+        newState.mode = action.mode;
+        newState.count = action.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE ? REGULAR_START : EXECUTION_START;
     }
-    return state.clone();
+    return newState;
 }
 
 /**
@@ -211,17 +221,18 @@ function changeMode(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function resetExecutionState(state: Processor): Processor {
-    state.mode = PlayerMode.regular;
-    state.count = 0;
-    state.isPlaying = false;
-    state.steps = DEFAULT_EXECUTION_STATE;
-    return state.clone();
+    const newState = state.clone();
+    newState.isPlaying = false;
+    newState.steps = DEFAULT_EXECUTION_STATE;
+    newState.count = 0;
+    return newState;
 }
 
 function changeStep(state: Processor, action: CodePayload): Processor {
     const newState = state.clone();
     if ( action.newStep !== undefined && action.newStep >= 0 && action.newStep < state.steps.length ) {
         newState.count = action.newStep;
+        newState.mode = PlayerMode.regular;
     }
     return newState;
 }
