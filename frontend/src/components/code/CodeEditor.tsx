@@ -11,6 +11,7 @@ import type Processor from "@src/class/Processor";
 import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
 import clearSign from "@src/assets/clear-code.svg";
 import { ConfirmationModalContext } from "../ConfirmationModal";
+import { DELETE_CODE_MESSAGE } from "@src/constants/ConfirmationModal";
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -108,7 +109,7 @@ export default function CodeEditor() {
                 </button>
                 <button
                     className="border-2 rounded-md w-1/4 border-main-400 flex justify-center items-center cursor-pointer hover:bg-main-900"
-                    onClick={() => setModal({ message: "Test", visible: true, payload: { type: CodeAction.CHANGE_CODE, code: "" }})}
+                    onClick={() => setModal({ message: DELETE_CODE_MESSAGE, visible: true, payload: { type: CodeAction.CHANGE_CODE, code: "" }})}
                 >
                     <img src={clearSign} alt="x" className="size-1/2" />
                 </button>
