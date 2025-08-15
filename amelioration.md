@@ -65,3 +65,5 @@ et exécuter le programme pour pouvoir vérifier si le programme est bien réuss
 Ces additions et changements permettront d'ajouter des fonctionalités qui seront plus facile à ajouter pour des processeurs supplémentaires, par exemple un Risc.
 Lorsqu'il faudra ajouter des processeurs qui existe déjà, il sera possible d'utiliser les LSP, DAP et TreeSitter déjà créer, car c'est protocole sont des standards
 ouverts et utilisés dans les éditeurs de code.
+
+Félix-Antoine Lefebvre
