@@ -32,6 +32,10 @@
     scrollbar-width: none;
   }
 
+  .app-region {
+    app-region: drag;
+  }
+
   .controlBtn {
     display: flex;
     color: var(--color-main-400);
