@@ -32,6 +32,7 @@ export default function CodeEditor() {
     const fetcher = useFetcher<{ result: Array<ProcessorStep>, error?: string }>();
 
     const [lineNumber, setLineNumber] = useState<number>(0);
+
     useEffect(() => {
         if (fetcher.data && !fetcher.data.error ) {
             setSnackBar({ visible: true, message: "Compilation réussie", type: MessageType.VALID, duration: 3000 });
@@ -64,7 +65,7 @@ export default function CodeEditor() {
         >
             <div className="flex grow gap-2 overflow-hidden">
                 <div 
-                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md no-scrollbar overflow-scroll"
+                    className="flex flex-col text-white w-1/5 items-end bg-slate-800 px-2 rounded-md no-scrollbar overflow-scroll pb-24"
                     ref={numberContainer}
                     onScroll={() => {
                         handleVerticalScroll(numberContainer, textArea);
@@ -74,11 +75,11 @@ export default function CodeEditor() {
                     {processor.lines.map((_, i) => (<p key={i}>{i + 1}</p>))}
                 </div>
                 <div className="relative">
-                    <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll" ref={textVisual}>
+                    <div className="absolute pointer-events-none size-full no-scrollbar overflow-scroll pb-24" ref={textVisual}>
                         {
                             processor.highlightedText.map((line, iIndex) => {
                                 return (
-                                    <p key={iIndex} className={`h-6 ${ iIndex === lineNumber ? "border-1 border-main-400 rounded-md bg-main-900/25" : ""}`}>
+                                    <p key={iIndex} className={`h-6 w-fit mr-24 ${ iIndex === lineNumber ? "border-1 border-main-400 rounded-md bg-main-900/25" : ""}`}>
                                         {
                                             line.map((element, jIndex) => {
                                                 return (
@@ -93,7 +94,7 @@ export default function CodeEditor() {
                     </div>
                     <textarea 
                         spellCheck="false"
-                        className="resize-none border-none outline-none size-full text-transparent caret-white no-scrollbar" 
+                        className="resize-none border-none outline-none size-full text-transparent caret-white" 
                         value={ processor.code } 
                         onChange={ e => dispatch({ type: CodeAction.CHANGE_CODE, code: e.target.value as string })} 
                         wrap="off"
