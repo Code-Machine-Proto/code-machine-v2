@@ -9,6 +9,7 @@ import "./app.css";
 import Header from "@src/components/Header";
 import { CodeProvider } from "./components/code/CodeProvider";
 import { SnackBarProvider } from "./components/SnackBarProvider";
+import { ConfirmationModalProvider } from "./components/ConfirmationModal";
 
 /**
  * Disposition de base de l'application est affiché sur toutes les pages.
@@ -45,7 +46,9 @@ export default function App() {
       <SnackBarProvider>
         <Header />
         <CodeProvider>
-          <Outlet />
+          <ConfirmationModalProvider>
+            <Outlet />
+          </ConfirmationModalProvider>
         </CodeProvider>
       </SnackBarProvider>
     );
