@@ -15,6 +15,9 @@ function createWindow(): void {
             color: "#0e1d31",
             symbolColor: "#ffffff",
         } } : {}),
+        webPreferences: {
+            devTools: isDev,
+        },
     });
 
     mainWindow.loadFile("./build/client/index.html");
