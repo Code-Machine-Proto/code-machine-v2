@@ -10,7 +10,8 @@
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "src/assets/code-machine-logo.png"
     },
     "linux": {
       "target": "AppImage"
