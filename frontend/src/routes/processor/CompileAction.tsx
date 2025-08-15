@@ -16,7 +16,9 @@ export async function clientAction({ request }: ClientActionFunctionArgs): Promi
     try {
         output = (await compileAndRun({ processorId: processor.processorId, program: processor.cleanCode })).output;
     } catch (err){
-        error = `Erreur du serveur: ${(err as Error).message}\nVeuillez redémarrer CodeMachine!`;
+        error = `Erreur du serveur: ${
+            (err as Error).message
+        }\nCeci est une erreur du serveur. Pour nous aider à améliorer CodeMachine, il serait apprécier que vous entriez le bug sur Github!`;
         output = "[,]";
     }
     /* eslint-disable no-magic-numbers */
