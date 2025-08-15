@@ -257,6 +257,13 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
 
                 case CheckerAction.REDUCE: {
+                    if (index === RiscSyntaxState.LABEL_ARGS) {
+                        const token = checkerStack.at(-1);
+                        if (token && !this.labelArray.find(tk => tk.value === token.value + ":")) {
+                            hasError = true;
+                            token.error = LABEL_INEXISTANT;
+                        }
+                    }
                     this.formatArguments(riscCheckerStack, index ? index : RiscSyntaxState.EXIT, action);
                     this.reduceStack(input, checkerStack, stateStack, action);
                     lastReduceValue = this.reduceRiscStack(riscCheckerStack, riscStateStack, action);
@@ -276,7 +283,7 @@ export class SyntaxCheckerVisitor implements Visitor {
         }
         stateStack.pop();
         stateStack.push(SyntaxState.REDUCE_INST);
-        const cleanValue = riscCheckerStack.at(-1)?.value;
+        const cleanValue = riscCheckerStack.at(-1)?.value.replaceAll("\n", "");
         const realToken = checkerStack.at(-1);
         if ( realToken && cleanValue ) {
             realToken.value = cleanValue;
@@ -322,7 +329,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                 break;
             }
 
-            case TokenType.LABEL: {
+            case TokenType.WORD: {
                 type = RiscTokenType.LABEL;
                 break;
             }
