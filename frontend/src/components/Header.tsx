@@ -11,8 +11,8 @@ import { Link, useLocation } from "react-router";
 export default function Header() {
     const pathName = useLocation().pathname;
     return (
-    <header className="flex h-[5rem] bg-main-950 justify-center items-center gap-3" >
-        <Link to="/" className="flex bg-main-950 justify-center items-center gap-5" >
+    <header className="flex h-[5rem] bg-main-950 justify-center items-center gap-3 electron-drag" >
+        <Link to="/" className="flex bg-main-950 justify-center items-center gap-5 electron-no-drag" >
             {
                 pathName !== '/' &&
                 <img src={ arrow } alt="back arrow" className="size-[1rem]" />

@@ -10,6 +10,14 @@ function createWindow(): void {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        titleBarStyle: 'hidden',
+        ...(process.platform !== 'darwin' ? { titleBarOverlay: {
+            color: "#0e1d31",
+            symbolColor: "#ffffff",
+        } } : {}),
+        webPreferences: {
+            devTools: isDev,
+        },
     });
 
     mainWindow.loadFile("./build/client/index.html");

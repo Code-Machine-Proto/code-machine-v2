@@ -27,9 +27,18 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .electron-drag {
+    app-region: drag;
+  }
+
+  .electron-no-drag {
+    app-region: no-drag;
   }
 
   .controlBtn {

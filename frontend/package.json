@@ -5,12 +5,13 @@
   "main": "build/main.js",
   "description": "",
   "author": "",
-  "version": "25.2.2",
+  "version": "25.2.3",
   "build": {
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "src/assets/code-machine-logo.png"
     },
     "linux": {
       "target": "AppImage"

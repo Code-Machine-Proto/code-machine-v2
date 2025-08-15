@@ -6,8 +6,8 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 
-**Version 25.2.2**  
-23 juillet 2025  
+**Version 25.2.3**  
+15 août 2025
 Geneviève Cyr  
 GIGL | Polytechnique Montréal
 <br><br>
@@ -91,7 +91,44 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
 
 ## Pour MAC
 
->**Pour le moment, l'application le support pour MAC n'est pas disponible.  Pour ceux qui ont un MAC, il est recommandé d'installer un VM Linux et d'utiliser la version de CodeMachine de Linux.  Il est prévu de régler le problème avec MAC dans une prochaine version.**
+1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
+
+
+2. Choisir le relâche la plus récente (cliquer dessus)
+   <p>
+   <img src="guide-codemachine-images/Version.png" width="650">
+   </p>
+
+3. Choisir l'installeur pour Mac (le même pour toutes les architectures)
+   <p>
+   <img src="guide-codemachine-images/mac-github.jpg" width="650">
+   </p>
+
+4. Dans téléchargement, double-cliquer pour partir l’installation et compléter une installation selon le format dmg
+
+5. Enlever les drapeaux de quarantaine mis par Apple
+   <p>
+   <img src="guide-codemachine-images/shell-unquarantine.jpg" width="650">
+   </p>
+
+6. Trouver l'application dans le Finder et afficher le contenu du paquet
+   <p>
+   <img src="guide-codemachine-images/paquet-mac.jpg" width="650">
+   </p>
+
+7. Naviguer Contents > MacOS
+   <p>
+   <img src="guide-codemachine-images/contents-mac.jpg" width="650">
+   </p>
+---
+   <p>
+   <img src="guide-codemachine-images/chemin-exec.jpg" width="650">
+   </p>
+
+8. Double-cliquer sur l'exécutable nommé CodeMachine pour le partir en mode administrateur, créer un alias pour mettre sur votre bureau est fortement recommandé
+   <p>
+   <img src="guide-codemachine-images/alias-mac.jpg" width="650">
+   </p>
 
 <div style="page-break-after: always;"></div>
 
