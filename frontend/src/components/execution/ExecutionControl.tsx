@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import { useContext, useEffect, useState } from "react";
 import ExecutionButton from "./ExecutionButton";
 import { ProcessorContext, DispatchProcessorContext } from "@src/components/code/CodeProvider";

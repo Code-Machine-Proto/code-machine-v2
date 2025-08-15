@@ -5,7 +5,7 @@ import type { ScrollRef } from "@src/interface/ScrollInterfaces";
 import { useFetcher } from "react-router";
 import type { ProcessorStep } from "@src/interface/ProcessorStep";
 import loader from "@src/assets/loader.svg";
-import { SnackBarContext } from "../SnackBarProvider";
+import { SnackBarContext } from "@src/components/SnackBarProvider";
 import { MessageType } from "@src/constants/SnackBar";
 import type Processor from "@src/class/Processor";
 import type { SnackBarDispatch } from "@src/interface/SnackBarInterface";
