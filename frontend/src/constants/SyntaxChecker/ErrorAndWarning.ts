@@ -9,4 +9,5 @@ export const JUMP_LABEL = "Le jump doit jumper vers un label valide";
 export const OPERATION_REGISTER = "Les opérations doivent avoir des registres valides";
 export const LDI_IMMEDIATE = "Le load immédiat à besoin d'une valeur immédiate";
 export const LABEL_INEXISTANT = "Le label courant n'est pas initialisé";
-export const INT_OVERFLOW = "Le nombre est trop grand pour le processeur"
+export const INT_OVERFLOW = "Le nombre est trop grand pour le processeur";
+export const DUPLICATE_LABEL = "Le label est dupliqué";
