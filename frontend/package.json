@@ -5,7 +5,7 @@
   "main": "build/main.js",
   "description": "",
   "author": "",
-  "version": "25.2.3",
+  "version": "25.2.4",
   "build": {
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
