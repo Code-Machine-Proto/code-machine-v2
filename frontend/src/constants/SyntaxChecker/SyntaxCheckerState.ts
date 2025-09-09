@@ -16,6 +16,8 @@ export enum SyntaxState {
     DETECT_OPERATION,
     TEXT_BLOCK,
     STATEMENT_REDUCTION,
+    DATA_ALONE_NUMBER,
+    DATA_ALONE_NUMBER_REDUCE,
 }
 
 export enum RiscSyntaxState {

@@ -8,7 +8,7 @@ import { RiscSyntaxState, SyntaxState } from "@src/constants/SyntaxChecker/Synta
 import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import type Processor from "@src/class/Processor";
 import { IMM_LOAD_REGEX, JUMP_POLYRISC, LOAD_REGEX, NO_ARGS_OPERATION_REGEX_ACC, NO_ARGS_OPERATION_REGEX_MA, NO_ARGS_REGEX_POLYRISC, SIMPLE_REGISTER_POLYRISC, STORE_REGEX, TWO_REG_POLYRISC } from "@src/constants/Regex";
-import { INSTRUCTION_ADRESS, INT_OVERFLOW, LABEL_INEXISTANT, WARNING_OPERATION } from "@src/constants/SyntaxChecker/ErrorAndWarning";
+import { INSTRUCTION_ADRESS, INT_OVERFLOW, LABEL_INEXISTANT, WARNING_OPERATION, DUPLICATE_LABEL } from "@src/constants/SyntaxChecker/ErrorAndWarning";
 import { RISC_SYNTAX_TABLE } from "@src/constants/SyntaxChecker/RiscSyntaxTable";
 import { RegisterFormat } from "@src/interface/visitor/RegisterFormat";
 import { BASE_RISC_TOKEN, MAX_INT32, MIN_INT32 } from "@src/constants/SyntaxChecker/BaseToken";
@@ -119,6 +119,9 @@ export class SyntaxCheckerVisitor implements Visitor {
             }
 
             if ( token.type === TokenType.LABEL ) {
+                if (this.labelArray.find(tk => tk.value === token.value)) {
+                    token.error = DUPLICATE_LABEL;
+                }
                 this.labelArray.push(token);
             }
 
@@ -128,7 +131,7 @@ export class SyntaxCheckerVisitor implements Visitor {
 
     checkerExecution( input: Array<Token | ComposedToken>, processor: Processor, reduceOpCallback: SyntaxStackAction ): void {
         let isFinished = false;
-        let hasError = false;
+        let hasError = !!input.find(token => token.error);
         const checkerStack: Array<Token | ComposedToken> = [];
         const stateStack: Array<SyntaxState> = [SyntaxState.INITIAL];
         while (!isFinished && input.length > 0) {

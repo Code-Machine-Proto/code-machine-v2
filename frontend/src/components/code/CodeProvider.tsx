@@ -95,13 +95,15 @@ function codeReducer(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function changeCode(state: Processor, action: CodePayload): Processor {
-    const newState = state.clone();
+    let newState = state.clone();
     if (action.code === "" || action.code) {
         storeCode(state.processorId, action.code);
         newState.code = action.code;
         newState.accept(new ParserVisitor());
         newState.accept(new SyntaxCheckerVisitor());
         newState.accept(new HighlightSyntaxVisitor());
+        newState = resetExecutionState(newState);
+
     }
     return newState;
 }
