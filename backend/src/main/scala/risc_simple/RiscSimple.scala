@@ -82,13 +82,15 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
     is(fetch) {
       IRReg := IM.io.inst
     }
+    is(decode) {}
     is(execute) {
       when (DEC.io.decode_out.op_type === branch) {
         when ((IRReg(19,16) === 0.U) |
           (IRReg(19,16) === 1.U & FlagReg(0) === true.B)  | 
           (IRReg(19,16) === 2.U & FlagReg(0) === false.B) |
           (IRReg(19,16) === 3.U & FlagReg(1) === true.B)  |
-          (IRReg(19,16) === 4.U & FlagReg(1) === false.B) ) {
+          (IRReg(19,16) === 4.U & FlagReg(1) === false.B) )
+          {
             PCReg := IRReg(11,0)
             }.otherwise {
               PCReg := PCReg + 1.U
@@ -99,6 +101,7 @@ class RiscSimple(prog:Array[UInt],data:Array[UInt]) extends Module {
             FlagReg(0) := ALU.io.Z
             FlagReg(1) := ALU.io.N
     }
+    is(end)  {}
   }
   
   // Debug module output
