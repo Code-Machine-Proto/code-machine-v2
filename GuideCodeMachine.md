@@ -6,8 +6,8 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 
-**Version 25.2.4**  
-15 août 2025
+**Version 25.2.5**  
+25 septembre 2025
 Geneviève Cyr  
 GIGL | Polytechnique Montréal
 <br><br>
@@ -21,7 +21,20 @@ N.B.	Le masculin est utilisé pour alléger le texte.*
 
 # Installation
 
->**ATTENTION : CodeMachine fonctionne avec Java 17 ou moins!**
+## Installation de Java
+Avant de vous lancer à installer CodeMachine, vous devez vous assurer d'avoir installé **Java Runtime 8 (JRE 8)**.  
+
+👉 Le JRE est suffisant puisqu’il permet d’**exécuter** des applications Java sans avoir besoin des outils de développement.  
+Vous pouvez télécharger la version la plus récente du **Java Runtime** (toutes plateformes) sur le site officiel :  
+[🔗 Télécharger Java Runtime 8](https://www.java.com/en/download/manual.jsp)  
+
+<br>
+
+> ⚠️ Si vous tenez à installer le **JDK complet** (qui inclut le compilateur et l’environnement d’exécution), assurez-vous de choisir une **version 17 ou inférieure** (Windows, Linux ou macOS).  
+> Le JDK est nécessaire uniquement si vous comptez développer en Java, et non simplement exécuter CodeMachine.  
+
+<br>
+
 
 ## Pour Windows
 
@@ -31,7 +44,7 @@ N.B.	Le masculin est utilisé pour alléger le texte.*
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
-
+<div style="page-break-after: always;"></div>
 3. Choisir la bonne architecture (celle correspondant à votre ordinateur) et cliquer dessus pour la télécharger
    <p>
    <img src="guide-codemachine-images/architecture_windows.jpg" width="650">
@@ -39,11 +52,12 @@ N.B.	Le masculin est utilisé pour alléger le texte.*
 
 4. Dans téléchargement, double-cliquer pour partir l’installation.
 <br>
+
 5. Cliquer sur Information complémentaires
    <p>
    <img src="guide-codemachine-images/InfoComplement.png"  width="350">
    </p>
-
+<div style="page-break-after: always;"></div>
 6. Choisir exécuter quand même
    <p>
    <img src="guide-codemachine-images/Executer.png"  width="350">
@@ -87,6 +101,21 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
 
 *Notez que vous pouvez déplacer le .AppImage à l’endroit que vous préférez pour faciliter son accès.  Cependant, vous devrez, dans tous les cas, permettre son exécution en changeant ses permissions.*
 
+
+<br>
+
+>**ATTENTION : Sur Windows, dans certains installations, il faut parfois partir CodeMachine en mode administrateur pour qu'il compile correctement**
+
+Si vous avez l'erreur suivante au moment de la compilation : 
+<p>
+   <img src="guide-codemachine-images/ExecPasAdmin.jpg" width="650">
+</p>
+Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuelle de la souris.
+<p>
+   <img src="guide-codemachine-images/PartirAdmin.png" width="250">
+</p>
+
+
 <div style="page-break-after: always;"></div>
 
 ## Pour MAC
@@ -105,6 +134,8 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
    </p>
 
 4. Dans téléchargement, double-cliquer pour partir l’installation et compléter une installation selon le format dmg
+ 
+<div style="page-break-after: always;"></div>
 
 5. Enlever les drapeaux de quarantaine mis par Apple
    <p>
@@ -113,21 +144,21 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
 
 6. Trouver l'application dans le Finder et afficher le contenu du paquet
    <p>
-   <img src="guide-codemachine-images/paquet-mac.jpg" width="650">
+   <img src="guide-codemachine-images/paquet-mac.jpg" width="250">
    </p>
 
 7. Naviguer Contents > MacOS
    <p>
-   <img src="guide-codemachine-images/contents-mac.jpg" width="650">
+   <img src="guide-codemachine-images/contents-mac.jpg" width="150">
    </p>
 ---
    <p>
-   <img src="guide-codemachine-images/chemin-exec.jpg" width="650">
+   <img src="guide-codemachine-images/chemin-exec.jpg" width="250">
    </p>
 
 8. Double-cliquer sur l'exécutable nommé CodeMachine pour le partir en mode administrateur, créer un alias pour mettre sur votre bureau est fortement recommandé
    <p>
-   <img src="guide-codemachine-images/alias-mac.jpg" width="650">
+   <img src="guide-codemachine-images/alias-mac.jpg" width="250">
    </p>
 
 <div style="page-break-after: always;"></div>
@@ -171,7 +202,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 ### Affichage du nombre de cycles
 
-- CodeMachine est limité à 2024 cycles au total.  Tout code qui donnera plus de 2024 cycles, seulement les 2024 premiers cycles seront exécutés.
+>**ATTENTION : CodeMachine est limité à 1024 cycles au total.  Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
 
 - Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.  Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».  Cependant, l’instruction « stop », n’a qu’un « fetch », donc un seul cycle.  Ainsi, le nombre de cycle total inscrit après le « / » sera TOUJOURS un multiple de 3 qui suit l’équation suivante :
 
@@ -237,12 +268,13 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
    <img src="guide-codemachine-images/ModeVisuel.png" width="600">
    </p>
 
-<div style="page-break-after: always;"></div>
 
 - En mode « programmeur », vous verrez le contenu des registres, sans voir le circuit :
    <p>
    <img src="guide-codemachine-images/ModeProgrammeur.png" width="400">
    </p>
+
+<div style="page-break-after: always;"></div>
 
 ## Affichage de la mémoire
 
