@@ -195,7 +195,7 @@ class accumulator_v2_simulation(DUT: accumulator.accumulator_v2.accumulator_v2, 
     step(1)
 
     simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || (simulation_cycle == 1024)
+    simulation_ended = (peek(DUT.io.Instruction).toInt == 19 && peek(DUT.io.State).toInt == 0) || (simulation_cycle == 1024)
   }
   output.write("]")
   output.flush()
