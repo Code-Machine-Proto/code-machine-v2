@@ -76,7 +76,7 @@ class accumulator_v1(internalMemoryContent:Array[UInt]) extends Module {
       }
     }
 
-    when(State === execute && IR.op =/= stop){
+    when(State === execute){
       State := fetch
 
       PC := PC + 1.U(1.W)

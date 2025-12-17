@@ -126,7 +126,8 @@ class accumulator_v1_simulation(DUT: accumulator.accumulator_v1.accumulator_v1, 
     step(1)
 
     simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 5) || (simulation_cycle == 1024)    
+    println(peek(DUT.io.State).toString);
+    simulation_ended = (peek(DUT.io.Instruction).toInt == 5 && peek(DUT.io.State).toInt == 0) || (simulation_cycle == 1024)    
   }
   output.write("]")
   output.flush()
