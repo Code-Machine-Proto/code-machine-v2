@@ -6,9 +6,9 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 
-**Version 25.2.5**  
-25 septembre 2025
-Geneviève Cyr  
+**Version 26.0.0**
+5 janvier 2025
+Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
 *Ce document est protégé par les droits d’auteurs en vertu de la licence Creative Commons Attribution 4.0 International (CC BY 4.0). Vous êtes autorisé(e) à partager, copier, distribuer et communiquer au public ce document, à condition d’attribuer correctement la paternité en citant les auteurs originaux. Vous n’êtes pas autorisé(e) à utiliser ce document à des fins commerciales. Toute modification de ce document doit être clairement indiquée, et les nouvelles créations doivent être diffusées sous une licence similaire.
@@ -204,9 +204,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 >**ATTENTION : CodeMachine est limité à 1024 cycles au total.  Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
 
-- Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.  Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».  Cependant, l’instruction « stop », n’a qu’un « fetch », donc un seul cycle.  Ainsi, le nombre de cycle total inscrit après le « / » sera TOUJOURS un multiple de 3 qui suit l’équation suivante :
-
-   *nbr_apres_slash (ex : /219) = nbre d’instructions (excluant le « stop ») * 3*
+- Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.  Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».
 
 - Pour naviguer dans le code vous avez plusieurs options.
 
@@ -254,7 +252,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 - Les règles d’écriture du code sont données dans la section « Grammaire du code ».
 
 - Si votre code est trop long pour s’afficher au complet à l’écran, vous devez utiliser la roulette de la souris pour faire défiler le code.  Il n’y a pas de barre de défilement.
-- >DISPONIBLE DANS UNE PROCHAINE VERSION : Vous pouvez voir l'instruction en cours d'excecution par sa surbrillance.  Notez que seulement l'instruction est en surbrillance, mais pas ses arguments.
+- Vous pouvez voir l'instruction en cours d'excecution par sa surbrillance.
 
 ### Mode d’affichage graphique
 
@@ -320,7 +318,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 - La directive « .data » est facultative et une directive « .data » vide est acceptée.
 
-- Les étiquettes (« label ») doivent être constituées de seulement des lettres minuscules
+- Les étiquettes (« label ») doivent être constituées de seulement des lettres minuscules, des lettres majuscules, des chiffres et des tirets du bas(_).
 
 - Les instructions doivent être en minuscules seulement (tout est sensible à la case)
 

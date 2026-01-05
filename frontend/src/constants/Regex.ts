@@ -11,12 +11,12 @@ export const COMMENT_REGEX = /^(#|\/\/).*$/;
 /**
  * Regex pour identifier un mot de lettre
  */
-export const WORD_REGEX = /^[a-z]+$/;
+export const WORD_REGEX = /^[a-z][a-zA-Z0-9_]*$/;
 
 /**
  * Regex pour identifier une étiquette
  */
-export const LABEL_REGEX = /^[a-z]+:$/;
+export const LABEL_REGEX = /^[a-z][a-zA-Z0-9_]*:$/;
 
 /**
  * Regex pour détecter les opérations du processeur à accumulateur
@@ -64,6 +64,8 @@ export const IMM_LOAD_REGEX = /^ldi$/;
 /**
  * Regex pour identifier les registres utilisé dans les opérations du PolyRisc
  */
-export const REGISTER_POLYRISC = /^\(?r([0-9]|[1-2][0-9]|3[1-2])\)?,?$/;
+export const REGISTER_POLYRISC = /^\(?r([0-9]|[1-2][0-9]|3[0-2])\)?,?$/;
 
-export const SIMPLE_REGISTER_POLYRISC = /r([0-9]|[1-2][0-9]|3[1-2])/;
+export const SIMPLE_REGISTER_POLYRISC = /r(3[0-2]|[1-2][0-9]|[0-9])/;
+
+export const IDENTIFICATION_PARANTHESE = /\(.*\)/;
