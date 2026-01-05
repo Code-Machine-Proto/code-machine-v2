@@ -72,11 +72,9 @@ export const EXECUTION_START = 2;
 /**
  * Nombre à retirer à la fin pour obtenir la dernière étape
  */
-export const REGULAR_END = 1;
+export const END= 1;
 
 /**
- * Nombre à retirer à la fin pour obtenir la dernière étape execute
+ * Nombre d'étape minimum pour avoir accès au mode execution
  */
-export const EXECUTION_END = 2;
-
 export const MINIMUM_EXECUTION_SIZE = 3;

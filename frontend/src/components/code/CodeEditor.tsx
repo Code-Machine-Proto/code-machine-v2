@@ -161,10 +161,12 @@ function handleHorizontalScroll(scroller: ScrollRef, scrolled: ScrollRef): void 
 
 function generateErrorMessage(processor: Processor, setSnackBar: SnackBarDispatch): void {
     let message = "";
+    let isOnlyWarning = true;
     processor.tokenizedLines.forEach((tokenLine, i)=> {
         tokenLine.forEach(token => {
             if (token.error) {
                 message += `Erreur ligne ${i + 1} - ${token.error}\n`; 
+                isOnlyWarning = false;
             }
 
             if (token.warning) {
@@ -172,5 +174,5 @@ function generateErrorMessage(processor: Processor, setSnackBar: SnackBarDispatc
             }
         });
     });
-    setSnackBar({ visible: !!message, type: MessageType.ERROR, message: message, duration: Infinity });
+    setSnackBar({ visible: !!message, type: isOnlyWarning ? MessageType.NEUTRAL : MessageType.ERROR, message: message, duration: Infinity });
 }

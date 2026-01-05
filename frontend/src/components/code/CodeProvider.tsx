@@ -3,12 +3,11 @@ import { storeCode } from "@src/module-store/CodeStore";
 import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
 import { 
     DEFAULT_SOURCE_CODE,
-    EXECUTION_END,
     EXECUTION_START,
     INCREMENT_SIZE_EXECUTION,
     INCREMENT_SIZE_REGULAR,
     PLAY_INTERVALL,
-    REGULAR_END,
+    END,
     REGULAR_START,
     DEFAULT_EXECUTION_STATE,
     MINIMUM_EXECUTION_SIZE,
@@ -171,8 +170,7 @@ function toStart(state: Processor): Processor {
  */
 function toEnd(state: Processor): Processor {
     const newState = state.clone();
-    const end = state.mode === PlayerMode.regular ? REGULAR_END : EXECUTION_END;
-    newState.count = state.steps.length - end;
+    newState.count = state.steps.length - END;
     return newState;
 }
 
