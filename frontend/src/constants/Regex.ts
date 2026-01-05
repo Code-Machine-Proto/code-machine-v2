@@ -11,12 +11,12 @@ export const COMMENT_REGEX = /^(#|\/\/).*$/;
 /**
  * Regex pour identifier un mot de lettre
  */
-export const WORD_REGEX = /^[a-z]+$/;
+export const WORD_REGEX = /^[a-z][a-zA-Z0-9_]*$/;
 
 /**
  * Regex pour identifier une étiquette
  */
-export const LABEL_REGEX = /^[a-z]+:$/;
+export const LABEL_REGEX = /^[a-z][a-zA-Z0-9_]*:$/;
 
 /**
  * Regex pour détecter les opérations du processeur à accumulateur
