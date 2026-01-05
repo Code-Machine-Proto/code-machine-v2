@@ -402,7 +402,7 @@ export const SYNTAX_TABLE: Record<SyntaxState, Record<TokenType | ComposedTokenT
         [ComposedTokenType.STATEMENT]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
         [ComposedTokenType.TEXT]: { type: CheckerAction.SHIFT, number: SyntaxState.DATA_FIRST_REDUCTION },
         [ComposedTokenType.TEXT_BLOCK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
-        [ComposedTokenType.END_OF_CODE]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },
+        [ComposedTokenType.END_OF_CODE]: { type: CheckerAction.ERROR, message: NO_TEXT_LABEL },
     },
     [SyntaxState.DATA_FIRST_REDUCTION]: {
         [TokenType.BLANK]: { type: CheckerAction.ERROR, message: LOGIC_ERROR },

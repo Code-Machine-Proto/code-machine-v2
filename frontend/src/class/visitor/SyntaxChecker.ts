@@ -7,8 +7,19 @@ import { SYNTAX_TABLE } from "@src/constants/SyntaxChecker/SyntaxTableAcc";
 import { RiscSyntaxState, SyntaxState } from "@src/constants/SyntaxChecker/SyntaxCheckerState";
 import { CheckerAction, type SyntaxStackAction, type SyntaxTableEntry } from "@src/interface/visitor/SyntaxChecker";
 import type Processor from "@src/class/Processor";
-import { IMM_LOAD_REGEX, JUMP_POLYRISC, LOAD_REGEX, NO_ARGS_OPERATION_REGEX_ACC, NO_ARGS_OPERATION_REGEX_MA, NO_ARGS_REGEX_POLYRISC, SIMPLE_REGISTER_POLYRISC, STORE_REGEX, TWO_REG_POLYRISC } from "@src/constants/Regex";
-import { INSTRUCTION_ADRESS, INT_OVERFLOW, LABEL_INEXISTANT, WARNING_OPERATION, DUPLICATE_LABEL } from "@src/constants/SyntaxChecker/ErrorAndWarning";
+import {
+    IMM_LOAD_REGEX,
+    JUMP_POLYRISC,
+    LOAD_REGEX,
+    NO_ARGS_OPERATION_REGEX_ACC,
+    NO_ARGS_OPERATION_REGEX_MA,
+    NO_ARGS_REGEX_POLYRISC,
+    SIMPLE_REGISTER_POLYRISC,
+    STORE_REGEX,
+    TWO_REG_POLYRISC,
+    IDENTIFICATION_PARANTHESE
+} from "@src/constants/Regex";
+import { INSTRUCTION_ADRESS, INT_OVERFLOW, LABEL_INEXISTANT, WARNING_OPERATION, DUPLICATE_LABEL, BAD_PARANTHESE } from "@src/constants/SyntaxChecker/ErrorAndWarning";
 import { RISC_SYNTAX_TABLE } from "@src/constants/SyntaxChecker/RiscSyntaxTable";
 import { RegisterFormat } from "@src/interface/visitor/RegisterFormat";
 import { BASE_RISC_TOKEN, MAX_INT32, MIN_INT32 } from "@src/constants/SyntaxChecker/BaseToken";
@@ -287,6 +298,13 @@ export class SyntaxCheckerVisitor implements Visitor {
                     const token = this.shiftStack(input, checkerStack, stateStack, { type: action.type, number: SyntaxState.COMPLETE_PROGRAM });
                     if (token) {
                         token.warning = action.message;
+                        if ( riscInput.type === RiscTokenType.REGISTER ) {
+                            const needParanthesis = index === RiscSyntaxState.STORE_OPERATION || index === RiscSyntaxState.LOAD_FIRST_REG;
+                            const hasParanthesis = IDENTIFICATION_PARANTHESE.test(token.value);
+                            if ((needParanthesis && !hasParanthesis) || (!needParanthesis && hasParanthesis)) {
+                                token.error = BAD_PARANTHESE;
+                            }
+                        }
                     }
                     break;
                 }
