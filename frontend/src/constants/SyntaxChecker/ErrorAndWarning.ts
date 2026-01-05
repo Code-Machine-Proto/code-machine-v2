@@ -11,3 +11,4 @@ export const LDI_IMMEDIATE = "Le load immédiat à besoin d'une valeur immédiat
 export const LABEL_INEXISTANT = "Le label courant n'est pas initialisé";
 export const INT_OVERFLOW = "Le nombre est trop grand pour le processeur";
 export const DUPLICATE_LABEL = "Le label est dupliqué";
+export const BAD_PARANTHESE = "Registre mal formaté";
