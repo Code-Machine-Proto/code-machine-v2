@@ -67,3 +67,5 @@ export const IMM_LOAD_REGEX = /^ldi$/;
 export const REGISTER_POLYRISC = /^\(?r([0-9]|[1-2][0-9]|3[1-2])\)?,?$/;
 
 export const SIMPLE_REGISTER_POLYRISC = /r([0-9]|[1-2][0-9]|3[1-2])/;
+
+export const IDENTIFICATION_PARANTHESE = /\(.*\)/;
