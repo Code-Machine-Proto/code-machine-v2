@@ -322,6 +322,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                             const needParanthesis = index === RiscSyntaxState.STORE_OPERATION || index === RiscSyntaxState.LOAD_FIRST_REG;
                             const hasParanthesis = IDENTIFICATION_PARANTHESE.test(token.value);
                             if ((needParanthesis && !hasParanthesis) || (!needParanthesis && hasParanthesis)) {
+                                hasError = true;
                                 token.error = BAD_PARANTHESE;
                             }
                         }
