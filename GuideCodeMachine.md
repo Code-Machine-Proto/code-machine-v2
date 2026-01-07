@@ -7,7 +7,7 @@
 
 
 **Version 26.0.0**
-5 janvier 2025
+5 janvier 2026
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
@@ -204,7 +204,9 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 >**ATTENTION : CodeMachine est limité à 1024 cycles au total.  Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
 
-- Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.  Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».
+- Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.  Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop »).
+   <p>
+   nbr_apres_slash (ex : /74) = (nbre d’instructions (incluant le « stop ») (ici 25) * 3) - 1
 
 - Pour naviguer dans le code vous avez plusieurs options.
 
