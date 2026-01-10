@@ -442,6 +442,7 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
 | brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
 | shl | 0x10XX | ACC <-  ACC << 1 |
 | shr | 0x11XX | ACC <-  ACC >> 1 |
+| lea | 0x12XX | MA <- ADR |
 | stop | 0x13XX | Arrêt du programme |
 
 ### Opérations ALU

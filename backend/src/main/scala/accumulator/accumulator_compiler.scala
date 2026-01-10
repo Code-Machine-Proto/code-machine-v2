@@ -8,7 +8,7 @@ import scala.io.Source
 object accumulator_compiler {
 
   val opcodeMapV2 = Map("add" -> 0, "sub" -> 1, "mul" -> 2, "adda" -> 3, "suba" -> 4, "addx" -> 5, "subx" -> 6, "ld" -> 7, "st" -> 8,
-    "lda" -> 9, "sta" -> 10, "ldi" -> 11, "sti" -> 12, "br" -> 13, "brz" -> 14, "brnz" -> 15, "shl" -> 16, "shr" -> 17, "and" -> 18, "stop" -> 19, "nop" -> 20)
+    "lda" -> 9, "sta" -> 10, "ldi" -> 11, "sti" -> 12, "br" -> 13, "brz" -> 14, "brnz" -> 15, "shl" -> 16, "shr" -> 17, "lea" -> 18, "stop" -> 19, "nop" -> 20)
   val opcodeMapV1 = Map("add" -> 0, "sub" -> 1, "mul" -> 2, "st" -> 3, "ld" -> 4, "stop" -> 5, "nop" -> 6, "br" -> 7, "brz" -> 8, "brnz"-> 9)
 
   def getHexcodeProgram(program: Array[UInt]): Array[String] = {
@@ -27,8 +27,9 @@ object accumulator_compiler {
     var toReturn = Array[UInt]()
     val programLines = removeComments(removeEmptyLinesAndSpaces(instructionArray))
 
-    val textLines = parseTextAndData(programLines)(0)
-    val dataLines = parseTextAndData(programLines)(1)
+    val parsed = parseTextAndData(programLines)
+    val textLines = parsed(0)
+    val dataLines = parsed(1)
 
     val textLabelsMap = mapTextLabels(textLines)
     val dataLabelsMap = mapDataLabels(dataLines, textLines.length - textLabelsMap.size)
