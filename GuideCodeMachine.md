@@ -318,7 +318,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 - La directive « .data » est facultative et une directive « .data » vide est acceptée.
 
-- Les étiquettes (« label ») doivent être constituées de seulement des lettres minuscules, des lettres majuscules, des chiffres et des tirets du bas(_).
+- Les étiquettes (« label ») doivent être constituées de seulement des lettres minuscules, des lettres majuscules, des chiffres et des tirets du bas(_) (attention, les étiquettes sont sensibles à la case)
 
 - Les instructions doivent être en minuscules seulement (tout est sensible à la case)
 
