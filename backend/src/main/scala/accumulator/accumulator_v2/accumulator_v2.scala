@@ -18,7 +18,7 @@ class accumulator_v2() extends Module {
   })
 
   val fetch :: decode :: execute :: Nil = Enum(3)
-  val add :: sub :: mul :: adda :: suba :: addx :: subx :: ld :: st :: lda :: sta :: ldi :: sti :: br :: brz :: brnz :: shl :: shr :: and :: stop :: nop :: Nil = Enum(21)
+  val add :: sub :: mul :: adda :: suba :: addx :: subx :: ld :: st :: lda :: sta :: ldi :: sti :: br :: brz :: brnz :: shl :: shr :: lea :: stop :: nop :: Nil = Enum(21)
 
   val PC = RegInit(0.U(16.W))
   val ACC = RegInit(0.S(16.W))
@@ -115,8 +115,8 @@ class accumulator_v2() extends Module {
       when(IR.op === shr){
         ACC := ACC >> 1
       }
-      when(IR.op === and){
-        ACC := ACC & InternalMemory(IR.addr).asSInt()
+      when(IR.op === lea){
+        MA := IR.addr
       }
     // }
     // when(State === execute && IR.op =/= stop){

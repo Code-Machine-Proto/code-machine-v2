@@ -6,8 +6,8 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 
-**Version 26.0.0**
-5 janvier 2025
+**Version 26.0.1**
+10 janvier 2026
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
@@ -442,6 +442,7 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
 | brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
 | shl | 0x10XX | ACC <-  ACC << 1 |
 | shr | 0x11XX | ACC <-  ACC >> 1 |
+| lea | 0x12XX | MA <- ADR |
 | stop | 0x13XX | Arrêt du programme |
 
 ### Opérations ALU

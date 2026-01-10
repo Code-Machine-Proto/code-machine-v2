@@ -28,7 +28,7 @@ export const NO_ARGS_OPERATION_REGEX_ACC = /^(stop|nop)$/;
 /**
  * Regex pour détecter les opérations du processeur à accumulateur avec MA
  */
-export const OPERATION_REGEX_MA =  /^((add|sub)(a|x)?|mul|(ld|st)(a|i)?|sh(l|r)|br(z|nz)?|(st|n)op)$/;
+export const OPERATION_REGEX_MA =  /^((add|sub)(a|x)?|mul|lea|(ld|st)(a|i)?|sh(l|r)|br(z|nz)?|(st|n)op)$/;
 
 export const NO_ARGS_OPERATION_REGEX_MA = /^(addx|subx|stop|nop|sh(l|r)|ldi|sti)$/;
 
