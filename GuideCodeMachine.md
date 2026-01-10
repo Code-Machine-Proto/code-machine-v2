@@ -120,8 +120,9 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 ## Pour MAC
 
-1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
+### Méthode 1: Installation simplifiée (recommandée)
 
+1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
 2. Choisir le relâche la plus récente (cliquer dessus)
    <p>
@@ -133,9 +134,39 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    <img src="guide-codemachine-images/mac-github.jpg" width="650">
    </p>
 
-4. Dans téléchargement, double-cliquer pour partir l’installation et compléter une installation selon le format dmg
- 
+4. Dans téléchargement, double-cliquer pour partir l'installation et compléter une installation selon le format dmg
+
+5. **Première ouverture de CodeMachine:**
+   - Double-cliquer sur l'application CodeMachine
+   - macOS affichera un message indiquant que l'app ne peut pas être ouverte (app non signée)
+   - Cliquer sur **OK**
+
+6. **Autoriser l'ouverture dans les Préférences Système:**
+   - Ouvrir **Préférences Système** (ou **Réglages Système** sur macOS Ventura+)
+   - Aller dans **Sécurité et confidentialité** (ou **Confidentialité et sécurité**)
+   - Dans l'onglet **Général**, vous verrez un message concernant CodeMachine
+   - Cliquer sur le bouton **Ouvrir quand même**
+   - Confirmer en cliquant **Ouvrir** dans la fenêtre de confirmation
+
+7. L'application CodeMachine devrait maintenant se lancer normalement
+
 <div style="page-break-after: always;"></div>
+
+### Méthode 2: Installation via Terminal (méthode alternative)
+
+1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
+
+2. Choisir le relâche la plus récente (cliquer dessus)
+   <p>
+   <img src="guide-codemachine-images/Version.png" width="650">
+   </p>
+
+3. Choisir l'installeur pour Mac (le même pour toutes les architectures)
+   <p>
+   <img src="guide-codemachine-images/mac-github.jpg" width="650">
+   </p>
+
+4. Dans téléchargement, double-cliquer pour partir l'installation et compléter une installation selon le format dmg
 
 5. Enlever les drapeaux de quarantaine mis par Apple
    <p>
@@ -151,7 +182,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    <p>
    <img src="guide-codemachine-images/contents-mac.jpg" width="150">
    </p>
----
+   ---
    <p>
    <img src="guide-codemachine-images/chemin-exec.jpg" width="250">
    </p>
@@ -160,6 +191,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    <p>
    <img src="guide-codemachine-images/alias-mac.jpg" width="250">
    </p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -242,8 +274,6 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
    <img src="guide-codemachine-images/surbrillance.png" width="200">
    </p>
 
-- Attention, les lignes n’indiquent pas les adresses mémoires des instructions ou des données puisque les « directives » (.text et .data) ne sont pas directement écrites en mémoire.
-
 - Les erreurs de syntaxes devraient être soulignées en *rouge* et les "warnings" en *jaune* et tant que vous avez des soulignements rouges dans le code, vous ne pourrez pas accéder au bouton « Compiler » qui sera *rouge*.  Normalement, lorsque vous avez des soulignées dans le code, une fenêtre devrait apparaître et vous indique le type d'erreur précédé du numéro de la ligne qui contient une erreur.  
    >**ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes.  Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
 - Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.  
@@ -253,6 +283,39 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 - Si votre code est trop long pour s’afficher au complet à l’écran, vous devez utiliser la roulette de la souris pour faire défiler le code.  Il n’y a pas de barre de défilement.
 - Vous pouvez voir l'instruction en cours d'excecution par sa surbrillance.
+
+### Organisation mémoire
+
+- **Les numéros de ligne** dans votre code assembleur **ne correspondent PAS** aux adresses mémoires réelles
+
+- **Les directives** (`.text`, `.data`) ne sont **pas écrites en mémoire** - elles indiquent seulement au compilateur comment organiser les sections
+
+- **Ordre en mémoire:**
+  1. Section `.text` (programme) → placée en premier en mémoire
+  2. Section `.data` (données) → placée après le code
+  
+- **Les étiquettes** (comme `loop:`) ne sont **pas écrites en mémoire** - elles sont remplacées par l'adresse de l'instruction suivante lors de l'assemblage
+
+**Exemple:**
+```
+.text              # Cette directive n'occupe pas de mémoire
+ld n               # Occupe de la mémoire (adresse 0)
+loop:              # Remplacée par l'adresse réelle (adresse 1)
+sub one            # Occupe de la mémoire (adresse 1)
+brnz loop          # Occupe de la mémoire (adresse 2), "loop" → adresse 1
+st n               # Occupe de la mémoire (adresse 3)
+stop               # Occupe de la mémoire (adresse 4)
+
+.data              # Cette directive n'occupe pas de mémoire
+n: 5               # Occupe de la mémoire (adresse 5)
+one: 1             # Occupe de la mémoire (adresse 6)
+```
+
+**Dans cet exemple:**
+- Les instructions (`.text`) occupent les adresses 0 à 4
+- Les données (`.data`) occupent les adresses 5 et 6
+- L'étiquette `loop:` est remplacée par l'adresse 1
+- Les directives `.text` et `.data` n'occupent aucun espace mémoire
 
 ### Mode d’affichage graphique
 
@@ -413,6 +476,16 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
    <p>
    <img src="guide-codemachine-images/ProcesseurAccMACodeMachine.png" width="800">
    </p>
+   
+**Attention:** Une nouvelle instruction (lea) a été ajoutée dans le jeu d'instructions et n'est pas encore représentée dans le schéme de CodeMachine.  Voici ce qu'il manque et sera ajouté éventuellement dans l'interface graphique.
+   <p>
+   <img src="guide-codemachine-images/Accumulateur-MA-Lea.png" width="800">
+   </p>
+
+Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-Proto/code-machine-v2/issues/123) sur GitHub.
+
+
+<div style="page-break-after: always;"></div>
 
 ### Détaillé
    <p>
@@ -442,7 +515,7 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
 | brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
 | shl | 0x10XX | ACC <-  ACC << 1 |
 | shr | 0x11XX | ACC <-  ACC >> 1 |
-| lea | 0x12XX | MA <- ADR |
+| lea ADR | 0x12XX | MA <- ADR |
 | stop | 0x13XX | Arrêt du programme |
 
 ### Opérations ALU
