@@ -6,8 +6,8 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 
-**Version 26.0.0**
-5 janvier 2025
+**Version 26.0.1**
+10 janvier 2026
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
