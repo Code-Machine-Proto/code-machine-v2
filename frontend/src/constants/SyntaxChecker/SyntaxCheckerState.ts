@@ -18,8 +18,6 @@ export enum SyntaxState {
     STATEMENT_REDUCTION,
     DATA_ALONE_NUMBER,
     DATA_ALONE_NUMBER_REDUCE,
-    DATA_FIRST,
-    DATA_FIRST_REDUCTION,
 }
 
 export enum RiscSyntaxState {
