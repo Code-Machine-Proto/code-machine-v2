@@ -7,7 +7,7 @@
 
 
 **Version 26.0.1**
-10 janvier 2026
+20 janvier 2026
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
@@ -119,40 +119,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 <div style="page-break-after: always;"></div>
 
 ## Pour MAC
-
-### Méthode 1: Installation simplifiée (recommandée)
-
-1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
-
-2. Choisir le relâche la plus récente (cliquer dessus)
-   <p>
-   <img src="guide-codemachine-images/Version.png" width="650">
-   </p>
-
-3. Choisir l'installeur pour Mac (le même pour toutes les architectures)
-   <p>
-   <img src="guide-codemachine-images/mac-github.jpg" width="650">
-   </p>
-
-4. Dans téléchargement, double-cliquer pour partir l'installation et compléter une installation selon le format dmg
-
-5. **Première ouverture de CodeMachine:**
-   - Double-cliquer sur l'application CodeMachine
-   - macOS affichera un message indiquant que l'app ne peut pas être ouverte (app non signée)
-   - Cliquer sur **OK**
-
-6. **Autoriser l'ouverture dans les Préférences Système:**
-   - Ouvrir **Préférences Système** (ou **Réglages Système** sur macOS Ventura+)
-   - Aller dans **Sécurité et confidentialité** (ou **Confidentialité et sécurité**)
-   - Dans l'onglet **Général**, vous verrez un message concernant CodeMachine
-   - Cliquer sur le bouton **Ouvrir quand même**
-   - Confirmer en cliquant **Ouvrir** dans la fenêtre de confirmation
-
-7. L'application CodeMachine devrait maintenant se lancer normalement
-
-<div style="page-break-after: always;"></div>
-
-### Méthode 2: Installation via Terminal (méthode alternative)
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
