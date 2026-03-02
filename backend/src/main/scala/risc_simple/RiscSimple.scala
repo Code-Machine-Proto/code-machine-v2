@@ -10,17 +10,6 @@ class Debug extends Bundle {
   val IR = UInt(28.W)
   val State = UInt()
   val Registers = Vec(32, SInt(16.W))
-
-  /*
-Data_mem and Inst_mem were removed from Debug IO because exposing large Vecs
-through hardware IO causes Chisel to elaborate thousands of individual wire
-assignments at compile time, making Driver.execute hang for 10+ seconds.
-Memory state is now tracked in software in risc_simple_simulation using
-the original prog/data arrays passed directly to the simulation class.
-   */
-//   val Data_mem = Vec(256,SInt(16.W))
-//   val Inst_mem = Vec(4096,UInt(28.W))
-
   val Instruction = UInt(3.W)
   val FlagNZ = UInt(2.W)
 }
@@ -136,15 +125,4 @@ class RiscSimple(prog: Array[UInt], data: Array[UInt]) extends Module {
   io.debug.Registers := BREG.io.Sim_RegistersVec
   io.debug.Instruction := DEC.io.decode_out.op_type
   io.debug.FlagNZ := (ALU.io.N << 1) + (ALU.io.Z << 0)
-
-  /* Removed for same reason as above*/
-//   io.debug.Data_mem := DM.io.Sim_DataMemoryOut
-//   io.debug.Inst_mem := IM.io.Sim_InstMemoryOut
-
 }
-
-/*
-object RiscSimple extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new RiscSimple(Assembler.prog2))
-}
- */

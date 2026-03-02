@@ -38,12 +38,19 @@ object risc_simple_execs {
     System.out.println(Hextext.mkString(" ")) // Dev.
     System.out.println(Hexdata.mkString(" ")) // Dev.
 
+    val startTime = System.currentTimeMillis()
+
     chisel3.iotesters.Driver.execute(
-      Array("--generate-vcd-output", "on"),
-      () => new RiscSimple(UIntText, UIntData)
+      Array("--generate-vcd-output", "off"),
+      () => {
+        new RiscSimple(UIntText, UIntData)
+      }
     ) { DUT =>
       new risc_simple_simulation(DUT, output, UIntText, UIntData)
     }
+
+    println(s"Total time: ${System.currentTimeMillis() - startTime}ms")
+    System.out.flush()
 
     result = output.toString
 
@@ -67,78 +74,69 @@ class risc_simple_simulation(
     data: Array[UInt]
 ) extends PeekPokeTester(DUT) {
 
-  // Software mirrors since memory doesn't change
+  // To collect data
+  case class CycleSnapshot(
+      memoryState: Array[BigInt],
+      regState: Array[BigInt],
+      pcState: BigInt,
+      irState: BigInt,
+      instructionState: BigInt,
+      stimulatedLine: Int
+  )
+
+  // Software mirrors so no hardware peeking is needed
   val imSnapshot = prog.map(_.litValue).toArray.padTo(4096, BigInt(0))
   val dmSnapshot = data.map(_.litValue).toArray.padTo(256, BigInt(0))
 
+  val snapshots = scala.collection.mutable.ArrayBuffer[CycleSnapshot]()
+
+  step(1)
+
   var simulation_ended = false
   var simulation_cycle = 0
-  output.write("[")
-  output.flush()
-  step(1)
+
   while (!simulation_ended) {
-    output.write("{")
-    output.flush()
-
-// --------- DM — now read from dmSnapshot instead of hardware
-    output.write("\"memoryState\" : [")
-    for (memIdx <- 0 until dmSnapshot.length) {
-      if (memIdx < dmSnapshot.length - 1) {
-        output.write(dmSnapshot(memIdx).toString + ",")
-      } else {
-        output.write(dmSnapshot(memIdx).toString + "\r")
-      }
-    }
-    output.write("],")
-    output.flush()
-
-// --------- Reg
-    output.write("\"regState\" : [")
-    for (memIdx <- 0 until DUT.io.debug.Registers.length) {
-      if (memIdx < DUT.io.debug.Registers.length - 1) {
-        output.write(peek(DUT.io.debug.Registers(memIdx)).toString + ",")
-      } else {
-        output.write(peek(DUT.io.debug.Registers(memIdx)).toString + "\r")
-      }
-    }
-    output.write("],")
-    output.flush()
-
-// ---------- PC, IR, State, FlagNZ — peek once, reuse
-    val pcVal = peek(DUT.io.debug.PC)
-    val irVal = peek(DUT.io.debug.IR)
     val stateVal = peek(DUT.io.debug.State)
+    val irVal = peek(DUT.io.debug.IR)
     val flagVal = peek(DUT.io.debug.FlagNZ)
 
-    output.write("\"pcState\" : " + pcVal.toString + ",")
-    output.flush()
-    output.write("\"irState\" : " + irVal.toString + ",")
-    output.flush()
-    output.write("\"instructionState\" : " + (stateVal - 1).toString + ",")
-    output.flush()
-    output.write(
-      "\"stimulatedLineState\" : " + risc_simple.compiler.asm_compiler
-        .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt) + ","
+    snapshots += CycleSnapshot(
+      memoryState = dmSnapshot.clone(),
+      regState = DUT.io.debug.Registers.map(peek(_)).toArray,
+      pcState = peek(DUT.io.debug.PC),
+      irState = irVal,
+      instructionState = stateVal - 1,
+      stimulatedLine = risc_simple.compiler.asm_compiler
+        .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt)
     )
-
-// --------- IM — read from imSnapshot instead of hardware
-    output.write("\"imState\" : [")
-    for (memIdx <- 0 until imSnapshot.length) {
-      if (memIdx < imSnapshot.length - 1) {
-        output.write(imSnapshot(memIdx).toString + ",")
-      } else {
-        output.write(imSnapshot(memIdx).toString + "\r")
-      }
-    }
-    output.write("]")
-    output.write("},")
-    output.flush()
 
     step(1)
     simulation_cycle += 1
     simulation_ended = (stateVal.toInt == 4) || (simulation_cycle == 1024)
   }
-  output.write("]")
+
+// Serialize once
+  val sb = new StringBuilder(snapshots.size * 512)
+  sb.append("[")
+  snapshots.zipWithIndex.foreach { case (s, idx) =>
+    sb.append("{")
+    sb.append("\"memoryState\" : [")
+      .append(s.memoryState.mkString(","))
+      .append("\r],")
+    sb.append("\"regState\" : [")
+      .append(s.regState.mkString(","))
+      .append("\r],")
+    sb.append("\"pcState\" : ").append(s.pcState).append(",")
+    sb.append("\"irState\" : ").append(s.irState).append(",")
+    sb.append("\"instructionState\" : ").append(s.instructionState).append(",")
+    sb.append("\"stimulatedLineState\" : ").append(s.stimulatedLine).append(",")
+    sb.append("\"imState\" : [").append(imSnapshot.mkString(",")).append("]")
+    sb.append("}")
+    if (idx < snapshots.size - 1) sb.append(",")
+  }
+  sb.append("\r]")
+
+  output.write(sb.toString)
   output.flush()
 }
 
