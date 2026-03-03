@@ -185,28 +185,8 @@ export class SyntaxCheckerVisitor implements Visitor {
         }
         processor.isCompilable = !(hasError || this.hasNumberError);
         if ( !hasError ) {
-            const almostCleanCode = checkerStack[0].value.split(/\n+/g).map(line => line.trim()).filter(line => line);
-            processor.cleanCode = this.putDataAtTheEnd(almostCleanCode);
+            processor.cleanCode = checkerStack[0].value.split(/\n+/g).map(line => line.trim()).filter(line => line);
         }
-    }
-
-    putDataAtTheEnd(almostCleanCode: string[]): string[] {
-        const positionDataLabel = almostCleanCode.indexOf(".data");
-        const positionTextLabel = almostCleanCode.indexOf(".text");
-
-        if (
-            positionDataLabel === -1 ||
-            positionTextLabel === -1 ||
-            positionTextLabel < positionDataLabel
-        ) {
-            return almostCleanCode;
-        }
-
-
-        return [
-            ...almostCleanCode.slice(positionTextLabel),
-            ...almostCleanCode.slice(positionDataLabel, positionTextLabel)
-        ];
     }
 
     opReduceAcc(input: Array<Token | ComposedToken>, checkerStack: Array<Token | ComposedToken>, stateStack: Array<SyntaxState>): boolean {
