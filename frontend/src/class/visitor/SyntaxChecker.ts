@@ -299,7 +299,7 @@ export class SyntaxCheckerVisitor implements Visitor {
                 }
 
                 case CheckerAction.REDUCE: {
-                    if (index === RiscSyntaxState.LABEL_ARGS) {
+                    if (index === RiscSyntaxState.LABEL_ARGS || index === RiscSyntaxState.IMM_LOAD_LABEL) {
                         const token = checkerStack.at(-1);
                         if (token && !this.labelArray.find(tk => tk.value === token.value + ":")) {
                             hasError = true;
