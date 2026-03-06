@@ -12,6 +12,7 @@ class Debug extends Bundle {
   val Registers = Vec(32, SInt(16.W))
   val Instruction = UInt(3.W)
   val FlagNZ = UInt(2.W)
+  val DataMemory = Vec(256, SInt(16.W))
 }
 
 class RiscSimple(prog: Array[UInt], data: Array[UInt]) extends Module {
@@ -125,4 +126,5 @@ class RiscSimple(prog: Array[UInt], data: Array[UInt]) extends Module {
   io.debug.Registers := BREG.io.Sim_RegistersVec
   io.debug.Instruction := DEC.io.decode_out.op_type
   io.debug.FlagNZ := (ALU.io.N << 1) + (ALU.io.Z << 0)
+  io.debug.DataMemory := DM.io.Sim_MemVec
 }

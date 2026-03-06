@@ -5,10 +5,11 @@ import chisel3.{UInt, _}
 class DataMem(data: Array[UInt]) extends Module {
   val io = IO(new Bundle {
     val addr = Input(UInt(8.W))
-    val data_in = Input(SInt(16.W)) //
+    val data_in = Input(SInt(16.W))
     val wmem = Input(Bool())
 
-    val data_out = Output(SInt(16.W)) //
+    val data_out = Output(SInt(16.W))
+    val Sim_MemVec = Output(Vec(256, SInt(16.W)))
   })
 
   val dataMem = RegInit(
@@ -23,5 +24,5 @@ class DataMem(data: Array[UInt]) extends Module {
   }
 
   io.data_out := dataMem(io.addr)
-
+  io.Sim_MemVec := dataMem
 }

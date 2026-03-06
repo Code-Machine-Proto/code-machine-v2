@@ -84,9 +84,8 @@ class risc_simple_simulation(
       stimulatedLine: Int
   )
 
-  // Software mirrors so no hardware peeking is needed
+  // Software mirror so no hardware peeking is needed for instruciton memory
   val imSnapshot = prog.map(_.litValue).toArray.padTo(4096, BigInt(0))
-  val dmSnapshot = data.map(_.litValue).toArray.padTo(256, BigInt(0))
 
   val snapshots = scala.collection.mutable.ArrayBuffer[CycleSnapshot]()
 
@@ -101,7 +100,7 @@ class risc_simple_simulation(
     val flagVal = peek(DUT.io.debug.FlagNZ)
 
     snapshots += CycleSnapshot(
-      memoryState = dmSnapshot.clone(),
+      memoryState = DUT.io.debug.DataMemory.map(peek(_)).toArray,
       regState = DUT.io.debug.Registers.map(peek(_)).toArray,
       pcState = peek(DUT.io.debug.PC),
       irState = irVal,
