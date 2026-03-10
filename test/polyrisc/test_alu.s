@@ -37,4 +37,4 @@ stop
 # mem[14] = 10      (mv:   r1)
 # mem[15] = 5       (shr:  10 >> 1)
 # mem[16] = 20      (shl:  10 << 1)
-# mem[17] = 0xFFFC  (not:  ~3)
+# mem[17] = -4  (0xFFFC)   (not: ~3)
