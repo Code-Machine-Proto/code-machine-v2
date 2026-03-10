@@ -1,5 +1,4 @@
 .text
-
 # --- br : branchement inconditionnel ---
 ldi r1, 42
 ldi r20, res_br
@@ -7,7 +6,6 @@ br br_ok
 ldi r1, 0           # ne doit PAS s'executer
 br_ok:
 st (r20), r1        # mem[res_br] = 42
-
 # --- brz : Z=1 (resultat nul) ---
 ldi r1, 55
 ldi r20, res_brz
@@ -19,7 +17,6 @@ br brz_end
 brz_ok:
 st (r20), r1        # mem[res_brz] = 55
 brz_end:
-
 # --- brnz : Z=0 (resultat non nul) ---
 ldi r20, res_brnz
 ldi r3, 5
@@ -31,7 +28,6 @@ br brnz_end
 brnz_ok:
 st (r20), r3        # mem[res_brnz] = 2
 brnz_end:
-
 # --- brlz : N=1 (resultat negatif) ---
 ldi r1, 77
 ldi r20, res_brlz
@@ -44,7 +40,6 @@ br brlz_end
 brlz_ok:
 st (r20), r1        # mem[res_brlz] = 77
 brlz_end:
-
 # --- brgez : N=0 (resultat >= 0) ---
 ldi r20, res_brgez
 ldi r3, 9
@@ -56,16 +51,13 @@ br brgez_end
 brgez_ok:
 st (r20), r3        # mem[res_brgez] = 5
 brgez_end:
-
 stop
-
 .data
 res_br:    0
 res_brz:   0
 res_brnz:  0
 res_brlz:  0
 res_brgez: 0
-
 # === RÉSULTATS ATTENDUS ===
 # mem[res_br]    = 42   (br    : inconditionnel)
 # mem[res_brz]   = 55   (brz   : 7-7=0,  Z=1)

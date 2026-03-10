@@ -1,4 +1,5 @@
 .text
+# Charger une valeur distincte dans chaque registre (r0-r30)
 ldi r0,  200
 ldi r1,  201
 ldi r2,  202
@@ -30,11 +31,9 @@ ldi r27, 227
 ldi r28, 228
 ldi r29, 229
 ldi r30, 230
-
 ldi r31, resultats
 st  (r31), r0        # sauver r0=200 en premier
 ldi r0, 1            # r0 devient constante 1
-
 add r31, r31, r0
 st  (r31), r1
 add r31, r31, r0
@@ -95,17 +94,12 @@ add r31, r31, r0
 st  (r31), r29
 add r31, r31, r0
 st  (r31), r30
-
-# r31 : avancer adresse, utiliser r0 comme scratch
 add r31, r31, r0     # r31 = resultats+31
 mv  r0, r31          # r0 = adresse resultats+31
 ldi r31, 231         # r31 = valeur à sauver
 st  (r0), r31
-
 stop
-
 .data
 resultats: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-
 # === RÉSULTATS ATTENDUS ===
 # mem[resultats+i] = 200+i   pour i = 0 à 31

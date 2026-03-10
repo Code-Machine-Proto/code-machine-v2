@@ -1,6 +1,7 @@
 .text
 ldi r5, n
 ld  r0, (r5)     # r0 = n (compteur)
+
 ldi r1, 0        # r1 = accumulateur somme
 ldi r2, 1        # r2 = constante 1
 ldi r3, 2        # r3 = constante 2

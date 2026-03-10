@@ -219,6 +219,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 > **ATTENTION : CodeMachine est limité à 1024 cycles au total. Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
 
 - Pour l'Accumulateur et l'Accumulateur-MA, les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour le PolyRisc, les cycles sont comptés à partir de 1, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. 
+
 - Pour toutes les architectures, chaque instruction prend 3 cycles (incluant l’instruction « nop »).
 
 - Pour naviguer dans le code vous avez plusieurs options.
