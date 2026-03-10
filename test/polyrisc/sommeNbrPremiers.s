@@ -21,5 +21,5 @@ n:    4
 somme: 0
 
 # === RÉSULTATS ATTENDUS ===
-# mem[n]    = 4    
+# mem[n]    = 4
 # mem[somme] = 20  (2+4+6+8)
