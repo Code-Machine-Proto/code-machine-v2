@@ -5,7 +5,8 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 **Version 26.2.0**
-6 mars 2026
+10 mars 2026
+
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
@@ -118,8 +119,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 ## Pour MAC
 
-### Méthode 1: Installation simplifiée (recommandée)
-
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
 2. Choisir le relâche la plus récente (cliquer dessus)
@@ -133,22 +132,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    </p>
 
 4. Dans téléchargement, double-cliquer pour partir l'installation et compléter une installation selon le format dmg
-
-5. **Première ouverture de CodeMachine:**
-   - Double-cliquer sur l'application CodeMachine
-   - macOS affichera un message indiquant que l'app ne peut pas être ouverte (app non signée)
-   - Cliquer sur **OK**
-
-6. **Autoriser l'ouverture dans les Préférences Système:**
-   - Ouvrir **Préférences Système** (ou **Réglages Système** sur macOS Ventura+)
-   - Aller dans **Sécurité et confidentialité** (ou **Confidentialité et sécurité**)
-   - Dans l'onglet **Général**, vous verrez un message concernant CodeMachine
-   - Cliquer sur le bouton **Ouvrir quand même**
-   - Confirmer en cliquant **Ouvrir** dans la fenêtre de confirmation
-
-7. L'application CodeMachine devrait maintenant se lancer normalement
-
-<div style="page-break-after: always;"></div>
 
 ### Méthode 2: Installation via Terminal (méthode alternative)
 
@@ -189,6 +172,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    <p>
    <img src="guide-codemachine-images/alias-mac.jpg" width="250">
    </p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -270,11 +254,10 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
    <img src="guide-codemachine-images/surbrillance.png" width="200">
    </p>
 
-- Les erreurs de syntaxes devraient être soulignées en _rouge_ et les "warnings" en _jaune_ et tant que vous avez des soulignements rouges dans le code, vous ne pourrez pas accéder au bouton « Compiler » qui sera _rouge_. Normalement, lorsque vous avez des soulignées dans le code, une fenêtre devrait apparaître et vous indique le type d'erreur précédé du numéro de la ligne qui contient une erreur.
-  > **ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes. Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
-- Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.
-
-  > **Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outils.**
+- Les erreurs de syntaxes devraient être soulignées en *rouge* et les "warnings" en *jaune* et tant que vous avez des soulignements rouges dans le code, vous ne pourrez pas accéder au bouton « Compiler » qui sera *rouge*.  Normalement, lorsque vous avez des soulignées dans le code, une fenêtre devrait apparaître et vous indique le type d'erreur précédé du numéro de la ligne qui contient une erreur.  
+   >**ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes.  Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
+- Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.  
+   >**Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outils.**
 
 - Les règles d’écriture du code sont données dans la section « Grammaire du code ».
 
@@ -290,10 +273,10 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 - **Ordre en mémoire:**
   1. Section `.text` (programme) → placée en premier en mémoire
   2. Section `.data` (données) → placée après le code
+  
 - **Les étiquettes** (comme `loop:`) ne sont **pas écrites en mémoire** - elles sont remplacées par l'adresse de l'instruction suivante lors de l'assemblage
 
 **Exemple:**
-
 ```
 .text              # Cette directive n'occupe pas de mémoire
 ld n               # Occupe de la mémoire (adresse 0)
@@ -309,7 +292,6 @@ one: 1             # Occupe de la mémoire (adresse 6)
 ```
 
 **Dans cet exemple:**
-
 - Les instructions (`.text`) occupent les adresses 0 à 4
 - Les données (`.data`) occupent les adresses 5 et 6
 - L'étiquette `loop:` est remplacée par l'adresse 1
@@ -496,29 +478,28 @@ Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-
 <div style="page-break-after: always;"></div>
 
 ## Instructions
-
-| Instruction | Encodage | Description                         |
-| ----------- | -------- | ----------------------------------- |
-| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]           |
-| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]           |
-| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]           |
-| adda ADR    | 0x03XX   | MA <- MA + Mémoire[ADR]             |
-| suba ADR    | 0x04XX   | MA <- MA - Mémoire[ADR]             |
-| addx        | 0x05XX   | ACC <- ACC + Mémoire[MA]            |
-| subx        | 0x06XX   | ACC <- ACC - Mémoire[MA]            |
-| ld ADR      | 0x07XX   | ACC <- Mémoire[ADR]                 |
-| st ADR      | 0x08XX   | Mémoire[ADR] <- ACC                 |
-| lda ADR     | 0x09XX   | MA <- Mémoire[ADR]                  |
-| sta ADR     | 0x0AXX   | Mémoire[ADR] <- MA                  |
-| ldi         | 0x0BXX   | ACC <- Mémoire[MA]                  |
-| sti         | 0x0CXX   | Mémoire[MA] <- ACC                  |
-| br ADR      | 0x0DXX   | PC <- ADR                           |
-| brz ADR     | 0x0EXX   | ACC = 0 ? PC <- ADR : PC <- PC + 1  |
-| brnz ADR    | 0x0FXX   | ACC != 0 ? PC <- ADR : PC <- PC + 1 |
-| shl         | 0x10XX   | ACC <- ACC << 1                     |
-| shr         | 0x11XX   | ACC <- ACC >> 1                     |
-| lea ADR     | 0x12XX   | MA <- ADR                           |
-| stop        | 0x13XX   | Arrêt du programme                  |
+| Instruction | Encodage | Description |
+| --- | --- | --- |
+| add ADR | 0x00XX | ACC <-  ACC + Mémoire[ADR] |
+| sub ADR | 0x01XX | ACC <-  ACC - Mémoire[ADR] |
+| mul ADR | 0x02XX | ACC <-  ACC × Mémoire[ADR] |
+| adda ADR | 0x03XX | MA  <-  MA  + Mémoire[ADR] |
+| suba ADR | 0x04XX | MA  <-  MA  - Mémoire[ADR] |
+| addx | 0x05XX | ACC <-  ACC + Mémoire[MA] |
+| subx | 0x06XX | ACC <-  ACC - Mémoire[MA] |
+| ld ADR | 0x07XX | ACC <-  Mémoire[ADR] |
+| st ADR | 0x08XX | Mémoire[ADR] <-  ACC |
+| lda ADR | 0x09XX | MA  <-  Mémoire[ADR] |
+| sta ADR | 0x0AXX | Mémoire[ADR] <-  MA |
+| ldi | 0x0BXX | ACC <-  Mémoire[MA] |
+| sti | 0x0CXX | Mémoire[MA] <-  ACC |
+| br ADR | 0x0DXX | PC <-  ADR |
+| brz ADR | 0x0EXX | ACC = 0 ? PC <-  ADR : PC <-  PC + 1 |
+| brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
+| shl | 0x10XX | ACC <-  ACC << 1 |
+| shr | 0x11XX | ACC <-  ACC >> 1 |
+| lea ADR | 0x12XX | MA <- ADR |
+| stop | 0x13XX | Arrêt du programme |
 
 ### Opérations ALU
 
