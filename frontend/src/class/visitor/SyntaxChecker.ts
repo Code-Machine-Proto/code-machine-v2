@@ -414,7 +414,8 @@ export class SyntaxCheckerVisitor implements Visitor {
     formatArguments(checkerStack: Array<RiscToken>, state: RiscSyntaxState, action: SyntaxTableEntry): void {
         if ( !action.number ) { return; }
         switch ( state ) {
-            case RiscSyntaxState.IMM_LOAD_NUM: {
+            case RiscSyntaxState.IMM_LOAD_NUM: 
+            case RiscSyntaxState.IMM_LOAD_LABEL: {
                 const token = checkerStack.at(-action.number);
                 this.formatRegister( token ? token : BASE_RISC_TOKEN, [ RegisterFormat.COMMA ]);
                 break;
