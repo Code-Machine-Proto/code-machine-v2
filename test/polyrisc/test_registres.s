@@ -1,4 +1,5 @@
 .text
+
 # Charger une valeur distincte dans chaque registre (r0-r30)
 ldi r0,  200
 ldi r1,  201
@@ -31,88 +32,75 @@ ldi r27, 227
 ldi r28, 228
 ldi r29, 229
 ldi r30, 230
-
-# Sauvegarder r0-r30 en memoire (r31 utilise comme adresse scratch)
-ldi r31, 0
-st (r31), r0
-ldi r31, 1
-st (r31), r1
-ldi r31, 2
-st (r31), r2
-ldi r31, 3
-st (r31), r3
-ldi r31, 4
-st (r31), r4
-ldi r31, 5
-st (r31), r5
-ldi r31, 6
-st (r31), r6
-ldi r31, 7
-st (r31), r7
-ldi r31, 8
-st (r31), r8
-ldi r31, 9
-st (r31), r9
-ldi r31, 10
-st (r31), r10
-ldi r31, 11
-st (r31), r11
-ldi r31, 12
-st (r31), r12
-ldi r31, 13
-st (r31), r13
-ldi r31, 14
-st (r31), r14
-ldi r31, 15
-st (r31), r15
-ldi r31, 16
-st (r31), r16
-ldi r31, 17
-st (r31), r17
-ldi r31, 18
-st (r31), r18
-ldi r31, 19
-st (r31), r19
-ldi r31, 20
-st (r31), r20
-ldi r31, 21
-st (r31), r21
-ldi r31, 22
-st (r31), r22
-ldi r31, 23
-st (r31), r23
-ldi r31, 24
-st (r31), r24
-ldi r31, 25
-st (r31), r25
-ldi r31, 26
-st (r31), r26
-ldi r31, 27
-st (r31), r27
-ldi r31, 28
-st (r31), r28
-ldi r31, 29
-st (r31), r29
-ldi r31, 30
-st (r31), r30
-
-# r31 : charge sa valeur de test, utilise r30 comme adresse
-# (r30 est deja sauvegarde en mem[30])
-ldi r31, 231
-ldi r30, 31
-st (r30), r31
-
+ldi r31, resultats
+st  (r31), r0        # sauver r0=200 en premier
+ldi r0, 1            # r0 devient constante 1
+add r31, r31, r0
+st  (r31), r1
+add r31, r31, r0
+st  (r31), r2
+add r31, r31, r0
+st  (r31), r3
+add r31, r31, r0
+st  (r31), r4
+add r31, r31, r0
+st  (r31), r5
+add r31, r31, r0
+st  (r31), r6
+add r31, r31, r0
+st  (r31), r7
+add r31, r31, r0
+st  (r31), r8
+add r31, r31, r0
+st  (r31), r9
+add r31, r31, r0
+st  (r31), r10
+add r31, r31, r0
+st  (r31), r11
+add r31, r31, r0
+st  (r31), r12
+add r31, r31, r0
+st  (r31), r13
+add r31, r31, r0
+st  (r31), r14
+add r31, r31, r0
+st  (r31), r15
+add r31, r31, r0
+st  (r31), r16
+add r31, r31, r0
+st  (r31), r17
+add r31, r31, r0
+st  (r31), r18
+add r31, r31, r0
+st  (r31), r19
+add r31, r31, r0
+st  (r31), r20
+add r31, r31, r0
+st  (r31), r21
+add r31, r31, r0
+st  (r31), r22
+add r31, r31, r0
+st  (r31), r23
+add r31, r31, r0
+st  (r31), r24
+add r31, r31, r0
+st  (r31), r25
+add r31, r31, r0
+st  (r31), r26
+add r31, r31, r0
+st  (r31), r27
+add r31, r31, r0
+st  (r31), r28
+add r31, r31, r0
+st  (r31), r29
+add r31, r31, r0
+st  (r31), r30
+add r31, r31, r0     # r31 = resultats+31
+mv  r0, r31          # r0 = adresse resultats+31
+ldi r31, 231         # r31 = valeur à sauver
+st  (r0), r31
 stop
-
+.data
+resultats: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 # === RÉSULTATS ATTENDUS ===
-# mem[i] = 200+i   pour i = 0 a 30
-# mem[31] = 231    (r31)
-#
-# mem[0]  = 200    mem[8]  = 208    mem[16] = 216    mem[24] = 224
-# mem[1]  = 201    mem[9]  = 209    mem[17] = 217    mem[25] = 225
-# mem[2]  = 202    mem[10] = 210    mem[18] = 218    mem[26] = 226
-# mem[3]  = 203    mem[11] = 211    mem[19] = 219    mem[27] = 227
-# mem[4]  = 204    mem[12] = 212    mem[20] = 220    mem[28] = 228
-# mem[5]  = 205    mem[13] = 213    mem[21] = 221    mem[29] = 229
-# mem[6]  = 206    mem[14] = 214    mem[22] = 222    mem[30] = 230
-# mem[7]  = 207    mem[15] = 215    mem[23] = 223    mem[31] = 231
+# mem[resultats+i] = 200+i   pour i = 0 à 31
