@@ -14,15 +14,15 @@ fn strip_line_comment(line: &str) -> &str {
 
 /// Strip parentheses from a line so the lexer can handle it
 fn strip_parens(line: &str) -> String {
-    line.replace('(', " ").replace(')', " ")
+    line.replace(['(', ')'], " ")
 }
 
 /// Parse a register token like "r0" .. "r31", returning the register number.
 fn parse_register(tok: &Token) -> Option<u32> {
     if let Token::Identifier(name) = tok {
         let lower = name.to_lowercase();
-        if lower.starts_with('r') {
-            if let Ok(n) = lower[1..].parse::<u32>() {
+        if let Some(suffix) = lower.strip_prefix('r') {
+            if let Ok(n) = suffix.parse::<u32>() {
                 if n <= 31 {
                     return Some(n);
                 }
@@ -268,7 +268,7 @@ pub fn compile(source: &str) -> CompileResult {
                     }
                 } else if let Some(cc) = cond_code(&mnemonic) {
                     // Branch instruction
-                    if operands.len() >= 1 {
+                    if !operands.is_empty() {
                         let target = match operands[0] {
                             Token::Number(n) => BranchTarget::Literal((*n as u32) & 0xFFF),
                             Token::Identifier(name) => BranchTarget::Label(name.clone()),

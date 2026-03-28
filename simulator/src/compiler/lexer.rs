@@ -89,7 +89,7 @@ pub fn tokenize_line(line: &str, line_index: usize) -> (Vec<Token>, Vec<TokenSpa
         }
 
         // Number (decimal or negative)
-        if c.is_ascii_digit() || (c == '-' && chars.clone().nth(1).map_or(false, |(_, ch)| ch.is_ascii_digit())) {
+        if c.is_ascii_digit() || (c == '-' && chars.clone().nth(1).is_some_and(|(_, ch)| ch.is_ascii_digit())) {
             let start = i;
             let mut num_str = String::new();
             if c == '-' {

@@ -204,6 +204,7 @@ pub fn simulate(program: &[u32], data_memory: Option<&[i32]>) -> SimulationTrace
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn make_cycle_state(
     cycle: u32,
     phase: Phase,
@@ -222,8 +223,8 @@ fn make_cycle_state(
     reg_map.insert("IR".to_string(), ir as i32);
     reg_map.insert("Z".to_string(), flag_z as i32);
     reg_map.insert("N".to_string(), flag_n as i32);
-    for i in 0..NUM_REGS {
-        reg_map.insert(format!("r{}", i), regs[i] as i32);
+    for (i, &val) in regs.iter().enumerate().take(NUM_REGS) {
+        reg_map.insert(format!("r{}", i), val as i32);
     }
 
     CycleState {
