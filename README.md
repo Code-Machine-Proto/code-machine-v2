@@ -1,46 +1,173 @@
-# CodeMachine
+# CodeMachine v3
 
-Cette application de simulation de processeur simple est utilisé dans le cadre du cours INF1600 à Polytechnique Montréal. Elle permets l'exécution de code en pseudo-assembleur sur trois architectures: à accumulateur, à accumulateur avec MA et le PolyRisc.
+Simulateur de chemin de donnees pour **INF1600** a Polytechnique Montreal. Permet d'ecrire de l'assembleur, de le compiler et de visualiser l'execution cycle par cycle sur le circuit du processeur.
 
-## Guide pour les étudiants
+<!-- Screenshot de la page d'accueil -->
+![Page d'accueil](docs/screenshots/home.png)
 
-Le [guide](GuideCodeMachine.md) contient les fonctionalités courantes de l'application et quelques astuces pour mieux utilisé CodeMachine
+---
 
-## Frontend
+## Fonctionnalites
 
-Client web utilisé avec electron ou un browser régulier. Pour de plus amples détails, consultez la [documentation](frontend/README.md) du module.
+- Editeur assembleur (CodeMirror 6) avec coloration syntaxique et diagnostics
+- Visualisation du circuit : signaux actifs et bus mis en surbrillance a chaque cycle
+- Panneau memoire (HEX/DEC) et panneau registres
+- Navigation cycle par cycle (avant, arriere, debut, fin)
+- Reference du jeu d'instructions dans un tiroir lateral
+- Theme clair / sombre (persiste en localStorage)
+- Panneaux redimensionnables, zoom et panoramique sur le circuit
 
-## Backend
+## Processeurs supportes
 
-Simulation des processeurs écrit en Chisel compilé vers un exécutable Java. Le backend utilise un serveur http comme façade. Pour de plus amples détails, consultez la [documentation](backend/README.md) du module.
+| Processeur | Instructions | Registres |
+|---|---|---|
+| **Accumulateur** | 10 | ACC |
+| **Accumulateur + MA** | 21 | ACC, MA |
+| **PolyRisc** | 17 | 32 registres + drapeaux Z, N |
 
-## Contribuez
+---
 
-Pour contribuer au projet vous devez respecter la nomenclature git.
+## Captures d'ecran
 
-Les commits sont sous cette forme:
+### Espace de travail — Mode sombre
 
-    <type>(<portée>): <Courte description>
+<!-- Screenshot du workspace en mode sombre avec du code compile et le circuit actif -->
+![Workspace sombre](docs/screenshots/workspace-dark.png)
 
-Le type correspond au type de chose modifier dans le commit :
-- feat : Pour les features supplémentaires ou pour des ajouts
-- fix : Pour corriger des bugs en tout genre
-- style : Pour changer le formatage ou la mise en page de fichier
-- refactor : Réusinage du code
-- doc : Ajout ou modification de la documentation en tout genre (README.md, TSdoc, etc)
-- test : Pour toute modification apporté pour des tests
-- chore : Tâches de maintenance ou modification des dépendances
+### Espace de travail — Mode clair
 
-La portée correspond à l'étendue du changement ou au partie touché
+<!-- Screenshot du workspace en mode clair -->
+![Workspace clair](docs/screenshots/workspace-light.png)
 
-Les branches sont sous cette forme:
+### Visualisation du circuit
 
-    <type>/<nom-significatif>
+<!-- Screenshot en zoom sur le circuit avec des signaux actifs (fils rouges/verts) -->
+![Circuit actif](docs/screenshots/circuit-detail.png)
 
-Le type correspond globalement à ce qui est effectué sur la branche :
-- feature : pour les nouvelles fonctionalités
-- bugfix : pour régler les bugs
-- hotfix : pour régler les bugs urgents
-- doc : pour modifier de la documentation
+### Reference d'instructions
 
-Le nom significatif doit être en kebab-case.
+<!-- Screenshot du tiroir lateral d'instructions ouvert -->
+![Instructions](docs/screenshots/instruction-drawer.png)
+
+---
+
+## Architecture technique
+
+```
+code-machine-v2/
+├── simulator/          # Backend Rust compile en WebAssembly
+│   └── src/
+│       ├── compiler/   # Compilation assembleur → programme
+│       ├── engine/     # Moteurs de simulation par processeur
+│       └── lib.rs      # Interface WASM (wasm-bindgen)
+├── frontend/           # Application SolidJS
+│   ├── src/
+│   │   ├── components/ # Composants UI (editeur, circuit, memoire, etc.)
+│   │   ├── pages/      # Pages (Home, Workspace)
+│   │   ├── stores/     # Etats globaux (simulation, theme)
+│   │   └── wasm/       # Bridge TypeScript ↔ WASM
+│   └── electron/       # Configuration Electron (app bureau)
+└── docs/               # Documentation et ressources
+```
+
+### Stack technique
+
+| Couche | Technologie | Role |
+|---|---|---|
+| Simulation | **Rust** → **WebAssembly** | Compilation assembleur, execution cycle par cycle |
+| Interface | **SolidJS** + **TypeScript** | Rendu reactif, gestion d'etat |
+| Style | **Tailwind CSS v4** | Theme clair/sombre, composants responsifs |
+| Editeur | **CodeMirror 6** | Coloration syntaxique, diagnostics, raccourcis |
+| Bureau | **Electron** | Distribution multiplateforme (Windows, macOS, Linux) |
+
+---
+
+## Installation et developpement
+
+### Prerequis
+
+- [Rust](https://rustup.rs/) (stable)
+- [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
+- [Node.js](https://nodejs.org/) >= 18
+- npm
+
+### Compiler le simulateur WASM
+
+```bash
+cd simulator
+wasm-pack build --target web --dev
+```
+
+### Lancer le frontend en developpement
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+L'application sera accessible a `http://localhost:5173`.
+
+### Construire pour la production
+
+```bash
+# Compilation WASM optimisee
+cd simulator
+wasm-pack build --target web --release
+
+# Build frontend + packaging Electron
+cd frontend
+npm run build
+npx electron-builder
+```
+
+Les executables sont generes dans `frontend/release/`.
+
+### Lancer les tests
+
+```bash
+cd frontend
+npm test           # Execution unique
+npm run test:watch # Mode surveillance
+```
+
+---
+
+## Raccourcis clavier
+
+| Raccourci | Action |
+|---|---|
+| `Ctrl + Entree` | Compiler le code |
+| `Espace` | Lecture / pause |
+| `Fleche droite` | Cycle suivant |
+| `Fleche gauche` | Cycle precedent |
+| `Home` | Retour au debut |
+| `End` | Aller a la fin |
+| `Molette` | Zoom sur le circuit |
+| `Alt + clic` | Panoramique du circuit |
+
+---
+
+## Convention de commits
+
+Les commits suivent le format :
+
+```
+<type>(<portee>): <description courte>
+```
+
+| Type | Usage |
+|---|---|
+| `feat` | Fonctionnalite ou ajout |
+| `fix` | Correction de bug |
+| `style` | Formatage, mise en page |
+| `refactor` | Reusinage du code |
+| `doc` | Documentation |
+| `test` | Ajout ou modification de tests |
+| `chore` | Maintenance, dependances |
+
+---
+
+## Licence
+
+Voir [LICENSE](LICENSE).

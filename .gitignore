@@ -1,2 +1,9 @@
 .DS_Store
 .metals
+node_modules/
+dist/
+release/
+simulator/target/
+simulator/pkg/
+frontend/node_modules/
+*.log

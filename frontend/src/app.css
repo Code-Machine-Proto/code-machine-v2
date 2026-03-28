@@ -1,117 +1,203 @@
 @import "tailwindcss";
 
 @theme {
-    --color-back: #616060;
-    --color-main-50: #f2f7fd;
-    --color-main-100: #e5eef9;
-    --color-main-200: #c4dbf3;
-    --color-main-300: #91bde8;
-    --color-main-400: #569bda;
-    --color-main-500: #307ec7;
-    --color-main-600: #2063a9;
-    --color-main-700: #1b4f89;
-    --color-main-800: #1a4472;
-    --color-main-900: #1b3a5f;
-    --color-main-950: #0e1d31;
-    --color-pc: #abbde5;
-    --color-ir: #97fcff;
-    --color-ma: #c2ff97;
-    --color-acc: #97ffc8;
-    --color-inst: #f92672;
-    --color-label: #a178ec;
-    --color-comment: #75715e;
-    --color-register: #fd971f;
+  --color-main-950: #0a0e1a;
+  --color-main-900: #111827;
+  --color-main-800: #1e293b;
+  --color-main-700: #334155;
+  --color-main-600: #64748b;
+  --color-main-500: #94a3b8;
+  --color-main-400: #cbd5e1;
+  --color-main-300: #e2e8f0;
+
+  --color-accent: #3b82f6;
+  --color-accent-light: #60a5fa;
+
+  --color-signal-data: #3b82f6;
+  --color-signal-alu: #22c55e;
+  --color-signal-memory: #8b5cf6;
+  --color-signal-control: #f59e0b;
+
+  --color-syntax-keyword: #f472b6;
+  --color-syntax-value: #a78bfa;
+  --color-syntax-label: #4ade80;
+  --color-syntax-comment: #64748b;
+  --color-syntax-error: #ef4444;
+
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "Fira Code", "Cascadia Code", "JetBrains Mono", monospace;
 }
 
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+/* ===== Light theme overrides ===== */
+[data-theme="light"] {
+  --color-main-950: #f8fafc;
+  --color-main-900: #f1f5f9;
+  --color-main-800: #e2e8f0;
+  --color-main-700: #cbd5e1;
+  --color-main-600: #94a3b8;
+  --color-main-500: #64748b;
+  --color-main-400: #475569;
+  --color-main-300: #1e293b;
 
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  --color-accent: #2563eb;
+  --color-accent-light: #3b82f6;
 
-  .electron-drag {
-    app-region: drag;
-  }
-
-  .electron-no-drag {
-    app-region: no-drag;
-  }
-
-  .controlBtn {
-    display: flex;
-    color: var(--color-main-400);
-    border-radius: calc(infinity * 1px);
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
+  --color-syntax-keyword: #db2777;
+  --color-syntax-value: #7c3aed;
+  --color-syntax-label: #16a34a;
+  --color-syntax-comment: #94a3b8;
+  --color-syntax-error: #dc2626;
 }
 
-@layer base {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  input[type="number"] {
-    appearance: textfield;
-  }
+body {
+  @apply bg-main-950 text-main-300 m-0 p-0 overflow-hidden;
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-@layer toggle {
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 25px;
+/* Dot-grid background pattern */
+.bg-grid {
+  background-image: radial-gradient(circle, var(--color-main-800) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.bg-grid-fine {
+  background-image: radial-gradient(circle, var(--color-main-700) 0.5px, transparent 0.5px);
+  background-size: 16px 16px;
 }
 
-.slider {
-  position: absolute;
+/* Section header accent */
+.panel-header {
+  @apply flex items-center justify-between shrink-0 border-b border-main-700/50 bg-main-900;
+  padding: 0.4rem 0.75rem;
+}
+
+.panel-label {
+  @apply uppercase font-semibold tracking-widest text-main-500;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+/* Custom range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-main-700);
+  outline: none;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 17px;
-  width: 17px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-main-950);
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
 }
 
-input:checked + .slider {
-  background-color: var(--color-main-400);
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.7);
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px var(--color-main-400);
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-main-950);
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
 }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(35px);
-  -ms-transform: translateX(35px);
-  transform: translateX(35px);
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
+
+::-webkit-scrollbar-track {
+  @apply bg-main-950;
 }
+
+::-webkit-scrollbar-thumb {
+  @apply bg-main-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-main-600;
+}
+
+/* Staggered entrance animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  50% { box-shadow: 0 0 20px 2px rgba(59, 130, 246, 0.15); }
+}
+
+/* Subtle glow on active/focused elements */
+.glow-accent:hover {
+  box-shadow: 0 0 16px -2px rgba(59, 130, 246, 0.3);
+}
+
+/* Button base */
+.btn-control {
+  @apply flex items-center justify-center rounded transition-all duration-150;
+  @apply bg-main-800 border border-main-700/50 text-main-400;
+}
+
+.btn-control:hover:not(:disabled) {
+  @apply bg-main-700 text-main-300 border-main-600/50;
+}
+
+.btn-control:disabled {
+  @apply opacity-25 cursor-not-allowed;
+}
+
+/* SVG circuit wire colors — adapt to theme */
+.circuit-wire { fill: var(--color-main-700); }
+.circuit-box-bg { fill: var(--color-main-900); }
+.circuit-label { fill: var(--color-main-500); }
+.circuit-bus { stroke: var(--color-accent-light); fill: var(--color-accent-light); }
+
+/* Register box text colors — dark theme uses light text, light theme uses dark text */
+.reg-text-blue { color: #bfdbfe; }
+.reg-text-purple { color: #d8b4fe; }
+.reg-text-emerald { color: #a7f3d0; }
+.reg-text-amber { color: #fde68a; }
+
+[data-theme="light"] .reg-text-blue { color: #1e40af; }
+[data-theme="light"] .reg-text-purple { color: #6b21a8; }
+[data-theme="light"] .reg-text-emerald { color: #065f46; }
+[data-theme="light"] .reg-text-amber { color: #92400e; }
+
+/* Light mode circuit adjustments */
+[data-theme="light"] .circuit-wire { fill: #64748b; }
+[data-theme="light"] .bg-grid-fine {
+  background-image: radial-gradient(circle, #cbd5e1 0.5px, transparent 0.5px);
+}
+
+/* Register box backgrounds — stronger in light mode */
+[data-theme="light"] .reg-bg-blue { background-color: rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
+[data-theme="light"] .reg-bg-purple { background-color: rgba(139, 92, 246, 0.15); border-color: #8b5cf6; }
+[data-theme="light"] .reg-bg-emerald { background-color: rgba(16, 185, 129, 0.15); border-color: #10b981; }
+[data-theme="light"] .reg-bg-amber { background-color: rgba(245, 158, 11, 0.15); border-color: #f59e0b; }

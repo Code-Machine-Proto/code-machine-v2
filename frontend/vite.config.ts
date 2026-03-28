@@ -1,32 +1,24 @@
-import { reactRouter } from "@react-router/dev/vite";
-import tailwindcss from "@tailwindcss/vite";
-import path from "path";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import solid from "vite-plugin-solid";
+import tailwindcss from "@tailwindcss/vite";
+import wasm from "vite-plugin-wasm";
+import topLevelAwait from "vite-plugin-top-level-await";
+import { resolve } from "path";
 
-export default defineConfig(({ mode }) => {
-    const base = mode === "electron" ? "./" : "/";
-    return {
-        plugins: [tailwindcss(), !process.env.VITEST && reactRouter(), tsconfigPaths()],
-	define: {
-            '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
-	},
-        envDir: "./environment",
-        appType: "spa",
-        resolve: {
-            alias: {
-                "@src": path.resolve(__dirname, "src"),
-            }
-        },
-        base: base,
-        test: {
-            browser: {
-                enabled: true,
-                provider: 'playwright',
-                instances: [
-                { browser: 'chromium' },
-                ],
-            },
-        },
-    };
+export default defineConfig({
+  plugins: [solid(), tailwindcss(), wasm(), topLevelAwait()],
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+      "codemachine-simulator": resolve(__dirname, "../simulator/pkg/codemachine_simulator"),
+    },
+  },
+  server: {
+    fs: {
+      allow: [resolve(__dirname, ".."), resolve(__dirname)],
+    },
+  },
+  build: {
+    target: "esnext",
+  },
 });
