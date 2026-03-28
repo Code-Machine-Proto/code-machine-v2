@@ -2,7 +2,7 @@
   "name": "codemachine-v3",
   "version": "3.0.0",
   "private": true,
-  "type": "module",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -45,13 +45,19 @@
       "output": "release"
     },
     "win": {
-      "target": "msi"
+      "target": [
+        { "target": "msi", "arch": ["x64", "arm64"] }
+      ]
     },
     "linux": {
-      "target": "AppImage"
+      "target": [
+        { "target": "AppImage", "arch": ["x64", "arm64"] }
+      ]
     },
     "mac": {
-      "target": "dmg"
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ]
     }
   }
 }
