@@ -6,6 +6,7 @@
   "description": "",
   "author": "",
   "version": "26.2.0",
+  "license": "MIT",
   "build": {
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
