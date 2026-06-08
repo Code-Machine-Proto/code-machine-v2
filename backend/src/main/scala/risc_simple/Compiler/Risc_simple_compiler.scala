@@ -61,7 +61,9 @@ object asm_compiler {
 
   def compileFromArray_text(instructionArray: Array[String]): Array[UInt] = {
     var toReturn = Array[UInt]()
+    System.out.println(instructionArray.mkString(" ")) // Dev.
     val programLines = removeComments(adjustComma(removeEmptyLinesAndSpaces(instructionArray)))
+    System.out.println(programLines.mkString(" ")) // Dev.
 
     val textLines = parseTextAndData(programLines)(0)
     val dataLines = parseTextAndData(programLines)(1)

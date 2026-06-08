@@ -108,9 +108,14 @@ class risc_simple_simulation(
       stimulatedLine = risc_simple.compiler.asm_compiler
         .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt)
     )
+    System.out.println(
+      risc_simple.compiler.asm_compiler
+        .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt)
+    ) // Dev.
 
     step(1)
     simulation_cycle += 1
+
     simulation_ended = (stateVal.toInt == 4) || (simulation_cycle == 1024)
   }
 
