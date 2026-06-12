@@ -4,7 +4,7 @@ Cette application de simulation de processeur simple est utilisé dans le cadre 
 
 ## Guide pour les étudiants
 
-Le [guide](GuideCodeMachine.md) contient les fonctionalités courantes de l'application et quelques astuces pour mieux utilisé CodeMachine
+Le [guide](GuideCodeMachine.md) contient les fonctionalités courantes de l'application et quelques astuces pour mieux utiliser CodeMachine
 
 ## Frontend
 
@@ -12,7 +12,7 @@ Client web utilisé avec electron ou un browser régulier. Pour de plus amples d
 
 ## Backend
 
-Simulation des processeurs écrit en Chisel compilé vers un exécutable Java. Le backend utilise un serveur http comme façade. Pour de plus amples détails, consultez la [documentation](backend/README.md) du module.
+Simulation des processeurs décrits en Chisel et compilés vers un exécutable Java. Le backend utilise un serveur http comme façade. Pour de plus amples détails, consultez la [documentation](backend/README.md) du module.
 
 ## Contribuez
 
