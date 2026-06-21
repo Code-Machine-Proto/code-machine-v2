@@ -29,6 +29,7 @@ export default function VisualWithMa() {
   const loadI = lineState == LineStateMa.loadI;
   const storeA = lineState == LineStateMa.storeA;
   const storeI = lineState == LineStateMa.storeI;
+  const lea = lineState == LineStateMa.lea;
   const branching = lineState == LineStateMa.branching;
   const nop =
     lineState == LineStateMa.nop ||
@@ -41,7 +42,8 @@ export default function VisualWithMa() {
     loadA ||
     loadI ||
     storeA ||
-    storeI;
+    storeI ||
+    lea;
 
   const addr = addSubMul || addSubA || store || load || loadA || storeA;
 
@@ -282,6 +284,11 @@ export default function VisualWithMa() {
                    120.001 1125 120.001H1154.98C1154.99 120.001 1154.99 120 1155 120Z'
       />
       <use href='#acc-control' fill='white' />
+      <path
+        id='mux3-ma'
+        d='M399 202C398.448 202 398 202.448 398 203C398 203.552 398.448 204 399 204H442V304H840V283C840 282 840 282 841 282H892V276.227L902 282L892 287.773V284H842V304C842 306 842 306 840 306H442C440 306 440 306 440 304V202H399Z'
+      />
+      <use href='#mux3-ma' fill='white' />
 
       <Bus x={590} y={147} number={16} />
       <Bus x={265} y={247} number={16} />
@@ -342,6 +349,7 @@ export default function VisualWithMa() {
       />
       <use href='#ir-control' className={decode ? 'fill-red-500' : ''} />
       <use href='#acc-control' className={decode ? 'fill-red-500' : ''} />
+      <use href='#mux3-ma' className={lea ? 'fill-red-500' : ''} />
 
       <Multiplexer
         x={41}
@@ -519,6 +527,12 @@ export default function VisualWithMa() {
           decode || addSubMul || addSubX || sh ? 'fill-red-500' : 'fill-white'
         }
       />
+      <circle
+        cx='441'
+        cy='203'
+        r='5'
+        className={addr || fetch || lea ? 'fill-red-500' : 'fill-white'}
+      />
 
       <g>
         <rect
@@ -559,13 +573,6 @@ export default function VisualWithMa() {
           +1
         </text>
       </g>
-
-      <path
-        id='mux3-ma'
-        d='M441 202C441.552 202 442 202.448 442 203V302H840V282H892V276.227L902 282L892 287.773V284H842V304H440V203C440 202.448 440.448 202 441 202Z'
-      />
-      <use href='#mux3-ma' fill='white' />
-      <circle cx='441' cy='203' r='5' fill='white' />
     </svg>
   );
 }
