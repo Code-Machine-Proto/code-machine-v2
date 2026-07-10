@@ -327,7 +327,10 @@ export default function VisualWithMa() {
           addSubMul || addSubX || sh || load || loadI ? 'fill-red-500' : ''
         }
       />
-      <use href='#mux-ma' className={addSubA || loadA ? 'fill-red-500' : ''} />
+      <use
+        href='#mux-ma'
+        className={addSubA || loadA || lea ? 'fill-red-500' : ''}
+      />
       <use
         href='#acc-alu'
         className={addSubMul || addSubX || sh ? 'fill-red-500' : ''}
@@ -385,7 +388,7 @@ export default function VisualWithMa() {
         x={900}
         y={215}
         name='sel_ma_source'
-        isActivated={addSubA || loadA}
+        isActivated={addSubA || loadA || lea}
       />
 
       <ALU
@@ -531,7 +534,11 @@ export default function VisualWithMa() {
         cx='441'
         cy='203'
         r='5'
-        className={addr || fetch || lea ? 'fill-red-500' : 'fill-white'}
+        className={
+          addr || fetch || lea || addSubX || loadI || storeI
+            ? 'fill-red-500'
+            : 'fill-white'
+        }
       />
 
       <g>
