@@ -6,6 +6,8 @@ import java.io.StringWriter
 import scala.io.Source
 import chisel3.UInt
 
+import commons.SimulationConfig
+
 // need further dev : stimulated lines
 
 object RiscSimpleFilePath {
@@ -34,9 +36,6 @@ object risc_simple_execs {
 
     val Hextext = risc_simple.compiler.asm_compiler.getHexcodeProgram(UIntText)
     val Hexdata = risc_simple.compiler.asm_compiler.getHexcodeProgram(UIntData)
-
-    System.out.println(Hextext.mkString(" ")) // Dev.
-    System.out.println(Hexdata.mkString(" ")) // Dev.
 
     val startTime = System.currentTimeMillis()
 
@@ -108,15 +107,11 @@ class risc_simple_simulation(
       stimulatedLine = risc_simple.compiler.asm_compiler
         .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt)
     )
-    System.out.println(
-      risc_simple.compiler.asm_compiler
-        .getStimulatedLines(irVal.toInt, stateVal.toInt, flagVal.toInt)
-    ) // Dev.
 
     step(1)
     simulation_cycle += 1
-
-    simulation_ended = (stateVal.toInt == 4) || (simulation_cycle == 1024)
+    simulation_ended =
+      (stateVal.toInt == 4) || (simulation_cycle == SimulationConfig.MaxCycles)
   }
 
 // Serialize once
@@ -148,6 +143,5 @@ object exec extends App {
   val program = risc_simple.compiler.asm_compiler.readProgramFromFile(
     "./programs_files/fibo.txt"
   )
-  System.out.println(program.mkString(" "))
   risc_simple.risc_simple_execs.compileAndRun(program)
 }
