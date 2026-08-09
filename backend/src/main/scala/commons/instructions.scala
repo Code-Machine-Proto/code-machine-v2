@@ -21,5 +21,5 @@ class instructions_v2() extends Bundle {
 }
 
 object SimulationConfig {
-  val MaxCycles = 1024
+  val MaxCycles = 4096
 }
