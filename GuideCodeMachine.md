@@ -232,7 +232,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 ### Affichage du nombre de cycles
 
-> **ATTENTION : CodeMachine est limité à 1024 cycles au total. Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
+> **ATTENTION : CodeMachine est limité à 4096 cycles au total. Tout code qui donnera plus de 4096 cycles, seulement les 4096 premiers cycles seront exécutés.**
 
 - Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».
 
