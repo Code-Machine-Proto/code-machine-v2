@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "main": "build/main.js",
-  "description": "",
+  "description": "Simulateur de processeurs simples",
   "author": "",
-  "version": "26.2.0",
+  "version": "26.2.1",
   "build": {
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
