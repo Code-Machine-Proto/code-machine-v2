@@ -4,11 +4,10 @@ import accumulator.accumulator_v1.{accumulator_v1, accumulator_v1_compiler}
 import accumulator.accumulator_v2.{accumulator_v2, accumulator_v2_compiler}
 import chisel3.UInt
 import chisel3.iotesters._
+import commons.SimulationConfig
 
 import java.io.StringWriter
 import scala.io.Source
-
-import commons.SimulationConfig
 
 object AccumulatorFilePathes {
   val FILE_PATH_ACCUMULATOR_V1 = "./output_files/output_v1.txt"
@@ -68,12 +67,10 @@ object accumulator_execs {
     val HexProgram =
       accumulator.accumulator_compiler.getHexcodeProgram(UIntProgram)
 
-    chisel3.iotesters.Driver.execute(
-      Array("--generate-vcd-output", "on"),
-      () => new accumulator_v2()
-    ) { DUT =>
-      new accumulator_v2_simulation(DUT, UIntProgram, output)
-    }
+    chisel3.iotesters.Driver
+      .execute(Array("--backend-name", "treadle"), () => new accumulator_v2()) {
+        DUT => new accumulator_v2_simulation(DUT, UIntProgram, output)
+      }
 
     result = output.toString
 
@@ -97,69 +94,59 @@ class accumulator_v1_simulation(
   var simulation_ended = false
   var simulation_cycle = 0
 
-  output.write("[")
-  output.flush()
+  case class V1Snapshot(
+      mem: Array[BigInt],
+      pc: BigInt,
+      acc: BigInt,
+      ir: BigInt,
+      state: BigInt,
+      stimMem: BigInt,
+      stimLine: Int
+  )
+  val snapshots = scala.collection.mutable.ArrayBuffer[V1Snapshot]()
+
   while (!simulation_ended) {
-    output.write("{")
-    output.flush()
+    val stateVal = peek(DUT.io.State)
+    val irVal = peek(DUT.io.IR)
+    val instrVal = peek(DUT.io.Instruction)
+    val accVal = peek(DUT.io.ACC.asSInt())
 
-    // Writing memory state
-    output.write("\"memoryState\" : [")
-    for (memIdx <- 0 until DUT.io.InternalMemory.length) {
-      if (memIdx < DUT.io.InternalMemory.length - 1) {
-        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + ",")
-      } else {
-        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
-      }
-    }
-    output.write("],")
-    output.flush()
-
-    // Writing PC state
-    output.write("\"pcState\" : " + peek(DUT.io.PC).toString + ",")
-    output.flush()
-
-    // Writing ACC state
-    output.write("\"accState\" : " + peek(DUT.io.ACC).toString + ",")
-    output.flush()
-
-    // Writing IR state
-    output.write("\"irState\" : " + peek(DUT.io.IR).toString + ",")
-    output.flush()
-
-    // Writing instruction state
-    output.write("\"instructionState\" : " + peek(DUT.io.State).toString + ",")
-    output.flush()
-
-    // Writing stimulated memory
-    output.write(
-      "\"stimulatedMemory\" : " + peek(
-        DUT.io.StimulatedMemoryCell
-      ).toString + ","
-    )
-    output.flush()
-
-    // Writing stimulated lines
-    output.write(
-      "\"stimulatedLineState\" : " + accumulator_v1_compiler
-        .getStimulatedLines(
-          peek(DUT.io.Instruction).toInt,
-          peek(DUT.io.State).toInt,
-          peek(DUT.io.ACC.asSInt())
-        )
-        .toString()
+    snapshots += V1Snapshot(
+      mem = DUT.io.InternalMemory.map(peek(_)).toArray,
+      pc = peek(DUT.io.PC),
+      acc = accVal,
+      ir = irVal,
+      state = stateVal,
+      stimMem = peek(DUT.io.StimulatedMemoryCell),
+      stimLine = accumulator_v1_compiler.getStimulatedLines(
+        instrVal.toInt,
+        stateVal.toInt,
+        accVal
+      )
     )
 
-    output.write("},")
-    output.flush()
     step(1)
-
-    simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 5 && peek(
-      DUT.io.State
-    ).toInt == 0) || (simulation_cycle == SimulationConfig.MaxCycles)
+    simulation_cycle += 1
+    simulation_ended =
+      (instrVal.toInt == 5 && stateVal.toInt == 0) || (simulation_cycle == SimulationConfig.MaxCycles)
   }
-  output.write("]")
+
+  val sb = new StringBuilder(snapshots.size * 512)
+  sb.append("{\"imState\":[],\"steps\":[")
+  snapshots.zipWithIndex.foreach { case (s, idx) =>
+    sb.append("{")
+    sb.append("\"memoryState\":[").append(s.mem.mkString(",")).append("],")
+    sb.append("\"pcState\":").append(s.pc).append(",")
+    sb.append("\"accState\":").append(s.acc).append(",")
+    sb.append("\"irState\":").append(s.ir).append(",")
+    sb.append("\"instructionState\":").append(s.state).append(",")
+    sb.append("\"stimulatedMemory\":").append(s.stimMem).append(",")
+    sb.append("\"stimulatedLineState\":").append(s.stimLine)
+    sb.append("}")
+    if (idx < snapshots.size - 1) sb.append(",")
+  }
+  sb.append("]}")
+  output.write(sb.toString)
   output.flush()
 }
 
@@ -169,84 +156,71 @@ class accumulator_v2_simulation(
     output: StringWriter
 ) extends PeekPokeTester(DUT) {
 
-  //  var instructionsArray = accumulator_v2_compiler.compileFromArray(program)
   var instructionsArray = program
-  var stimulatedLines = Array[String]()
 
   for (idx <- 0 until instructionsArray.length) {
     poke(DUT.io.InputMemory(idx), instructionsArray(idx))
   }
   step(256)
 
-  // val numberOfInstructions = accumulator_v2_compiler.getNumberOfInstructions(program)
-
   var simulation_ended = false
   var simulation_cycle = 0
 
-  output.write("[")
-  output.flush()
+  case class V2Snapshot(
+      mem: Array[BigInt],
+      pc: BigInt,
+      acc: BigInt,
+      ir: BigInt,
+      ma: BigInt,
+      state: BigInt,
+      stimMem: BigInt,
+      stimLine: Int
+  )
+  val snapshots = scala.collection.mutable.ArrayBuffer[V2Snapshot]()
+
   while (!simulation_ended) {
-    output.write("{")
-    output.flush()
+    val stateVal = peek(DUT.io.State)
+    val instrVal = peek(DUT.io.Instruction)
+    val accVal = peek(DUT.io.ACC.asSInt())
 
-    // Writing memory state
-    output.write("\"memoryState\" : [")
-    for (memIdx <- 0 until DUT.io.InternalMemory.length) {
-      if (memIdx < DUT.io.InternalMemory.length - 1) {
-        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + ",")
-      } else {
-        output.write(peek(DUT.io.InternalMemory(memIdx)).toString + "\r")
-      }
-    }
-    output.write("],")
-    output.flush()
-    // Writing PC state
-    output.write("\"pcState\" : " + peek(DUT.io.PC).toString + ",")
-    output.flush()
-
-    // Writing ACC state
-    output.write("\"accState\" : " + peek(DUT.io.ACC.asSInt()).toString + ",")
-    output.flush()
-
-    // Writing IR state
-    output.write("\"irState\" : " + peek(DUT.io.IR).toString + ",")
-    output.flush()
-
-    // Writing ma
-    output.write("\"ma\" : " + peek(DUT.io.MA).toString + ",")
-    output.flush()
-
-    // Writing instruction state
-    output.write("\"instructionState\" : " + peek(DUT.io.State).toString + ",")
-    output.flush()
-
-    // Writing stimulated memory
-    output.write(
-      "\"stimulatedMemory\" : " + peek(
-        DUT.io.StimulatedMemoryCell
-      ).toString + ","
+    snapshots += V2Snapshot(
+      mem = DUT.io.InternalMemory.map(peek(_)).toArray,
+      pc = peek(DUT.io.PC),
+      acc = accVal,
+      ir = peek(DUT.io.IR),
+      ma = peek(DUT.io.MA),
+      state = stateVal,
+      stimMem = peek(DUT.io.StimulatedMemoryCell),
+      stimLine = accumulator_v2_compiler.getStimulatedLines(
+        instrVal.toInt,
+        stateVal.toInt,
+        accVal
+      )
     )
-    output.flush()
 
-    // Writing stimulated lines
-    output.write(
-      "\"stimulatedLineState\": " + accumulator_v2_compiler
-        .getStimulatedLines(
-          peek(DUT.io.Instruction).toInt,
-          peek(DUT.io.State).toInt,
-          peek(DUT.io.ACC.asSInt())
-        )
-        .toString()
-    )
-    output.write("},")
     step(1)
-
-    simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 19 && peek(
-      DUT.io.State
-    ).toInt == 0) || (simulation_cycle == 1024)
+    simulation_cycle += 1
+    simulation_ended =
+      (instrVal.toInt == 19 && stateVal.toInt == 0) || (simulation_cycle == SimulationConfig.MaxCycles)
   }
-  output.write("]")
+
+  val sb = new StringBuilder(snapshots.size * 512)
+  sb.append("{\"imState\":[],\"steps\":[")
+  snapshots.zipWithIndex.foreach { case (s, idx) =>
+    sb.append("{")
+    sb.append("\"memoryState\":[").append(s.mem.mkString(",")).append("],")
+    sb.append("\"pcState\":").append(s.pc).append(",")
+    sb.append("\"accState\":").append(s.acc).append(",")
+    sb.append("\"irState\":").append(s.ir).append(",")
+    sb.append("\"ma\":").append(s.ma).append(",")
+    sb.append("\"instructionState\":").append(s.state).append(",")
+    sb.append("\"stimulatedMemory\":").append(s.stimMem).append(",")
+    sb.append("\"stimulatedLineState\":").append(s.stimLine)
+    sb.append("}")
+    if (idx < snapshots.size - 1) sb.append(",")
+  }
+  sb.append("]}")
+  output.write(sb.toString)
   output.flush()
 }
 
