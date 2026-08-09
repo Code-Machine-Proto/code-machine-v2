@@ -5,7 +5,8 @@
   "main": "build/main.js",
   "description": "Simulateur de processeurs simples",
   "author": "",
-  "version": "26.2.1",
+  "version": "26.2.0",
+  "license": "MIT",
   "build": {
     "productName": "CodeMachine",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",

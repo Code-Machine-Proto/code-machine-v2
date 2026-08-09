@@ -1,4 +1,6 @@
-# CodeMachine v26.0.1
+# CodeMachine v26.2.0
 
-- Enlever la possibilité de mettre le data avant le text
-- Ajouter l'instruction lea au processeur à accumulateur avec MA
+- Mise à jour de la documentation
+- Polyrisc: Accepter les litéraux pour les instructions de branchements et ldi
+- Polyrisc: Accélération considérable de la vitesse de compilation
+

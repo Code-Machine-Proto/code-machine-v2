@@ -5,11 +5,12 @@
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
 **Version 26.2.0**
-6 mars 2026
+10 mars 2026
+
 Geneviève Cyr
 GIGL | Polytechnique Montréal
 <br><br>
-_Ce document est protégé par les droits d’auteurs en vertu de la licence Creative Commons Attribution 4.0 International (CC BY 4.0). Vous êtes autorisé(e) à partager, copier, distribuer et communiquer au public ce document, à condition d’attribuer correctement la paternité en citant les auteurs originaux. Vous n’êtes pas autorisé(e) à utiliser ce document à des fins commerciales. Toute modification de ce document doit être clairement indiquée, et les nouvelles créations doivent être diffusées sous une licence similaire.
+_Ce document est distribué sous licence Creative Commons Attribution 4.0 International (CC BY 4.0). Vous êtes libre de le partager, copier, distribuer et adapter, y compris à des fins commerciales, à condition d'attribuer correctement la paternité en citant les auteurs originaux.
 N.B. Le masculin est utilisé pour alléger le texte._  
 <br>
 <br>
@@ -118,8 +119,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 ## Pour MAC
 
-### Méthode 1: Installation simplifiée (recommandée)
-
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
 2. Choisir le relâche la plus récente (cliquer dessus)
@@ -133,22 +132,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    </p>
 
 4. Dans téléchargement, double-cliquer pour partir l'installation et compléter une installation selon le format dmg
-
-5. **Première ouverture de CodeMachine:**
-   - Double-cliquer sur l'application CodeMachine
-   - macOS affichera un message indiquant que l'app ne peut pas être ouverte (app non signée)
-   - Cliquer sur **OK**
-
-6. **Autoriser l'ouverture dans les Préférences Système:**
-   - Ouvrir **Préférences Système** (ou **Réglages Système** sur macOS Ventura+)
-   - Aller dans **Sécurité et confidentialité** (ou **Confidentialité et sécurité**)
-   - Dans l'onglet **Général**, vous verrez un message concernant CodeMachine
-   - Cliquer sur le bouton **Ouvrir quand même**
-   - Confirmer en cliquant **Ouvrir** dans la fenêtre de confirmation
-
-7. L'application CodeMachine devrait maintenant se lancer normalement
-
-<div style="page-break-after: always;"></div>
 
 ### Méthode 2: Installation via Terminal (méthode alternative)
 
@@ -234,7 +217,8 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 > **ATTENTION : CodeMachine est limité à 1024 cycles au total. Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
 
-- Les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour toutes les architecture, chaque instruction prend 3 cycles (incluant l’instruction « nop ».
+- Pour l'Accumulateur et l'Accumulateur-MA, les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour le PolyRisc, les cycles sont comptés à partir de 1, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.
+- Pour toutes les architectures, chaque instruction prend 3 cycles (incluant l’instruction « nop »).
 
 - Pour naviguer dans le code vous avez plusieurs options.
   1. Utiliser le « play » (triangle bleu simple) et le code sera exécuté automatiquement, étapes par étapes.
