@@ -125,10 +125,10 @@ class accumulator_v1_simulation(
       )
     )
 
-    step(1)
     simulation_cycle += 1
     simulation_ended =
-      (instrVal.toInt == 5 && stateVal.toInt == 0) || (simulation_cycle == SimulationConfig.MaxCycles)
+      (instrVal.toInt == 5 && stateVal.toInt == 2) || (simulation_cycle == SimulationConfig.MaxCycles)
+    if (!simulation_ended) step(1)
   }
 
   val sb = new StringBuilder(snapshots.size * 512)
@@ -198,10 +198,10 @@ class accumulator_v2_simulation(
       )
     )
 
-    step(1)
     simulation_cycle += 1
     simulation_ended =
-      (instrVal.toInt == 19 && stateVal.toInt == 0) || (simulation_cycle == SimulationConfig.MaxCycles)
+      (instrVal.toInt == 19 && stateVal.toInt == 2) || (simulation_cycle == SimulationConfig.MaxCycles)
+    if (!simulation_ended) step(1)
   }
 
   val sb = new StringBuilder(snapshots.size * 512)
