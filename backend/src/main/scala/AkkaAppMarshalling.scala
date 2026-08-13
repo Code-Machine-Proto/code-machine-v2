@@ -25,7 +25,8 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import risc_simple.RunResultsRiscSimple
 import spray.json.DefaultJsonProtocol._
 
-import scala.io.StdIn
+import scala.concurrent.duration.Duration
+import scala.concurrent.Await
 
 final case class Program(content: Array[String]);
 final case class CompileAndRunRequest(program: Array[String], processorId: Int);
@@ -125,11 +126,8 @@ object SprayJsonExample {
     val host = "0.0.0.0"
     val port = scala.util.Properties.envOrElse("PORT", "8080").toInt
 
-    val bindingFuture = Http().newServerAt(host, port).bind(route)
-    println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
-    StdIn.readLine() // let it run until user presses return
-    bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+    Http().newServerAt(host, port).bind(route)
+    println(s"Server online at http://localhost:$port/")
+    Await.result(Future.never, Duration.Inf)
   }
 }

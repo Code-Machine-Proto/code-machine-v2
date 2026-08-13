@@ -36,6 +36,8 @@
   "scripts": {
     "build": "react-router build --mode website",
     "build:electron": "react-router build --mode electron && vite build -c vite.config.electron.ts",
+    "build:backend": "cd ../backend && sbt assembly && cp target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar ../frontend/module-electron/Accumulator_CPU_Chisel-assembly-0.1.0.jar",
+    "build:all": "npm run build:backend && npm run build:electron",
     "dev": "react-router dev --mode website",
     "dev:electron": "electron .",
     "package": "electron-builder",
