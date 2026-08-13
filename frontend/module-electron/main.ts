@@ -4,7 +4,11 @@ import isDev from "electron-is-dev";
 import path from "node:path";
 import http from "node:http";
 
-function waitForServer(port: number, timeout = 30_000): Promise<void> {
+const SERVER_PORT: number = 8080;
+const SERVER_TIMEOUT_DEFAULT: number = 60000;
+const PROBE_DELAY: number = 200;
+
+function waitForServer(port: number, timeout = SERVER_TIMEOUT_DEFAULT): Promise<void> {
   return new Promise((resolve, reject) => {
     const deadline = Date.now() + timeout;
     const probe = () => {
@@ -14,7 +18,7 @@ function waitForServer(port: number, timeout = 30_000): Promise<void> {
           if (Date.now() >= deadline) {
             reject(new Error(`Server on port ${port} did not start within ${timeout}ms`));
           } else {
-            setTimeout(probe, 200);
+            setTimeout(probe, PROBE_DELAY);
           }
         });
     };
@@ -63,7 +67,7 @@ app.whenReady().then(async () => {
   scalaServer.on("exit", (code, signal) => stderrLines.push(`[exit] code=${code} signal=${signal}`));
 
   try {
-    await waitForServer(8080, 60_000);
+    await waitForServer(SERVER_PORT);
   } catch (err) {
     await dialog.showMessageBox({
       type: "error",
@@ -81,5 +85,7 @@ app.whenReady().then(async () => {
 });
 
 app.on("before-quit", () => {
-  if (scalaServer) scalaServer.kill();
+  if (scalaServer) {
+    scalaServer.kill();
+  }
 });
