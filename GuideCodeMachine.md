@@ -40,7 +40,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
    <br>
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -63,7 +63,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
    <img src="guide-codemachine-images/Executer.png"  width="350">
    </p>
 
-7. Suivre les étapes d’installations
+7. Suivre les étapes d’installation
 <div style="page-break-after: always;"></div>
 
 8. Vous trouverez CodeMachine dans la barre de recherche
@@ -77,7 +77,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
    <br>
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -94,7 +94,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
    <p>
    <img src="guide-codemachine-images/ExecuterMacA.jpg" width="650">
    </p>
-Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’outils comme suit :
+Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’outil comme suit :
    <p>
    <img src="guide-codemachine-images/ExecuterMacB.jpg" width="650">
    </p>
@@ -110,7 +110,7 @@ Si vous avez l'erreur suivante au moment de la compilation :
 <p>
    <img src="guide-codemachine-images/ExecPasAdmin.jpg" width="650">
 </p>
-Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuelle de la souris.
+Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuel de la souris.
 <p>
    <img src="guide-codemachine-images/PartirAdmin.png" width="250">
 </p>
@@ -121,7 +121,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -137,7 +137,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -258,7 +258,7 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
   > **ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes. Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
 - Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.
 
-  > **Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outils.**
+  > **Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outil.**
 
 - Les règles d’écriture du code sont données dans la section « Grammaire du code ».
 
@@ -406,7 +406,7 @@ Si vous avez des problèmes avec CodeMachine, vous pouvez les souligner aux dév
 
 5. Dans chacun des cas, il y a un « template » de base qui vous guide dans l’information à entrer dans votre « issue » pour faciliter la compréhension du développeur. SVP, suivez ces instructions pour faciliter leur travail.
 
-Notez que vous avez accès au code (c’est « open source »), alors vous pouvez faire un clone et jouer dans le code à votre aise si vous le désirer. Vous avez aussi une manière de déployez votre version automatiquement (pour vous-même), mais nous ne supporterons pas le code, juste l’interface. De plus, les accès en écriture sont proscrits, seulement les développeurs pourront changer le code en cours.
+Notez que vous avez accès au code (c’est « open source »), alors vous pouvez faire un clone et jouer dans le code à votre aise si vous le désirez. Vous avez aussi une manière de déployer votre version automatiquement (pour vous-même), mais nous ne supporterons pas le code, juste l’interface. De plus, les accès en écriture sont proscrits, seulement les développeurs pourront changer le code en cours.
 
 <div style="page-break-after: always;"></div>
 
