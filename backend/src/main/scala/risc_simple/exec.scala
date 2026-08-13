@@ -136,10 +136,10 @@ class risc_simple_simulation(
     prevStateVal = stateVal
     prevIrVal = irVal
 
-    step(1)
     simulation_cycle += 1
     simulation_ended =
-      (stateVal.toInt == 4) || (simulation_cycle == SimulationConfig.MaxCycles)
+      (stateVal.toInt == 3 && ((irVal >> 24) & 0xf) == 0xf) || (simulation_cycle == SimulationConfig.MaxCycles)
+    if (!simulation_ended) step(1)
   }
 
 // Serialize once — imState is constant so it is hoisted outside the steps array
