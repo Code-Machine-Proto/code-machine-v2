@@ -4,8 +4,8 @@
 
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
-**Version 26.2.0**
-10 mars 2026
+**Version 26.2.1**
+9 juillet 2026
 
 Geneviève Cyr
 GIGL | Polytechnique Montréal
@@ -430,17 +430,17 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
 
 ## Instructions
 
-| Instruction | Encodage | Description                         |
-| ----------- | -------- | ----------------------------------- |
-| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]           |
-| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]           |
-| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]           |
-| st ADR      | 0x03XX   | Mémoire[ADR] <- ACC                 |
-| ld ADR      | 0x04XX   | ACC <- Mémoire[ADR]                 |
-| stop        | 0x05XX   | Arrêt du programme                  |
-| br ADR      | 0x07XX   | PC <- ADR                           |
-| brz ADR     | 0x08XX   | ACC = 0 ? PC <- ADR : PC <- PC + 1  |
-| brnz ADR    | 0x09XX   | ACC != 0 ? PC <- ADR : PC <- PC + 1 |
+| Instruction | Encodage | Description                                     |
+| ----------- | -------- | ----------------------------------------------- |
+| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]                       |
+| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]                       |
+| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]                       |
+| st ADR      | 0x03XX   | Mémoire[ADR] <- ACC                             |
+| ld ADR      | 0x04XX   | ACC <- Mémoire[ADR]                             |
+| stop        | 0x05XX   | Arrêt du programme                              |
+| br ADR      | 0x07XX   | PC <- ADR                                       |
+| brz ADR     | 0x08XX   | (ACC = 0) → PC ← ADR &#124; (ACC != 0) → PC ← PC + 1 |
+| brnz ADR    | 0x09XX   | (ACC != 0) → PC ← ADR &#124; (ACC = 0) → PC ← PC + 1 |
 
 ### Opérations ALU
 
@@ -461,13 +461,6 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
    <p>
    <img src="guide-codemachine-images/ProcesseurAccMACodeMachine.png" width="800">
    </p>
-   
-**Attention:** Une nouvelle instruction (lea) a été ajoutée dans le jeu d'instructions et n'est pas encore représentée dans le schéme de CodeMachine.  Voici ce qu'il manque et sera ajouté éventuellement dans l'interface graphique.
-   <p>
-   <img src="guide-codemachine-images/Accumulateur-MA-Lea.png" width="800">
-   </p>
-
-Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-Proto/code-machine-v2/issues/123) sur GitHub.
 
 <div style="page-break-after: always;"></div>
 
@@ -481,27 +474,27 @@ Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-
 
 ## Instructions
 | Instruction | Encodage | Description |
-| --- | --- | --- |
-| add ADR | 0x00XX | ACC <-  ACC + Mémoire[ADR] |
-| sub ADR | 0x01XX | ACC <-  ACC - Mémoire[ADR] |
-| mul ADR | 0x02XX | ACC <-  ACC × Mémoire[ADR] |
-| adda ADR | 0x03XX | MA  <-  MA  + Mémoire[ADR] |
-| suba ADR | 0x04XX | MA  <-  MA  - Mémoire[ADR] |
-| addx | 0x05XX | ACC <-  ACC + Mémoire[MA] |
-| subx | 0x06XX | ACC <-  ACC - Mémoire[MA] |
-| ld ADR | 0x07XX | ACC <-  Mémoire[ADR] |
-| st ADR | 0x08XX | Mémoire[ADR] <-  ACC |
-| lda ADR | 0x09XX | MA  <-  Mémoire[ADR] |
-| sta ADR | 0x0AXX | Mémoire[ADR] <-  MA |
-| ldi | 0x0BXX | ACC <-  Mémoire[MA] |
-| sti | 0x0CXX | Mémoire[MA] <-  ACC |
-| br ADR | 0x0DXX | PC <-  ADR |
-| brz ADR | 0x0EXX | ACC = 0 ? PC <-  ADR : PC <-  PC + 1 |
-| brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
-| shl | 0x10XX | ACC <-  ACC << 1 |
-| shr | 0x11XX | ACC <-  ACC >> 1 |
-| lea ADR | 0x12XX | MA <- ADR |
-| stop | 0x13XX | Arrêt du programme |
+| -------- | ------ | ----------------------------------------------- |
+| add ADR  | 0x00XX | ACC <-  ACC + Mémoire[ADR]                      |
+| sub ADR  | 0x01XX | ACC <-  ACC - Mémoire[ADR]                      |
+| mul ADR  | 0x02XX | ACC <-  ACC × Mémoire[ADR]                      |
+| adda ADR | 0x03XX | MA  <-  MA  + Mémoire[ADR]                      |
+| suba ADR | 0x04XX | MA  <-  MA  - Mémoire[ADR]                      |
+| addx     | 0x05XX | ACC <-  ACC + Mémoire[MA]                       |
+| subx     | 0x06XX | ACC <-  ACC - Mémoire[MA]                       |
+| ld ADR   | 0x07XX | ACC <-  Mémoire[ADR]                            |
+| st ADR   | 0x08XX | Mémoire[ADR] <-  ACC                            |
+| lda ADR  | 0x09XX | MA  <-  Mémoire[ADR]                            |
+| sta ADR  | 0x0AXX | Mémoire[ADR] <-  MA                             |
+| ldi      | 0x0BXX | ACC <-  Mémoire[MA]                             |
+| sti      | 0x0CXX | Mémoire[MA] <-  ACC                             |
+| br ADR   | 0x0DXX | PC <-  ADR                                      |
+| brz ADR  | 0x0EXX | (ACC = 0) → PC ← ADR &#124; (ACC != 0) → PC ← PC + 1 |
+| brnz ADR | 0x0FXX | (ACC != 0) → PC ← ADR &#124; (ACC = 0) → PC ← PC + 1 |
+| shl      | 0x10XX | ACC <-  ACC << 1                                |
+| shr      | 0x11XX | ACC <-  ACC >> 1                                |
+| lea ADR  | 0x12XX | MA <- ADR                                       |
+| stop     | 0x13XX | Arrêt du programme                              |
 
 ### Opérations ALU
 
