@@ -97,7 +97,7 @@ export default function ExecutionControl({
               setShownStep(e.target.valueAsNumber > maxStep ? maxStep : e.target.valueAsNumber);
             }}
           />
-          <p>/{maxStep} cycles</p>
+          <p>/{maxStep}</p>
         </div>
         <div className="flex items-center gap-1">
           <input type="checkbox" checked={enableMemory} onChange={() => setEnableMemory(!enableMemory)} />
