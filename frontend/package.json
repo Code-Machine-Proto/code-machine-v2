@@ -4,8 +4,8 @@
   "type": "module",
   "main": "build/main.js",
   "description": "",
-  "author": "",
-  "version": "26.2.0",
+  "author": "Polytechnique Montréal",
+  "version": "26.3.0",
   "license": "MIT",
   "build": {
     "productName": "CodeMachine",

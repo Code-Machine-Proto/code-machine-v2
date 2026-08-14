@@ -28,7 +28,7 @@ export default function Processor() {
         <p className="bg-white w-fit p-3 rounded-md">
           {processor.mode === PlayerMode.execution
             ? PROCESSOR_ACTIONS[EXECUTION_ACTION]
-            : PROCESSOR_ACTIONS[currentStep.instructionState]}
+            : PROCESSOR_ACTIONS[currentStep.instructionState] ?? PROCESSOR_ACTIONS[0]}
         </p>
         <div className="flex grow gap-5">
           <Outlet context={isVisualMode} />
