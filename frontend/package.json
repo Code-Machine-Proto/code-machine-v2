@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "main": "build/main.js",
-  "description": "Simulateur de processeurs simples",
-  "author": "Polytechnique Montréal",
-  "version": "26.3.0",
+  "description": "",
+  "author": "",
+  "version": "26.2.0",
   "license": "MIT",
   "build": {
     "productName": "CodeMachine",

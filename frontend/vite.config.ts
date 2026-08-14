@@ -1,49 +1,32 @@
-import { reactRouter } from '@react-router/dev/vite';
-import tailwindcss from '@tailwindcss/vite';
-import path from 'path';
-import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import path from "path";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ mode }) => {
-  const base = mode === 'electron' ? './' : '/';
-
-  return {
-    plugins: [
-      tailwindcss(),
-      !process.env.VITEST && reactRouter(),
-      tsconfigPaths(),
-    ],
-
-    define: {
-      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
-    },
-
-    envDir: './environment',
-    appType: 'spa',
-
-    resolve: {
-      alias: {
-        '@src': path.resolve(__dirname, 'src'),
-      },
-    },
-
-    base,
-
-    server: {
-      proxy: {
-        '/compileAndRun': {
-          target: 'http://localhost:8080',
-          changeOrigin: true,
+    const base = mode === "electron" ? "./" : "/";
+    return {
+        plugins: [tailwindcss(), !process.env.VITEST && reactRouter(), tsconfigPaths()],
+	define: {
+            '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+	},
+        envDir: "./environment",
+        appType: "spa",
+        resolve: {
+            alias: {
+                "@src": path.resolve(__dirname, "src"),
+            }
         },
-      },
-    },
-
-    test: {
-      browser: {
-        enabled: true,
-        provider: 'playwright',
-        instances: [{ browser: 'chromium' }],
-      },
-    },
-  };
+        base: base,
+        test: {
+            browser: {
+                enabled: true,
+                provider: 'playwright',
+                instances: [
+                { browser: 'chromium' },
+                ],
+            },
+        },
+    };
 });
