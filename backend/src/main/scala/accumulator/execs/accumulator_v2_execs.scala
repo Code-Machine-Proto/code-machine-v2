@@ -7,6 +7,8 @@ import chisel3.iotesters.PeekPokeTester
 
 import scala.io.Source
 
+import commons.SimulationConfig
+
 final case class RunResultsV20(
                              hex: Array[String],
                              internal_memory_status: Array[String],
@@ -109,7 +111,7 @@ class accumulator_v2_tester_with_array(DUT: accumulator_v2, program: Array[Strin
 
     step(1)
     simulation_cycle = simulation_cycle + 1
-    simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || simulation_cycle == 1024
+    simulation_ended = (peek(DUT.io.Instruction).toInt == 19) || simulation_cycle == SimulationConfig.MaxCycles
   }
 }
 

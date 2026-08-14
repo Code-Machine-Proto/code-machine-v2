@@ -11,7 +11,14 @@ import akka.http.scaladsl.Http
 import akka.Done
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
+import akka.http.scaladsl.model.{
+  ContentTypes,
+  HttpEntity,
+  HttpMethods,
+  StatusCodes
+}
+import akka.http.scaladsl.model.HttpMethods._
+import akka.http.scaladsl.model.headers._
 import accumulator.execs._
 import risc_simple.exec._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
@@ -34,17 +41,24 @@ object SprayJsonExample {
   // needed for the future map/flatmap in the end and future in fetchItem and saveOrder
   implicit val executionContext = system.executionContext
 
-  implicit val ProgramMarshaller: spray.json.RootJsonFormat[Program] = jsonFormat1(Program.apply);
-  implicit val compileAndRunRequestMarshaller: spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat2(CompileAndRunRequest.apply)
-  implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] = jsonFormat2(testClass.apply);
-  implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] = jsonFormat2(RunResultsV1.apply);
-  implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] = jsonFormat2(RunResultsV2.apply);
-  implicit val RunResultsRiscSimpleMarshaller: spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat3(RunResultsRiscSimple.apply)
+  implicit val ProgramMarshaller: spray.json.RootJsonFormat[Program] =
+    jsonFormat1(Program.apply);
+  implicit val compileAndRunRequestMarshaller
+      : spray.json.RootJsonFormat[CompileAndRunRequest] = jsonFormat2(
+    CompileAndRunRequest.apply
+  )
+  implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] =
+    jsonFormat2(testClass.apply);
+  implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] =
+    jsonFormat2(RunResultsV1.apply);
+  implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] =
+    jsonFormat2(RunResultsV2.apply);
+  implicit val RunResultsRiscSimpleMarshaller
+      : spray.json.RootJsonFormat[RunResultsRiscSimple] = jsonFormat3(
+    RunResultsRiscSimple.apply
+  )
 
   def main(args: Array[String]): Unit = {
-
- //   val accumulator_v2_instance =  new accumulator_v2()
-
     val content =
       """|<html>
         |<head></head>
@@ -54,36 +68,59 @@ object SprayJsonExample {
         |</html>
          |""".stripMargin
 
-    val route: Route =
-      concat(
-        get {
-          path("") {
-            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
-          }
-        },
+    val corsHeaders = List(
+      `Access-Control-Allow-Origin`.*,
+      `Access-Control-Allow-Methods`(GET, POST, OPTIONS),
+      `Access-Control-Allow-Headers`("Content-Type")
+    )
 
-        post {
-          path("compileAndRun") {
-            entity(as[CompileAndRunRequest]){
-              request => {
-                if(request.processorId == 0)
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV1(request.program))
-                else if(request.processorId == 1) {
-                  complete(accumulator.execs.accumulator_execs.compileAndRunV2(request.program))
-                }else{
-                  complete(risc_simple.risc_simple_execs.compileAndRun(request.program))
+    val route: Route =
+      respondWithHeaders(corsHeaders) {
+
+        concat(
+          options {
+            complete(StatusCodes.OK)
+          },
+
+          get {
+            path("") {
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, content))
+            }
+          },
+
+          post {
+            path("compileAndRun") {
+              entity(as[CompileAndRunRequest]) { request =>
+                {
+                  if (request.processorId == 0)
+                    complete(
+                      accumulator.execs.accumulator_execs
+                        .compileAndRunV1(request.program)
+                    )
+                  else if (request.processorId == 1) {
+                    complete(
+                      accumulator.execs.accumulator_execs
+                        .compileAndRunV2(request.program)
+                    )
+                  } else {
+                    complete(
+                      risc_simple.risc_simple_execs.compileAndRun(
+                        request.program
+                      )
+                    )
+                  }
                 }
               }
             }
-          }
-        },
+          },
 
-        get {
-          path("testClass") {
-            complete(testClass("oui", 18))
+          get {
+            path("testClass") {
+              complete(testClass("oui", 18))
+            }
           }
-        }
-      )
+        )
+      }
 
     val host = "0.0.0.0"
     val port = scala.util.Properties.envOrElse("PORT", "8080").toInt
