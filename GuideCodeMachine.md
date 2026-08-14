@@ -4,8 +4,8 @@
 
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
-**Version 26.2.0**
-10 mars 2026
+**Version 26.3.0**
+14 août 2026
 
 Geneviève Cyr
 GIGL | Polytechnique Montréal
@@ -40,7 +40,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
    <br>
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -63,7 +63,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
    <img src="guide-codemachine-images/Executer.png"  width="350">
    </p>
 
-7. Suivre les étapes d’installations
+7. Suivre les étapes d’installation
 <div style="page-break-after: always;"></div>
 
 8. Vous trouverez CodeMachine dans la barre de recherche
@@ -77,7 +77,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
    <br>
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -94,7 +94,7 @@ Vous pouvez télécharger la version la plus récente du **Java Runtime** (toute
    <p>
    <img src="guide-codemachine-images/ExecuterMacA.jpg" width="650">
    </p>
-Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’outils comme suit :
+Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’outil comme suit :
    <p>
    <img src="guide-codemachine-images/ExecuterMacB.jpg" width="650">
    </p>
@@ -110,7 +110,7 @@ Si vous avez l'erreur suivante au moment de la compilation :
 <p>
    <img src="guide-codemachine-images/ExecPasAdmin.jpg" width="650">
 </p>
-Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuelle de la souris.
+Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuel de la souris.
 <p>
    <img src="guide-codemachine-images/PartirAdmin.png" width="250">
 </p>
@@ -121,7 +121,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -137,7 +137,7 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 1. Aller sur GitHub : [Page GitHub de CodeMachine](https://github.com/Code-Machine-Proto/code-machine-v2)
 
-2. Choisir le relâche la plus récente (cliquer dessus)
+2. Choisir la version la plus récente (cliquer dessus)
    <p>
    <img src="guide-codemachine-images/Version.png" width="650">
    </p>
@@ -172,7 +172,6 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
    <p>
    <img src="guide-codemachine-images/alias-mac.jpg" width="250">
    </p>
-
 
 <div style="page-break-after: always;"></div>
 
@@ -216,11 +215,10 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 ### Affichage du nombre de cycles
 
-> **ATTENTION : CodeMachine est limité à 1024 cycles au total. Tout code qui donnera plus de 1024 cycles, seulement les 1024 premiers cycles seront exécutés.**
+> **ATTENTION : CodeMachine est limité à 4096 cycles au total. Tout code qui donnera plus de 4096 cycles, seulement les 4096 premiers cycles seront exécutés.**
 
-- Pour l'Accumulateur et l'Accumulateur-MA, les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour le PolyRisc, les cycles sont comptés à partir de 1, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. 
+- Pour l'Accumulateur et l'Accumulateur-MA, les cycles sont comptés à partir de 0, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1. Pour le PolyRisc, les cycles sont comptés à partir de 1, donc le nombre total de cycle (/nb) sera toujours égale au nombre de cycle -1.
 - Pour toutes les architectures, chaque instruction prend 3 cycles (incluant l’instruction « nop »).
-
 
 - Pour naviguer dans le code vous avez plusieurs options.
   1. Utiliser le « play » (triangle bleu simple) et le code sera exécuté automatiquement, étapes par étapes.
@@ -256,10 +254,11 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
    <img src="guide-codemachine-images/surbrillance.png" width="200">
    </p>
 
-- Les erreurs de syntaxes devraient être soulignées en *rouge* et les "warnings" en *jaune* et tant que vous avez des soulignements rouges dans le code, vous ne pourrez pas accéder au bouton « Compiler » qui sera *rouge*.  Normalement, lorsque vous avez des soulignées dans le code, une fenêtre devrait apparaître et vous indique le type d'erreur précédé du numéro de la ligne qui contient une erreur.  
-   >**ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes.  Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
-- Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.  
-   >**Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outils.**
+- Les erreurs de syntaxes devraient être soulignées en _rouge_ et les "warnings" en _jaune_ et tant que vous avez des soulignements rouges dans le code, vous ne pourrez pas accéder au bouton « Compiler » qui sera _rouge_. Normalement, lorsque vous avez des soulignées dans le code, une fenêtre devrait apparaître et vous indique le type d'erreur précédé du numéro de la ligne qui contient une erreur.
+  > **ATTENTION : Lorsqu'il y a une erreur dans une ligne de code, il se pourrait que la surbrillance des erreurs des lignes suivantes ne soient pas exactes. Il est très important de régler les premières erreurs dans le code pour pouvoir continuer la correction des lignes suivantes**
+- Si vous compiler et qu’une erreur se produit (qui n’a pas été détecter par le « parser »), un message vous l’indiquera, mais vous devrez trouver sans aide le problème de votre côté.
+
+  > **Ne vous gênez pas pour ouvrir des "issues" sur GitHub si ce genre de situation se produise pour qu'on puisse améliorer l'outil.**
 
 - Les règles d’écriture du code sont données dans la section « Grammaire du code ».
 
@@ -275,10 +274,10 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 - **Ordre en mémoire:**
   1. Section `.text` (programme) → placée en premier en mémoire
   2. Section `.data` (données) → placée après le code
-  
 - **Les étiquettes** (comme `loop:`) ne sont **pas écrites en mémoire** - elles sont remplacées par l'adresse de l'instruction suivante lors de l'assemblage
 
 **Exemple:**
+
 ```
 .text              # Cette directive n'occupe pas de mémoire
 ld n               # Occupe de la mémoire (adresse 0)
@@ -294,6 +293,7 @@ one: 1             # Occupe de la mémoire (adresse 6)
 ```
 
 **Dans cet exemple:**
+
 - Les instructions (`.text`) occupent les adresses 0 à 4
 - Les données (`.data`) occupent les adresses 5 et 6
 - L'étiquette `loop:` est remplacée par l'adresse 1
@@ -406,7 +406,7 @@ Si vous avez des problèmes avec CodeMachine, vous pouvez les souligner aux dév
 
 5. Dans chacun des cas, il y a un « template » de base qui vous guide dans l’information à entrer dans votre « issue » pour faciliter la compréhension du développeur. SVP, suivez ces instructions pour faciliter leur travail.
 
-Notez que vous avez accès au code (c’est « open source »), alors vous pouvez faire un clone et jouer dans le code à votre aise si vous le désirer. Vous avez aussi une manière de déployez votre version automatiquement (pour vous-même), mais nous ne supporterons pas le code, juste l’interface. De plus, les accès en écriture sont proscrits, seulement les développeurs pourront changer le code en cours.
+Notez que vous avez accès au code (c’est « open source »), alors vous pouvez faire un clone et jouer dans le code à votre aise si vous le désirez. Vous avez aussi une manière de déployer votre version automatiquement (pour vous-même), mais nous ne supporterons pas le code, juste l’interface. De plus, les accès en écriture sont proscrits, seulement les développeurs pourront changer le code en cours.
 
 <div style="page-break-after: always;"></div>
 
@@ -430,17 +430,17 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
 
 ## Instructions
 
-| Instruction | Encodage | Description                         |
-| ----------- | -------- | ----------------------------------- |
-| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]           |
-| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]           |
-| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]           |
-| st ADR      | 0x03XX   | Mémoire[ADR] <- ACC                 |
-| ld ADR      | 0x04XX   | ACC <- Mémoire[ADR]                 |
-| stop        | 0x05XX   | Arrêt du programme                  |
-| br ADR      | 0x07XX   | PC <- ADR                           |
-| brz ADR     | 0x08XX   | ACC = 0 ? PC <- ADR : PC <- PC + 1  |
-| brnz ADR    | 0x09XX   | ACC != 0 ? PC <- ADR : PC <- PC + 1 |
+| Instruction | Encodage | Description                                          |
+| ----------- | -------- | ---------------------------------------------------- |
+| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]                            |
+| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]                            |
+| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]                            |
+| st ADR      | 0x03XX   | Mémoire[ADR] <- ACC                                  |
+| ld ADR      | 0x04XX   | ACC <- Mémoire[ADR]                                  |
+| stop        | 0x05XX   | Arrêt du programme                                   |
+| br ADR      | 0x07XX   | PC <- ADR                                            |
+| brz ADR     | 0x08XX   | (ACC = 0) → PC ← ADR &#124; (ACC != 0) → PC ← PC + 1 |
+| brnz ADR    | 0x09XX   | (ACC != 0) → PC ← ADR &#124; (ACC = 0) → PC ← PC + 1 |
 
 ### Opérations ALU
 
@@ -461,13 +461,6 @@ Notez que vous avez accès au code (c’est « open source »), alors vous pou
    <p>
    <img src="guide-codemachine-images/ProcesseurAccMACodeMachine.png" width="800">
    </p>
-   
-**Attention:** Une nouvelle instruction (lea) a été ajoutée dans le jeu d'instructions et n'est pas encore représentée dans le schéme de CodeMachine.  Voici ce qu'il manque et sera ajouté éventuellement dans l'interface graphique.
-   <p>
-   <img src="guide-codemachine-images/Accumulateur-MA-Lea.png" width="800">
-   </p>
-
-Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-Proto/code-machine-v2/issues/123) sur GitHub.
 
 <div style="page-break-after: always;"></div>
 
@@ -480,28 +473,29 @@ Pour plus de détails, consultez [l'issue #123](https://github.com/Code-Machine-
 <div style="page-break-after: always;"></div>
 
 ## Instructions
-| Instruction | Encodage | Description |
-| --- | --- | --- |
-| add ADR | 0x00XX | ACC <-  ACC + Mémoire[ADR] |
-| sub ADR | 0x01XX | ACC <-  ACC - Mémoire[ADR] |
-| mul ADR | 0x02XX | ACC <-  ACC × Mémoire[ADR] |
-| adda ADR | 0x03XX | MA  <-  MA  + Mémoire[ADR] |
-| suba ADR | 0x04XX | MA  <-  MA  - Mémoire[ADR] |
-| addx | 0x05XX | ACC <-  ACC + Mémoire[MA] |
-| subx | 0x06XX | ACC <-  ACC - Mémoire[MA] |
-| ld ADR | 0x07XX | ACC <-  Mémoire[ADR] |
-| st ADR | 0x08XX | Mémoire[ADR] <-  ACC |
-| lda ADR | 0x09XX | MA  <-  Mémoire[ADR] |
-| sta ADR | 0x0AXX | Mémoire[ADR] <-  MA |
-| ldi | 0x0BXX | ACC <-  Mémoire[MA] |
-| sti | 0x0CXX | Mémoire[MA] <-  ACC |
-| br ADR | 0x0DXX | PC <-  ADR |
-| brz ADR | 0x0EXX | ACC = 0 ? PC <-  ADR : PC <-  PC + 1 |
-| brnz ADR | 0x0FXX | ACC != 0 ? PC <-  ADR : PC <-  PC + 1 |
-| shl | 0x10XX | ACC <-  ACC << 1 |
-| shr | 0x11XX | ACC <-  ACC >> 1 |
-| lea ADR | 0x12XX | MA <- ADR |
-| stop | 0x13XX | Arrêt du programme |
+
+| Instruction | Encodage | Description                                          |
+| ----------- | -------- | ---------------------------------------------------- |
+| add ADR     | 0x00XX   | ACC <- ACC + Mémoire[ADR]                            |
+| sub ADR     | 0x01XX   | ACC <- ACC - Mémoire[ADR]                            |
+| mul ADR     | 0x02XX   | ACC <- ACC × Mémoire[ADR]                            |
+| adda ADR    | 0x03XX   | MA <- MA + Mémoire[ADR]                              |
+| suba ADR    | 0x04XX   | MA <- MA - Mémoire[ADR]                              |
+| addx        | 0x05XX   | ACC <- ACC + Mémoire[MA]                             |
+| subx        | 0x06XX   | ACC <- ACC - Mémoire[MA]                             |
+| ld ADR      | 0x07XX   | ACC <- Mémoire[ADR]                                  |
+| st ADR      | 0x08XX   | Mémoire[ADR] <- ACC                                  |
+| lda ADR     | 0x09XX   | MA <- Mémoire[ADR]                                   |
+| sta ADR     | 0x0AXX   | Mémoire[ADR] <- MA                                   |
+| ldi         | 0x0BXX   | ACC <- Mémoire[MA]                                   |
+| sti         | 0x0CXX   | Mémoire[MA] <- ACC                                   |
+| br ADR      | 0x0DXX   | PC <- ADR                                            |
+| brz ADR     | 0x0EXX   | (ACC = 0) → PC ← ADR &#124; (ACC != 0) → PC ← PC + 1 |
+| brnz ADR    | 0x0FXX   | (ACC != 0) → PC ← ADR &#124; (ACC = 0) → PC ← PC + 1 |
+| shl         | 0x10XX   | ACC <- ACC << 1                                      |
+| shr         | 0x11XX   | ACC <- ACC >> 1                                      |
+| lea ADR     | 0x12XX   | MA <- ADR                                            |
+| stop        | 0x13XX   | Arrêt du programme                                   |
 
 ### Opérations ALU
 
