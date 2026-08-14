@@ -1,12 +1,6 @@
-import Processor from '@src/class/Processor';
-import { storeCode } from '@src/module-store/CodeStore';
-import {
-  createContext,
-  useEffect,
-  useReducer,
-  useRef,
-  type ReactNode,
-} from 'react';
+import Processor from "@src/class/Processor";
+import { storeCode } from "@src/module-store/CodeStore";
+import { createContext, useEffect, useReducer, useRef, type ReactNode } from "react";
 import {
   DEFAULT_SOURCE_CODE,
   EXECUTION_START,
@@ -17,17 +11,12 @@ import {
   REGULAR_START,
   DEFAULT_EXECUTION_STATE,
   MINIMUM_EXECUTION_SIZE,
-} from '@src/constants/CodeProvider';
-import {
-  CodeAction,
-  type ActionFunction,
-  type CodePayload,
-  type DispatchCode,
-} from '@src/interface/DispatchCode';
-import { PlayerMode } from '@src/interface/StepControl';
-import { HighlightSyntaxVisitor } from '@src/class/visitor/HighligthSyntax';
-import { ParserVisitor } from '@src/class/visitor/Parser';
-import { SyntaxCheckerVisitor } from '@src/class/visitor/SyntaxChecker';
+} from "@src/constants/CodeProvider";
+import { CodeAction, type ActionFunction, type CodePayload, type DispatchCode } from "@src/interface/DispatchCode";
+import { PlayerMode } from "@src/interface/StepControl";
+import { HighlightSyntaxVisitor } from "@src/class/visitor/HighligthSyntax";
+import { ParserVisitor } from "@src/class/visitor/Parser";
+import { SyntaxCheckerVisitor } from "@src/class/visitor/SyntaxChecker";
 
 /**
  * Contexte pour accéder au valeur du code et son état
@@ -65,9 +54,7 @@ export function CodeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ProcessorContext.Provider value={state}>
-      <DispatchProcessorContext.Provider value={dispatch}>
-        {children}
-      </DispatchProcessorContext.Provider>
+      <DispatchProcessorContext.Provider value={dispatch}>{children}</DispatchProcessorContext.Provider>
     </ProcessorContext.Provider>
   );
 }
@@ -106,7 +93,7 @@ function codeReducer(state: Processor, action: CodePayload): Processor {
  */
 function changeCode(state: Processor, action: CodePayload): Processor {
   let newState = state.clone();
-  if (action.code === '' || action.code) {
+  if (action.code === "" || action.code) {
     storeCode(state.processorId, action.code);
     newState.code = action.code;
     newState.accept(new ParserVisitor());
@@ -124,10 +111,7 @@ function changeCode(state: Processor, action: CodePayload): Processor {
  * @returns le prochain état
  */
 function changeProcessor(state: Processor, action: CodePayload): Processor {
-  if (
-    action.newProcessor &&
-    action.newProcessor.processorId != state.processorId
-  ) {
+  if (action.newProcessor && action.newProcessor.processorId != state.processorId) {
     action.newProcessor.accept(new ParserVisitor());
     action.newProcessor.accept(new SyntaxCheckerVisitor());
     action.newProcessor.accept(new HighlightSyntaxVisitor());
@@ -143,10 +127,7 @@ function changeProcessor(state: Processor, action: CodePayload): Processor {
  */
 function forward(state: Processor): Processor {
   const newState = state.clone();
-  const inc =
-    state.mode === PlayerMode.regular
-      ? INCREMENT_SIZE_REGULAR
-      : INCREMENT_SIZE_EXECUTION;
+  const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
   if (state.steps && state.count + inc < state.steps.length) {
     newState.count += inc;
   }
@@ -160,10 +141,7 @@ function forward(state: Processor): Processor {
  */
 function backward(state: Processor): Processor {
   const newState = state.clone();
-  const inc =
-    state.mode === PlayerMode.regular
-      ? INCREMENT_SIZE_REGULAR
-      : INCREMENT_SIZE_EXECUTION;
+  const inc = state.mode === PlayerMode.regular ? INCREMENT_SIZE_REGULAR : INCREMENT_SIZE_EXECUTION;
   if (state.count - inc >= 0) {
     newState.count -= inc;
   }
@@ -177,8 +155,7 @@ function backward(state: Processor): Processor {
  */
 function toStart(state: Processor): Processor {
   const newState = state.clone();
-  const start =
-    state.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
+  const start = state.mode === PlayerMode.regular ? REGULAR_START : EXECUTION_START;
   newState.count = start;
   return newState;
 }
@@ -205,8 +182,7 @@ function changeExecutedCode(state: Processor, action: CodePayload): Processor {
   if (action.executedCode) {
     newState.steps = action.executedCode;
     newState.count =
-      state.mode === PlayerMode.regular ||
-      state.steps.length <= MINIMUM_EXECUTION_SIZE
+      state.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE
         ? REGULAR_START
         : EXECUTION_START;
   }
@@ -235,8 +211,7 @@ function changeMode(state: Processor, action: CodePayload): Processor {
   if (action.mode) {
     newState.mode = action.mode;
     newState.count =
-      action.mode === PlayerMode.regular ||
-      state.steps.length <= MINIMUM_EXECUTION_SIZE
+      action.mode === PlayerMode.regular || state.steps.length <= MINIMUM_EXECUTION_SIZE
         ? REGULAR_START
         : EXECUTION_START;
   }
@@ -258,16 +233,13 @@ function resetExecutionState(state: Processor): Processor {
 
 function changeStep(state: Processor, action: CodePayload): Processor {
   const newState = state.clone();
-  if (
-    action.newStep !== undefined &&
-    action.newStep >= 0 &&
-    action.newStep < state.steps.length
-  ) {
-    const inc =
-      state.mode === PlayerMode.execution
-        ? INCREMENT_SIZE_EXECUTION
-        : INCREMENT_SIZE_REGULAR;
-    newState.count = Math.round(action.newStep / inc) * inc;
+  if (action.newStep !== undefined && action.newStep >= 0 && action.newStep < state.steps.length) {
+    const inc = state.mode === PlayerMode.execution ? INCREMENT_SIZE_EXECUTION : INCREMENT_SIZE_REGULAR;
+    const offset = state.mode === PlayerMode.execution ? EXECUTION_START : REGULAR_START;
+    newState.count = Math.round((action.newStep - offset) / inc) * inc + offset;
+    if (newState.count < offset) {
+      newState.count = offset;
+    }
     if (newState.count >= state.steps.length) {
       newState.count = state.steps.length - 1;
     }
