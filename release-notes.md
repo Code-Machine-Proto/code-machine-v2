@@ -1,6 +1,9 @@
-# CodeMachine v26.2.0
+# CodeMachine v26.3.0
 
 - Mise à jour de la documentation
-- Polyrisc: Accepter les litéraux pour les instructions de branchements et ldi
-- Polyrisc: Accélération considérable de la vitesse de compilation
+- Accumulateur-MA : Fixer l'affichage de lea
+- Nombre limites de cycles monté à 4096
+- Ajoute de la barre de progression
+- Quelques fixes dans le back-end
+- Autres améliorations variées
 
