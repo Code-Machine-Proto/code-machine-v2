@@ -248,7 +248,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Installer Pandoc
-        run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
 
       - name: Convertir MD en PDF
         run: |
@@ -293,7 +295,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Installer Pandoc
-        run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
 
       - name: Récupérer le tag de la dernière release
         id: get-tag
