@@ -8,6 +8,13 @@ on:
       - 'frontend/**'
       - 'backend/**'
       - '**.md'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Forcer une nouvelle release même sans changement détecté'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   detect-changes:
@@ -32,7 +39,7 @@ jobs:
 
   create-release:
     needs: detect-changes
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     name: Publier une release
     runs-on: ubuntu-latest
     outputs:
@@ -57,7 +64,7 @@ jobs:
 
   build-backend:
     needs: detect-changes
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     defaults:
       run:
         shell: bash -ieo pipefail {0}
@@ -90,7 +97,7 @@ jobs:
 
   build-frontend:
     needs: detect-changes
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     name: Construction du frontend
     runs-on: ubuntu-latest
     steps:
@@ -128,7 +135,7 @@ jobs:
     name: Emballage de l'application pour mac
     runs-on: macos-latest
     needs: [detect-changes, build-frontend, build-backend, create-release]
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -179,7 +186,7 @@ jobs:
         arch: [x64, arm64]
     runs-on: ${{ matrix.os }}
     needs: [detect-changes, build-frontend, build-backend, create-release]
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
     steps:
       - name: Récupérer le code
@@ -243,14 +250,14 @@ jobs:
     name: Publier la documentation
     runs-on: ubuntu-latest
     needs: [detect-changes, create-release]
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     steps:
       - uses: actions/checkout@v4
 
       - name: Installer Pandoc
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-color-emoji
 
       - name: Convertir MD en PDF
         run: |
@@ -275,7 +282,7 @@ jobs:
         package-mac,
         publish-docs,
       ]
-    if: needs.detect-changes.outputs.code == 'true'
+    if: needs.detect-changes.outputs.code == 'true' || github.event.inputs.force_release == 'true'
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -297,7 +304,7 @@ jobs:
       - name: Installer Pandoc
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+          sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-color-emoji
 
       - name: Récupérer le tag de la dernière release
         id: get-tag
