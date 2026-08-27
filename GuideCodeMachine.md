@@ -4,8 +4,8 @@
 
 <h1 style="font-size: 60px;">Guide CodeMachine</h1>
 
-**Version 26.3.0**
-14 août 2026
+**Version 26.3.1**
+27 août 2026
 
 Geneviève Cyr
 GIGL | Polytechnique Montréal
@@ -101,19 +101,6 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
 
 _Notez que vous pouvez déplacer le .AppImage à l’endroit que vous préférez pour faciliter son accès. Cependant, vous devrez, dans tous les cas, permettre son exécution en changeant ses permissions._
 
-<br>
-
-> **ATTENTION : Sur Windows, dans certains installations, il faut parfois partir CodeMachine en mode administrateur pour qu'il compile correctement**
-
-Si vous avez l'erreur suivante au moment de la compilation :
-
-<p>
-   <img src="guide-codemachine-images/ExecPasAdmin.jpg" width="650">
-</p>
-Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuel de la souris.
-<p>
-   <img src="guide-codemachine-images/PartirAdmin.png" width="250">
-</p>
 
 <div style="page-break-after: always;"></div>
 
@@ -175,6 +162,76 @@ Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton co
 
 <div style="page-break-after: always;"></div>
 
+## Problème de démarrage ou compilation avec CodeMachine
+
+### Problème de compilation
+
+> **ATTENTION : Sur Windows, dans certains installations, il faut parfois partir CodeMachine en mode administrateur pour qu'il compile correctement**
+
+Si vous avez l'erreur suivante au moment de la compilation :
+
+<p>
+   <img src="guide-codemachine-images/ExecPasAdmin.jpg" width="650">
+</p>
+Il faut repartir CodeMachine en tant qu'administrateur en utilisant le bouton contextuel de la souris.
+<p>
+   <img src="guide-codemachine-images/PartirAdmin.png" width="250">
+</p>
+
+<br>
+
+### Problème de démarrage
+
+> **ATTENTION : Si CodeMachine ne parvient pas à démarrer et affiche l'erreur suivante, un ancien processus Java (resté actif suite à une fermeture précédente de l'application) occupe déjà le port utilisé par CodeMachine.**
+
+<p>
+   <img src="guide-codemachine-images/ErreurCodeMachineMalTermine.jpg" width="500">
+</p>
+
+Il faut d'abord terminer manuellement tous les processus Java résiduels avant de relancer CodeMachine :
+
+**Windows**
+
+1. Ouvrir le Gestionnaire des tâches (`Ctrl+Shift+Échap`)
+2. Aller dans l'onglet **Détails**
+3. Trier par nom (cliquer sur l'en-tête **Nom**)
+4. Sélectionner tous les processus `java.exe` visibles (`Ctrl+clic` pour en sélectionner plusieurs)
+5. Cliquer **Fin de tâche**
+6. Relancer CodeMachine
+
+Ou, plus rapidement, dans une invite de commande / PowerShell :
+
+```
+taskkill /F /IM java.exe
+```
+
+**macOS**
+
+1. Ouvrir le Moniteur d'activité (`Cmd+Espace`, taper « Moniteur d'activité »)
+2. Rechercher « java » dans la barre de recherche
+3. Sélectionner le(s) processus java trouvé(s)
+4. Cliquer sur le bouton **✕** puis **Forcer à quitter**
+5. Relancer CodeMachine
+
+Ou, plus rapidement, dans un terminal :
+
+```
+killall java
+```
+
+**Linux**
+
+Dans un terminal :
+
+```
+killall java
+```
+
+Puis relancer CodeMachine.
+
+
+<div style="page-break-after: always;"></div>
+
 # Guide d’utilisation de CodeMachine
 
 ## Utilisation de l’interface graphique
@@ -212,6 +269,27 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
    </p>
 
 - Durant la compilation, le bouton « Compiler » aura un indicateur de chargement et le bouton sera inaccessible. Le temps de compilation pour les architectures « Accumulateur » sont relativement rapide. Pour le « PolyRisc », c’est plus long (cela peut prendre au-delà d’une minute pour plusieurs cycles)
+
+### Menu du bas (Compiler, sauvegarder, importer, effacer)
+
+En bas de l’éditeur de code, un menu vous donne accès à quatre actions :
+
+   <p>
+   <img src="guide-codemachine-images/MenuBasCode.jpg" width="500">
+   </p>
+
+- **Compiler** : compile le code actuellement dans l’éditeur (voir la section précédente).
+- **Icône de téléchargement (↓)** : enregistre le code actuel de l’éditeur dans un fichier sur votre ordinateur.
+- **Icône de téléversement (↑)** : importe le code d’un fichier depuis votre ordinateur dans l’éditeur.
+- **Icône de gomme** : efface le code actuellement dans l’éditeur.
+
+> **ATTENTION : Importer un fichier ou effacer le code sont des actions irréversibles.** Une fenêtre d’avertissement vous demandera de confirmer avant de procéder :
+>
+> <p>
+> <img src="guide-codemachine-images/AvertissementEffacerCode.jpg" width="400">
+> </p>
+>
+> Cliquer sur « Confirmer » remplacera définitivement le contenu actuel de l’éditeur (par le fichier importé, ou par un éditeur vide). Assurez-vous d’avoir sauvegardé votre code au préalable (avec l’icône de téléchargement) si vous souhaitez le conserver.
 
 ### Affichage du nombre de cycles
 
