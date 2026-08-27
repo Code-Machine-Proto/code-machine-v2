@@ -101,7 +101,6 @@ Sinon, vous pouvez aller **par le CLI**, changer les permissions et partir l’o
 
 _Notez que vous pouvez déplacer le .AppImage à l’endroit que vous préférez pour faciliter son accès. Cependant, vous devrez, dans tous les cas, permettre son exécution en changeant ses permissions._
 
-
 <div style="page-break-after: always;"></div>
 
 ## Pour MAC
@@ -229,7 +228,6 @@ killall java
 
 Puis relancer CodeMachine.
 
-
 <div style="page-break-after: always;"></div>
 
 # Guide d’utilisation de CodeMachine
@@ -263,6 +261,12 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 ### Compilation
 
+Le bouton pour compiler se trouve au bas de l'éditeur de texte :
+
+   <p>
+   <img src="guide-codemachine-images/MenuBasCode.png" width="500">
+   </p>
+
 - Le dernier code entré dans chaque architecture devrait être mémorisé quand vous quittez l’architecture. Cependant, dès que vous quitté une architecture, en retournant dans n’importe quelle architecture, il faut recompiler. Pour savoir si le code est compilé, regardé le / en haut.
    <p>
    <img src="guide-codemachine-images/CodeCompileOUNon.jpg" width="500">
@@ -270,15 +274,14 @@ Trois architectures sont disponibles dans CodeMachine : Accumulateur, Accumulat
 
 - Durant la compilation, le bouton « Compiler » aura un indicateur de chargement et le bouton sera inaccessible. Le temps de compilation pour les architectures « Accumulateur » sont relativement rapide. Pour le « PolyRisc », c’est plus long (cela peut prendre au-delà d’une minute pour plusieurs cycles)
 
-### Menu du bas (Compiler, sauvegarder, importer, effacer)
-
-En bas de l’éditeur de code, un menu vous donne accès à quatre actions :
+### Menu du haut (Sauvegarder, importer, effacer)
 
    <p>
-   <img src="guide-codemachine-images/MenuBasCode.jpg" width="500">
+   <img src="guide-codemachine-images/MenuHautCode.png" width="300">
    </p>
 
-- **Compiler** : compile le code actuellement dans l’éditeur (voir la section précédente).
+En haut de l’éditeur de code, un menu vous donne accès à trois actions :
+
 - **Icône de téléchargement (↓)** : enregistre le code actuel de l’éditeur dans un fichier sur votre ordinateur.
 - **Icône de téléversement (↑)** : importe le code d’un fichier depuis votre ordinateur dans l’éditeur.
 - **Icône de gomme** : efface le code actuellement dans l’éditeur.
