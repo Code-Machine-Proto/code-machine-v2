@@ -248,12 +248,12 @@ jobs:
         - uses: actions/checkout@v4
   
         - name: Installer Pandoc
-          run: sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended
-  
+          run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+
         - name: Convertir MD en PDF
           run: |
             TAG=${{ needs.create-release.outputs.version }}
-            pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=xelatex
+            pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=wkhtmltopdf
   
         - name: Uploader le PDF dans la nouvelle release
           env:
@@ -286,8 +286,8 @@ jobs:
       - uses: actions/checkout@v4
   
       - name: Installer Pandoc
-        run: sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended
-  
+        run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+
       - name: Récupérer le tag de la dernière release
         id: get-tag
         env:
@@ -295,11 +295,11 @@ jobs:
         run: |
           TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-  
+
       - name: Convertir MD en PDF
         run: |
           TAG=${{ steps.get-tag.outputs.tag }}
-          pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=xelatex
+          pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=wkhtmltopdf
   
       - name: Remplacer le PDF dans la dernière release
         env:
