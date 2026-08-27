@@ -31,251 +31,258 @@ jobs:
               - 'GuideCodeMachine.md'
 
   create-release:
-      needs: detect-changes
-      if: needs.detect-changes.outputs.code == 'true'
-      name: Publier une release
-      runs-on: ubuntu-latest
-      outputs:
-        version: ${{ steps.get-version.outputs.version }}
-      steps:
-        - name: Récupérer le code
-          uses: actions/checkout@v4
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'true'
+    name: Publier une release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-        - name: Installer node
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-        
-        - id: get-version
-          working-directory: ./frontend
-          run: echo "version=v$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
+      - name: Installer node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-        - name: Créer une release brouillon
-          env:
-            GH_TOKEN: ${{ github.token }}
-          run: gh release create ${{ steps.get-version.outputs.version }} -d -F release-notes.md
-        
+      - id: get-version
+        working-directory: ./frontend
+        run: echo "version=v$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
+
+      - name: Créer une release brouillon
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create ${{ steps.get-version.outputs.version }} -d -F release-notes.md
+
   build-backend:
-        needs: detect-changes
-        if: needs.detect-changes.outputs.code == 'true'
-        defaults:
-            run:
-                shell: bash -ieo pipefail {0}
-        name: Construction du backend
-        runs-on: ubuntu-latest
-        steps:
-            - name: Récupérer le code
-              uses: actions/checkout@v4
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'true'
+    defaults:
+      run:
+        shell: bash -ieo pipefail {0}
+    name: Construction du backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-            - name: Installer sdkman
-              run: |
-                curl -s "https://get.sdkman.io" | bash
-                source "/home/runner/.sdkman/bin/sdkman-init.sh"
+      - name: Installer sdkman
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "/home/runner/.sdkman/bin/sdkman-init.sh"
 
-            - name: Installer java 
-              run: sdk install java 17.0.10-tem
+      - name: Installer java
+        run: sdk install java 17.0.10-tem
 
-            - name: Installer sbt
-              run: sdk install sbt
+      - name: Installer sbt
+        run: sdk install sbt
 
-            - name: Compiler le jar
-              working-directory: ./backend
-              run: sbt assembly
+      - name: Compiler le jar
+        working-directory: ./backend
+        run: sbt assembly
 
-            - name: Artéfacter le jar
-              uses: actions/upload-artifact@v4
-              with:
-                name: backend-build
-                path: ./backend/target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar
+      - name: Artéfacter le jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: ./backend/target/scala-2.12/Accumulator_CPU_Chisel-assembly-0.1.0.jar
 
   build-frontend:
-      needs: detect-changes
-      if: needs.detect-changes.outputs.code == 'true'
-      name: Construction du frontend
-      runs-on: ubuntu-latest
-      steps:
-        - name: Récupérer le code
-          uses: actions/checkout@v4
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'true'
+    name: Construction du frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-        - name: Installer node
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-        
-        - name: Sauvegarder les modules node
-          id: npm-cache
-          uses: actions/cache@v4
-          with:
-            path: frontend/node_modules
-            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+      - name: Installer node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-        - name: Installer les dépendances node
-          working-directory: ./frontend
-          if: steps.npm-cache.outputs.cache-hit != 'true'
-          run: npm ci
-        
-        - name: Compiler le build du frontend
-          working-directory: ./frontend
-          run: npm run build:electron
-        
-        - name: Transférer le build
-          uses: actions/upload-artifact@v4
-          with:
-            name: frontend-build
-            path: ./frontend/build
+      - name: Sauvegarder les modules node
+        id: npm-cache
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+
+      - name: Installer les dépendances node
+        working-directory: ./frontend
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Compiler le build du frontend
+        working-directory: ./frontend
+        run: npm run build:electron
+
+      - name: Transférer le build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: ./frontend/build
 
   package-mac:
-      name: Emballage de l'application pour mac
-      runs-on: macos-latest
-      needs: [detect-changes, build-frontend, build-backend, create-release]
-      if: needs.detect-changes.outputs.code == 'true'
-      steps:
-        - name: Récupérer le code
-          uses: actions/checkout@v4
-        
-        - name: Installer node
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-        
-        - name: Sauvegarder les modules node
-          id: npm-cache
-          uses: actions/cache@v4
-          with:
-            path: frontend/node_modules
-            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+    name: Emballage de l'application pour mac
+    runs-on: macos-latest
+    needs: [detect-changes, build-frontend, build-backend, create-release]
+    if: needs.detect-changes.outputs.code == 'true'
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-        - name: Installer les modules node
-          working-directory: ./frontend
-          if: steps.npm-cache.outputs.cache-hit != 'true'
-          run: npm ci
+      - name: Installer node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-        - name: Obtenir le build du frontend
-          uses: actions/download-artifact@v4
-          with:
-            name: frontend-build
-            path: frontend/build
+      - name: Sauvegarder les modules node
+        id: npm-cache
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
 
-        - name: Obtenir le build du backend
-          uses: actions/download-artifact@v4
-          with:
-            name: backend-build
-            path: frontend/module-electron
+      - name: Installer les modules node
+        working-directory: ./frontend
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
 
-        - name: Package l'application pour mac
-          working-directory: ./frontend
-          run: npm run package -- --universal
+      - name: Obtenir le build du frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build
 
-        - name: Uploader le build
-          env:
-            GH_TOKEN: ${{ github.token }}
-            tag: ${{ needs.create-release.outputs.version }}
-          run: gh release upload $tag frontend/dist/CodeMachine-$tag-mac-universal.dmg
+      - name: Obtenir le build du backend
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build
+          path: frontend/module-electron
+
+      - name: Package l'application pour mac
+        working-directory: ./frontend
+        run: npm run package -- --universal
+
+      - name: Uploader le build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.create-release.outputs.version }}
+        run: gh release upload $tag frontend/dist/CodeMachine-$tag-mac-universal.dmg
 
   package-linux-windows:
-      strategy:
-        matrix:
-          os: [ubuntu-latest, windows-latest]
-          arch: [x64, arm64]
-      runs-on: ${{ matrix.os }}
-      needs: [detect-changes, build-frontend, build-backend, create-release]
-      if: needs.detect-changes.outputs.code == 'true'
-      name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
-      steps:
-        - name: Récupérer le code
-          uses: actions/checkout@v4
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        arch: [x64, arm64]
+    runs-on: ${{ matrix.os }}
+    needs: [detect-changes, build-frontend, build-backend, create-release]
+    if: needs.detect-changes.outputs.code == 'true'
+    name: Emballage pour ${{ matrix.os }}-${{ matrix.arch }}
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-        - name: Installer node
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-        
-        - name: Sauvegarder ou récupérer les node_modules
-          id: npm-cache
-          uses: actions/cache@v4
-          with:
-            path: frontend/node_modules
-            key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
-        
-        - name: Installer les dépendances
-          working-directory: ./frontend
-          if: steps.npm-cache.outputs.cache-hit != 'true'
-          run: npm ci
+      - name: Installer node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-        - name: Récupérer le build du frontend
-          uses: actions/download-artifact@v4
-          with:
-            name: frontend-build
-            path: frontend/build
+      - name: Sauvegarder ou récupérer les node_modules
+        id: npm-cache
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
 
-        - name: Récupérer le build du backend
-          uses: actions/download-artifact@v4
-          with:
-            name: backend-build
-            path: frontend/module-electron
-        
-        - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
-          working-directory: ./frontend
-          run: npm run package:${{ matrix.arch }}
-        
-        - name: Uploader les distributions
-          env:
-            GH_TOKEN: ${{ github.token }}
-            tag: ${{ needs.create-release.outputs.version }}
-          if: runner.os == 'Windows'
-          run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-${{ matrix.arch }}.msi"
+      - name: Installer les dépendances
+        working-directory: ./frontend
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
 
-        - name: Uploader les distributions
-          env:
-            GH_TOKEN: ${{ github.token }}
-            tag: ${{ needs.create-release.outputs.version }}
-          if: runner.os == 'Linux' && matrix.arch == 'x64'
-          run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-x86_64.AppImage
+      - name: Récupérer le build du frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build
 
-        - name: Uploader les distributions
-          env:
-            GH_TOKEN: ${{ github.token }}
-            tag: ${{ needs.create-release.outputs.version }}
-          if: runner.os == 'Linux' && matrix.arch == 'arm64'
-          run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-${{ matrix.arch }}.AppImage
-          
+      - name: Récupérer le build du backend
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build
+          path: frontend/module-electron
+
+      - name: Emballer l'application pour ${{ runner.os }}-${{ matrix.arch }}
+        working-directory: ./frontend
+        run: npm run package:${{ matrix.arch }}
+
+      - name: Uploader les distributions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.create-release.outputs.version }}
+        if: runner.os == 'Windows'
+        run: gh release upload $env:tag "frontend/dist/CodeMachine-$($env:tag)-win-${{ matrix.arch }}.msi"
+
+      - name: Uploader les distributions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.create-release.outputs.version }}
+        if: runner.os == 'Linux' && matrix.arch == 'x64'
+        run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-x86_64.AppImage
+
+      - name: Uploader les distributions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.create-release.outputs.version }}
+        if: runner.os == 'Linux' && matrix.arch == 'arm64'
+        run: gh release upload $tag frontend/dist/CodeMachine-$tag-linux-${{ matrix.arch }}.AppImage
+
   publish-docs:
-      name: Publier la documentation
-      runs-on: ubuntu-latest
-      needs: [detect-changes, create-release]
-      if: needs.detect-changes.outputs.code == 'true'
-      steps:
-        - uses: actions/checkout@v4
-  
-        - name: Installer Pandoc
-          run: sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended
-  
-        - name: Convertir MD en PDF
-          run: |
-            TAG=${{ needs.create-release.outputs.version }}
-            pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=xelatex
-  
-        - name: Uploader le PDF dans la nouvelle release
-          env:
-            GH_TOKEN: ${{ github.token }}
-          run: |
-            TAG=${{ needs.create-release.outputs.version }}
-            gh release upload $TAG GuideCodeMachine-$TAG.pdf
+    name: Publier la documentation
+    runs-on: ubuntu-latest
+    needs: [detect-changes, create-release]
+    if: needs.detect-changes.outputs.code == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Pandoc
+        run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+
+      - name: Convertir MD en PDF
+        run: |
+          TAG=${{ needs.create-release.outputs.version }}
+          pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=wkhtmltopdf
+
+      - name: Uploader le PDF dans la nouvelle release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=${{ needs.create-release.outputs.version }}
+          gh release upload $TAG GuideCodeMachine-$TAG.pdf
 
   save-release:
-      name: Sauvegarder la distribution
-      runs-on: ubuntu-latest
-      needs: [detect-changes, create-release, package-linux-windows, package-mac, publish-docs]
-      if: needs.detect-changes.outputs.code == 'true'
-      steps:
-        - name: Récupérer le code
-          uses: actions/checkout@v4
+    name: Sauvegarder la distribution
+    runs-on: ubuntu-latest
+    needs:
+      [
+        detect-changes,
+        create-release,
+        package-linux-windows,
+        package-mac,
+        publish-docs,
+      ]
+    if: needs.detect-changes.outputs.code == 'true'
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
 
-        - name: Sauvegarder la release
-          env:
-            GH_TOKEN: ${{ github.token }}
-            tag: ${{ needs.create-release.outputs.version }}
-          run: gh release edit $tag --draft=false
+      - name: Sauvegarder la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.create-release.outputs.version }}
+        run: gh release edit $tag --draft=false
 
   update-docs:
     name: Mettre à jour la documentation
@@ -284,10 +291,10 @@ jobs:
     if: needs.detect-changes.outputs.docs == 'true' && needs.detect-changes.outputs.code == 'false'
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: Installer Pandoc
-        run: sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended
-  
+        run: sudo apt-get install -y pandoc wkhtmltopdf fonts-noto-emoji
+
       - name: Récupérer le tag de la dernière release
         id: get-tag
         env:
@@ -295,12 +302,12 @@ jobs:
         run: |
           TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-  
+
       - name: Convertir MD en PDF
         run: |
           TAG=${{ steps.get-tag.outputs.tag }}
-          pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=xelatex
-  
+          pandoc GuideCodeMachine.md -o GuideCodeMachine-$TAG.pdf --pdf-engine=wkhtmltopdf
+
       - name: Remplacer le PDF dans la dernière release
         env:
           GH_TOKEN: ${{ github.token }}

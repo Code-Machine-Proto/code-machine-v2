@@ -10,12 +10,31 @@ import { MessageType } from '@src/constants/SnackBar';
 import type Processor from '@src/class/Processor';
 import type { SnackBarDispatch } from '@src/interface/SnackBarInterface';
 import clearSign from '@src/assets/clear-code.svg';
+import saveSign from '@src/assets/save-code.svg';
+import uploadSign from '@src/assets/upload-code.svg';
+import compileSign from '@src/assets/compile-code.svg';
 import { ConfirmationModalContext } from '../ConfirmationModal';
-import { DELETE_CODE_MESSAGE } from '@src/constants/ConfirmationModal';
+import {
+  DELETE_CODE_MESSAGE,
+  UPLOAD_CODE_MESSAGE,
+} from '@src/constants/ConfirmationModal';
 import { TokenType } from '@src/interface/visitor/Token';
+import { ProcessorId } from '@src/interface/CodeInterface';
 
 export const MIN_EDITOR_WIDTH = 320;
 export const MAX_VISUAL_WIDTH = 1000;
+
+interface SaveFileHandle {
+  createWritable(): Promise<{
+    write(data: Blob): Promise<void>;
+    close(): Promise<void>;
+  }>;
+}
+
+type SaveFilePicker = (options: {
+  suggestedName: string;
+  types: { description: string; accept: Record<string, string[]> }[];
+}) => Promise<SaveFileHandle>;
 
 /**
  * Éditeur de code pour l'assembleur, assure l'écriture, sa connexion avec l'état global
@@ -37,6 +56,7 @@ export default function CodeEditor({
   const numberContainer = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLTextAreaElement>(null);
   const textVisual = useRef<HTMLDivElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const fetcher = useFetcher<{
     result: Array<ProcessorStep>;
@@ -108,9 +128,116 @@ export default function CodeEditor({
     setLineNumber(lineNumber);
   }, [processor.currentStep.pcState, processor.tokenizedLines]);
 
+  const onSaveCode = async () => {
+    const timestamp = new Date()
+      .toISOString()
+      .replace('T', '_')
+      .replace(/:/g, '-')
+      .split('.')[0];
+    const defaultName = `${ProcessorId[
+      processor.processorId
+    ].toLowerCase()}_${timestamp}.txt`;
+    const blob = new Blob([processor.code], { type: 'text/plain' });
+
+    const showSaveFilePicker = (
+      window as unknown as { showSaveFilePicker?: SaveFilePicker }
+    ).showSaveFilePicker;
+
+    if (showSaveFilePicker) {
+      try {
+        const handle = await showSaveFilePicker({
+          suggestedName: defaultName,
+          types: [
+            {
+              description: 'Fichier texte',
+              accept: { 'text/plain': ['.txt', '.asm', '.s'] },
+            },
+          ],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+      } catch (error) {
+        if ((error as DOMException).name !== 'AbortError') {
+          setSnackBar({
+            visible: true,
+            message: "Échec de l'enregistrement du fichier",
+            type: MessageType.ERROR,
+            duration: 3000,
+          });
+        }
+      }
+      return;
+    }
+
+    const fileName = window.prompt(
+      'Enregistrer sous.\nChoisir le nom du fichier :',
+      defaultName,
+    );
+    if (!fileName) {
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = fileName;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const onUploadCode = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) {
+      return;
+    }
+    const text = await file.text();
+    setModal({
+      message: UPLOAD_CODE_MESSAGE,
+      visible: true,
+      payload: { type: CodeAction.CHANGE_CODE, code: text },
+    });
+  };
+
   return (
     <div className='flex flex-shrink-0 min-w-[20rem]' style={{ width }}>
-      <div className='flex flex-col p-5 bg-main-950 rounded-xl gap-2 flex-1 min-w-0'>
+      <div className='relative flex flex-col p-5 bg-main-950 rounded-xl gap-2 flex-1 min-w-0'>
+        <div className='absolute top-3 right-3 flex gap-1 z-10 opacity-60 hover:opacity-100 transition-opacity'>
+          <button
+            className='border border-main-400 rounded-md size-8 bg-main-950/80 backdrop-blur-sm flex justify-center items-center cursor-pointer hover:bg-main-900'
+            title='Enregistrer sous...'
+            onClick={onSaveCode}
+          >
+            <img src={saveSign} alt='save' className='size-4' />
+          </button>
+          <button
+            className='border border-main-400 rounded-md size-8 bg-main-950/80 backdrop-blur-sm flex justify-center items-center cursor-pointer hover:bg-main-900'
+            title='Téléverser un fichier'
+            onClick={() => fileInput.current?.click()}
+          >
+            <img src={uploadSign} alt='upload' className='size-4' />
+          </button>
+          <input
+            type='file'
+            accept='.txt,.asm,.s'
+            ref={fileInput}
+            className='hidden'
+            onChange={onUploadCode}
+          />
+          <button
+            className='border border-main-400 rounded-md size-8 bg-main-950/80 backdrop-blur-sm flex justify-center items-center cursor-pointer hover:bg-main-900'
+            title='Effacer le code'
+            onClick={() =>
+              setModal({
+                message: DELETE_CODE_MESSAGE,
+                visible: true,
+                payload: { type: CodeAction.CHANGE_CODE, code: '' },
+              })
+            }
+          >
+            <img src={clearSign} alt='eraser' className='size-4' />
+          </button>
+        </div>
         <div className='flex grow gap-2 overflow-hidden'>
           <div
             className='flex flex-col text-white w-10 items-end bg-slate-800 px-2 rounded-md no-scrollbar overflow-scroll pb-24'
@@ -175,11 +302,11 @@ export default function CodeEditor({
         </div>
         <div className='flex gap-2 max-w-[100rem] h-[4rem]'>
           <button
-            className={`bg-transparent flex ${
+            className={`bg-transparent flex justify-center items-center overflow-hidden ${
               processor.isCompilable
                 ? 'text-main-400 border-main-400 hover:bg-main-900 cursor-pointer'
                 : 'text-red-500 border-red-500'
-            } border-2 rounded-md p-2 gap-2 justify-around items-center h-[4rem] w-3/4`}
+            } border-2 rounded-md p-2 gap-2 h-[4rem] flex-1`}
             disabled={!processor.isCompilable}
             onClick={() => {
               dispatch({ type: CodeAction.RESET_CODE });
@@ -189,27 +316,16 @@ export default function CodeEditor({
               );
             }}
           >
-            <div className='size-[2rem]' />
-            <span className='inline-block align-middle'>Compiler</span>
             <img
-              src={loader}
-              alt='loader'
-              className={`animate-spin size-[2rem] ${
-                fetcher.state === 'submitting' ? 'visible' : 'invisible'
+              src={fetcher.state === 'submitting' ? loader : compileSign}
+              alt='compile'
+              className={`shrink-0 size-[2rem] ${
+                fetcher.state === 'submitting' ? 'animate-spin' : ''
               }`}
             />
-          </button>
-          <button
-            className='border-2 rounded-md w-1/4 border-main-400 flex justify-center items-center cursor-pointer hover:bg-main-900'
-            onClick={() =>
-              setModal({
-                message: DELETE_CODE_MESSAGE,
-                visible: true,
-                payload: { type: CodeAction.CHANGE_CODE, code: '' },
-              })
-            }
-          >
-            <img src={clearSign} alt='x' className='size-1/2' />
+            <span className='inline-block align-middle truncate min-w-0'>
+              Compiler
+            </span>
           </button>
         </div>
       </div>

@@ -27,6 +27,7 @@ final case class Program(content: Array[String]);
 final case class CompileAndRunRequest(program: Array[String], processorId: Int);
 
 final case class testClass(id: String, age: Int);
+final case class HealthResponse(sessionId: String);
 
 import scala.concurrent.Future
 
@@ -45,6 +46,10 @@ object SprayJsonExample {
   )
   implicit val testClassMarshaller: spray.json.RootJsonFormat[testClass] =
     jsonFormat2(testClass.apply);
+  implicit val healthResponseMarshaller
+      : spray.json.RootJsonFormat[HealthResponse] = jsonFormat1(
+    HealthResponse.apply
+  )
   implicit val RunResultsMarshaller: spray.json.RootJsonFormat[RunResultsV1] =
     jsonFormat2(RunResultsV1.apply);
   implicit val RunResultsV2Marshaller: spray.json.RootJsonFormat[RunResultsV2] =
@@ -55,6 +60,9 @@ object SprayJsonExample {
   )
 
   def main(args: Array[String]): Unit = {
+    val sessionId =
+      scala.util.Properties.envOrElse("CODEMACHINE_SESSION_ID", "")
+
     val content =
       """|<html>
         |<head></head>
@@ -113,6 +121,12 @@ object SprayJsonExample {
           get {
             path("testClass") {
               complete(testClass("oui", 18))
+            }
+          },
+
+          get {
+            path("health") {
+              complete(HealthResponse(sessionId))
             }
           }
         )
